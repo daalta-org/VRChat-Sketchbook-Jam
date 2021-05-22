@@ -5,8 +5,9 @@ using VRC.SDKBase;
 
 public class GameManager : UdonSharpBehaviour
 {
+    [SerializeField] private GameUI gameUI = null;
     [SerializeField] private PlayerManager[] playerManagers = null;
-    [SerializeField] private Prompts prompts;
+    [SerializeField] private Prompts prompts = null;
     [SerializeField] private int numRounds = 5;
 
     [UdonSynced] private int seed = -1;
@@ -14,7 +15,7 @@ public class GameManager : UdonSharpBehaviour
     [UdonSynced] private int round = -1;
     private int roundOld = -1;
 
-    private int[] promptSequence;
+    private int[] promptSequence = null;
 
     private void Start()
     {
@@ -49,6 +50,12 @@ public class GameManager : UdonSharpBehaviour
         }
     }
 
+    public void NextRound()
+    {
+        round++;
+        OnRoundChanged();
+    }
+
     private void OnSeedChanged()
     {
         promptSequence = prompts.GetPrompts(seed, 4 * numRounds);
@@ -61,6 +68,7 @@ public class GameManager : UdonSharpBehaviour
     private void OnRoundChanged()
     {
         UpdatePromptsForPlayers();
+        gameUI.OnRoundChanged(round);
     }
 
     private void UpdatePromptsForPlayers()

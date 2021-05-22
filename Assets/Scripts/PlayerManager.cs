@@ -7,11 +7,6 @@ public class PlayerManager : UdonSharpBehaviour
     
     private int prompt = -1;
 
-    void Start()
-    {
-        
-    }
-
     public void SetPrompt(int index)
     {
         prompt = index;

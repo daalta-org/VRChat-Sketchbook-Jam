@@ -1,13 +1,13 @@
-﻿
+﻿using TMPro;
 using UdonSharp;
 using UnityEngine;
-using VRC.SDKBase;
-using VRC.Udon;
 
 public class GameUI : UdonSharpBehaviour
 {
-    void Start()
+    [SerializeField] private TextMeshProUGUI textRound = null;
+
+    public void OnRoundChanged(int round)
     {
-        
+        textRound.text = "Round " + (round+1);
     }
 }
