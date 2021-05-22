@@ -5,7 +5,7 @@ public class PlayerManager : UdonSharpBehaviour
 {
     [SerializeField] private PlayerUI playerUI = null;
     
-    [UdonSynced] private int prompt = -1;
+    private int prompt = -1;
 
     void Start()
     {
