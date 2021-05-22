@@ -16,5 +16,8 @@ Missing something? Check the VRCPrefabs database at https://docs.google.com/spre
 
 # How to use
 
-Press "Fork" in the top right to fork the repository and create your own.
-Or, if you're unfamiliar with Git, press the green 'Code' download button to save the project to your hard drive.
+You can either fork the repository, or download it as a zip.
+
+- <a href="https://github.com/daalta/VRChat-Sketchbook-Jam/fork">Fork: Click here</a> to **fork** the repository. You might need to create a GitHub organization first.
+
+- <a href="https://github.com/daalta/VRChat-Sketchbook-Jam/archive/refs/heads/master.zip">Zip Download: Click here</a> to download a **zip** file of the project.
