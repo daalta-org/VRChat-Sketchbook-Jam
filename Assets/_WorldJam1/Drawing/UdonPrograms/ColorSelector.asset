@@ -355,7 +355,7 @@ MonoBehaviour:
         stringValue: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|none
     - fullName: Get_Variable
       uid: 2e4a4b0c-2907-4271-9a02-ac053f057e08
-      position: {x: -2820, y: 780}
+      position: {x: -2828, y: 747}
       nodeUIDs:
       - 
       flowUIDs: []
@@ -1210,7 +1210,7 @@ MonoBehaviour:
     jsonData: '{"visible":true,"layout":{"serializedVersion":"2","x":7.0,"y":142.0,"width":201.0,"height":429.0}}'
   - type: 2
     uid: 1d1a95d9-aed2-4abf-bee7-a03ff6f45e6b
-    jsonData: '{"uid":"1d1a95d9-aed2-4abf-bee7-a03ff6f45e6b","layout":{"serializedVersion":"2","x":-2850.0,"y":610.0,"width":415.0,"height":282.0},"containedElements":["b3e26385-7d9f-44db-b6a2-fe0e132c0bcd","2e4a4b0c-2907-4271-9a02-ac053f057e08"],"title":"Check
+    jsonData: '{"uid":"1d1a95d9-aed2-4abf-bee7-a03ff6f45e6b","layout":{"serializedVersion":"2","x":-2853.0,"y":606.0,"width":421.0,"height":249.0},"containedElements":["b3e26385-7d9f-44db-b6a2-fe0e132c0bcd","2e4a4b0c-2907-4271-9a02-ac053f057e08"],"title":"Check
       for doColorChange","layer":0,"elementTypeColor":{"r":0.0,"g":0.0,"b":0.0,"a":0.0}}'
   - type: 2
     uid: 632185f7-5b7f-4fb0-8e7e-4127aefc89a7
@@ -1244,8 +1244,11 @@ MonoBehaviour:
     uid: 78459696-ef9f-4b87-8495-587c7c20de62
     jsonData: '{"uid":"78459696-ef9f-4b87-8495-587c7c20de62","layout":{"serializedVersion":"2","x":540.0,"y":1250.0,"width":555.0,"height":510.0},"containedElements":["a92efab2-a38b-45f0-80d7-d7c042da2747","c050642f-af8d-433a-ab58-bc2ec8be6738","e3ad314f-797e-4c79-9875-1641cad326e3","839d8988-6ce5-4324-b300-540f2adc16c4","7839c60a-9505-4e80-ab3e-f62c18d16a00"],"title":"Get
       pixel color from texture position","layer":0,"elementTypeColor":{"r":0.0,"g":0.0,"b":0.0,"a":0.0}}'
+  - type: 4
+    uid: d807838d-72c6-43af-816d-4171ae5c8418
+    jsonData: '{"visible":true,"layout":{"serializedVersion":"2","x":0.0,"y":35.0,"width":200.0,"height":100.0}}'
   viewTransform:
-    position: {x: 1160.8239, y: 373.40894}
-    scale: 0.65751624
+    position: {x: -585.0487, y: -94.169365}
+    scale: 0.8695652
   version: 1.0.0
   showAssembly: 0

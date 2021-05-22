@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   serializedUdonProgramAsset: {fileID: 11400000, guid: c5345a09a8c59e448822d56e5158300f,
     type: 2}
-  udonAssembly: ".data_start\r\n\r\n    .sync points, none\r\n    .sync color, none\r\n
-    \   \r\n    instance_0: %UnityEngineLineRenderer, null\r\n    tolerance_0: %SystemSingle,
-    null\r\n    instance_1: %VRCUdonUdonBehaviour, this\r\n    eventName_0: %SystemString,
-    null\r\n    instance_2: %VRCUdonUdonBehaviour, this\r\n    target_0: %VRCUdonCommonInterfacesNetworkEventTarget,
+  udonAssembly: ".data_start\r\n\r\n    .sync points, none\r\n    \r\n    instance_0:
+    %UnityEngineLineRenderer, null\r\n    tolerance_0: %SystemSingle, null\r\n    instance_1:
+    %VRCUdonUdonBehaviour, this\r\n    eventName_0: %SystemString, null\r\n    instance_2:
+    %VRCUdonUdonBehaviour, this\r\n    target_0: %VRCUdonCommonInterfacesNetworkEventTarget,
     null\r\n    eventName_1: %SystemString, null\r\n    instance_3: %UnityEngineLineRenderer,
     null\r\n    value_0: %SystemInt32, null\r\n    instance_4: %UnityEngineVector3Array,
     null\r\n    instance_5: %UnityEngineLineRenderer, null\r\n    positions_0: %UnityEngineVector3Array,
@@ -40,23 +40,18 @@ MonoBehaviour:
     %UnityEngineGameObject, this\r\n    GameObject_0: %UnityEngineGameObject, this\r\n
     \   Boolean_1: %SystemBoolean, null\r\n    Color_0: %UnityEngineColor, null\r\n
     \   Color_1: %UnityEngineColor, null\r\n    instance_E: %VRCUdonUdonBehaviour,
-    this\r\n    eventName_4: %SystemString, null\r\n    instance_F: %UnityEngineLineRenderer,
-    null\r\n    value_1: %UnityEngineColor, null\r\n    instance_10: %UnityEngineLineRenderer,
-    null\r\n    value_2: %UnityEngineColor, null\r\n    H_1: %SystemSingle, null\r\n
-    \   S_1: %SystemSingle, null\r\n    V_1: %SystemSingle, null\r\n    Single_0:
-    %SystemSingle, null\r\n    Single_1: %SystemSingle, null\r\n    rgbColor_0: %UnityEngineColor,
-    null\r\n    H_0: %SystemSingle, null\r\n    S_0: %SystemSingle, null\r\n    V_0:
-    %SystemSingle, null\r\n    instance_11: %UnityEngineGameObject, this\r\n    value_3:
-    %SystemBoolean, null\r\n    instance_12: %UnityEngineLineRenderer, null\r\n    mesh_0:
-    %UnityEngineMesh, null\r\n    useTransform_0: %SystemBoolean, null\r\n    instance_13:
-    %UnityEngineMeshCollider, null\r\n    value_4: %UnityEngineMesh, null\r\n    isDown:
-    %SystemBoolean, null\r\n    points: %UnityEngineVector3Array, null\r\n    lineRenderer:
-    %UnityEngineLineRenderer, null\r\n    __returnValue: %SystemObject, null\r\n    lineMesh:
-    %UnityEngineMesh, null\r\n    lineCollider: %UnityEngineMeshCollider, null\r\n
-    \   color: %UnityEngineColor, null\r\n    lastColor: %UnityEngineColor, null\r\n\r\n.data_end\r\n\r\n.code_start\r\n\r\n
-    \   .export OnFinish\r\n    \r\n    OnFinish:\r\n    \r\n        PUSH, lineRenderer\r\n
-    \       PUSH, instance_0\r\n        COPY\r\n        PUSH, instance_0\r\n        PUSH,
-    tolerance_0\r\n        EXTERN, \"UnityEngineLineRenderer.__Simplify__SystemSingle__SystemVoid\"\r\n
+    this\r\n    eventName_4: %SystemString, null\r\n    instance_F: %UnityEngineGameObject,
+    this\r\n    value_1: %SystemBoolean, null\r\n    instance_10: %UnityEngineLineRenderer,
+    null\r\n    mesh_0: %UnityEngineMesh, null\r\n    useTransform_0: %SystemBoolean,
+    null\r\n    instance_11: %UnityEngineMeshCollider, null\r\n    value_2: %UnityEngineMesh,
+    null\r\n    isDown: %SystemBoolean, null\r\n    points: %UnityEngineVector3Array,
+    null\r\n    lineRenderer: %UnityEngineLineRenderer, null\r\n    __returnValue:
+    %SystemObject, null\r\n    lineMesh: %UnityEngineMesh, null\r\n    lineCollider:
+    %UnityEngineMeshCollider, null\r\n    color: %UnityEngineColor, null\r\n    lastColor:
+    %UnityEngineColor, null\r\n\r\n.data_end\r\n\r\n.code_start\r\n\r\n    .export
+    OnFinish\r\n    \r\n    OnFinish:\r\n    \r\n        PUSH, lineRenderer\r\n        PUSH,
+    instance_0\r\n        COPY\r\n        PUSH, instance_0\r\n        PUSH, tolerance_0\r\n
+    \       EXTERN, \"UnityEngineLineRenderer.__Simplify__SystemSingle__SystemVoid\"\r\n
     \       PUSH, instance_1\r\n        PUSH, eventName_0\r\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\r\n
     \       PUSH, instance_2\r\n        PUSH, target_0\r\n        PUSH, eventName_1\r\n
     \       EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomNetworkEvent__VRCUdonCommonInterfacesNetworkEventTarget_SystemString__SystemVoid\"\r\n
@@ -121,29 +116,17 @@ MonoBehaviour:
     \       EXTERN, \"UnityEngineColor.__op_Inequality__UnityEngineColor_UnityEngineColor__SystemBoolean\"\r\n
     \       PUSH, Boolean_1\r\n        JUMP_IF_FALSE, 0x0000053C\r\n        PUSH,
     instance_E\r\n        PUSH, eventName_4\r\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\r\n
-    \       JUMP, 0x0000053C\r\n        JUMP, 0xFFFFFFFC\r\n    \r\n    .export UpdateLineColor\r\n
-    \   \r\n    UpdateLineColor:\r\n    \r\n        PUSH, lineRenderer\r\n        PUSH,
-    instance_F\r\n        COPY\r\n        PUSH, instance_F\r\n        PUSH, color\r\n
-    \       EXTERN, \"UnityEngineLineRenderer.__set_startColor__UnityEngineColor__SystemVoid\"\r\n
-    \       PUSH, color\r\n        PUSH, H_0\r\n        PUSH, S_0\r\n        PUSH,
-    V_0\r\n        EXTERN, \"UnityEngineColor.__RGBToHSV__UnityEngineColor_SystemSingleRef_SystemSingleRef_SystemSingleRef__SystemVoid\"\r\n
-    \       PUSH, lineRenderer\r\n        PUSH, instance_10\r\n        COPY\r\n        PUSH,
-    H_0\r\n        PUSH, Single_0\r\n        COPY\r\n        PUSH, H_0\r\n        PUSH,
-    Single_1\r\n        PUSH, H_1\r\n        EXTERN, \"SystemSingle.__op_Subtraction__SystemSingle_SystemSingle__SystemSingle\"\r\n
-    \       PUSH, S_0\r\n        PUSH, S_1\r\n        COPY\r\n        PUSH, H_1\r\n
-    \       PUSH, S_0\r\n        PUSH, V_1\r\n        PUSH, value_2\r\n        EXTERN,
-    \"UnityEngineColor.__HSVToRGB__SystemSingle_SystemSingle_SystemSingle__UnityEngineColor\"\r\n
-    \       PUSH, instance_10\r\n        PUSH, value_2\r\n        EXTERN, \"UnityEngineLineRenderer.__set_endColor__UnityEngineColor__SystemVoid\"\r\n
-    \       JUMP, 0xFFFFFFFC\r\n    \r\n    .export Erase\r\n    \r\n    Erase:\r\n
-    \   \r\n        PUSH, instance_11\r\n        PUSH, value_3\r\n        EXTERN,
-    \"UnityEngineGameObject.__SetActive__SystemBoolean__SystemVoid\"\r\n        JUMP,
-    0xFFFFFFFC\r\n    \r\n    .export BakeMesh\r\n    \r\n    BakeMesh:\r\n    \r\n
-    \       PUSH, lineRenderer\r\n        PUSH, instance_12\r\n        COPY\r\n        PUSH,
-    lineMesh\r\n        PUSH, mesh_0\r\n        COPY\r\n        PUSH, instance_12\r\n
-    \       PUSH, mesh_0\r\n        PUSH, useTransform_0\r\n        EXTERN, \"UnityEngineLineRenderer.__BakeMesh__UnityEngineMesh_SystemBoolean__SystemVoid\"\r\n
-    \       PUSH, lineCollider\r\n        PUSH, instance_13\r\n        COPY\r\n        PUSH,
-    lineMesh\r\n        PUSH, value_4\r\n        COPY\r\n        PUSH, instance_13\r\n
-    \       PUSH, value_4\r\n        EXTERN, \"UnityEngineMeshCollider.__set_sharedMesh__UnityEngineMesh__SystemVoid\"\r\n
+    \       JUMP, 0x0000053C\r\n        JUMP, 0xFFFFFFFC\r\n    \r\n    .export Erase\r\n
+    \   \r\n    Erase:\r\n    \r\n        PUSH, instance_F\r\n        PUSH, value_1\r\n
+    \       EXTERN, \"UnityEngineGameObject.__SetActive__SystemBoolean__SystemVoid\"\r\n
+    \       JUMP, 0xFFFFFFFC\r\n    \r\n    .export BakeMesh\r\n    \r\n    BakeMesh:\r\n
+    \   \r\n        PUSH, lineRenderer\r\n        PUSH, instance_10\r\n        COPY\r\n
+    \       PUSH, lineMesh\r\n        PUSH, mesh_0\r\n        COPY\r\n        PUSH,
+    instance_10\r\n        PUSH, mesh_0\r\n        PUSH, useTransform_0\r\n        EXTERN,
+    \"UnityEngineLineRenderer.__BakeMesh__UnityEngineMesh_SystemBoolean__SystemVoid\"\r\n
+    \       PUSH, lineCollider\r\n        PUSH, instance_11\r\n        COPY\r\n        PUSH,
+    lineMesh\r\n        PUSH, value_2\r\n        COPY\r\n        PUSH, instance_11\r\n
+    \       PUSH, value_2\r\n        EXTERN, \"UnityEngineMeshCollider.__set_sharedMesh__UnityEngineMesh__SystemVoid\"\r\n
     \       JUMP, 0xFFFFFFFC\r\n    \r\n\r\n.code_end\r\n"
   assemblyError: 
   graphData:
@@ -727,7 +710,7 @@ MonoBehaviour:
       - unityObjectValue: {fileID: 0}
         stringValue: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|False
       - unityObjectValue: {fileID: 0}
-        stringValue: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|True
+        stringValue: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|False
       - unityObjectValue: {fileID: 0}
         stringValue: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|none
     - fullName: Variable_UnityEngineColor
@@ -742,7 +725,8 @@ MonoBehaviour:
       flowUIDs: []
       nodeValues:
       - unityObjectValue: {fileID: 0}
-        stringValue: 
+        stringValue: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null|{"r":1.0,"g":1.0,"b":1.0,"a":0.0}
       - unityObjectValue: {fileID: 0}
         stringValue: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|lastColor
       - unityObjectValue: {fileID: 0}
@@ -930,7 +914,7 @@ MonoBehaviour:
       nodeUIDs:
       - 
       flowUIDs:
-      - cacc9f15-acbc-4954-aed4-46ae822c38a7
+      - 
       nodeValues:
       - unityObjectValue: {fileID: 0}
         stringValue: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|UpdateLineColor
@@ -1113,8 +1097,11 @@ MonoBehaviour:
     uid: 46f2b95d-f5f5-484c-85b1-67af7aab147b
     jsonData: '{"uid":"46f2b95d-f5f5-484c-85b1-67af7aab147b","layout":{"serializedVersion":"2","x":800.0,"y":570.0,"width":748.0,"height":422.0},"containedElements":["c63c8c91-c08a-41e1-a772-52e480e95526","a99bb75b-1c15-49a5-b57b-41c0ff272dfc","3a567ac6-37e7-45e4-9267-be52bb192ccd","351772dd-494d-49cf-8a1d-a453b9c89cca","0d8beb35-b587-457b-8862-fe4c02e11f25","4be10c6d-cf52-426f-8180-378dcccaaeb7"],"title":"Bake
       Mesh Collider","layer":0,"elementTypeColor":{"r":0.0,"g":0.0,"b":0.0,"a":0.0}}'
+  - type: 5
+    uid: b6e6b0a1-c6d3-46bc-8787-fa4b9c2f4662
+    jsonData: '{"visible":true,"layout":{"serializedVersion":"2","x":8.0,"y":145.0,"width":205.0,"height":257.0}}'
   viewTransform:
-    position: {x: 800.8791, y: -815.3519}
-    scale: 0.7561437
+    position: {x: 1521.7854, y: -1100.3778}
+    scale: 0.8695652
   version: 1.0.0
   showAssembly: 0

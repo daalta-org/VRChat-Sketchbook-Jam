@@ -614,4 +614,4 @@ MonoBehaviour:
     position: {x: 77.918434, y: 125.43764}
     scale: 0.65751624
   version: 1.0.0
-  showAssembly: 0
+  showAssembly: 1

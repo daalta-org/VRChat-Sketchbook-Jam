@@ -52,17 +52,12 @@ MonoBehaviour:
     %SystemType, null\r\n    Type_2: %SystemType, null\r\n    object_1: %SystemObject,
     null\r\n    Type_3: %SystemType, null\r\n    result_1: %SystemBoolean, null\r\n
     \   instance_12: %UnityEngineTransform, this\r\n    type_2: %SystemType, null\r\n
-    \   Type_4: %SystemType, null\r\n    object_2: %SystemObject, null\r\n    result_2:
-    %SystemBoolean, null\r\n    instance_13: %UnityEngineMaterial, null\r\n    value_4:
-    %UnityEngineColor, null\r\n    instance_14: %UnityEngineMeshRenderer, null\r\n
-    \   Boolean_7: %SystemBoolean, null\r\n    Color_0: %UnityEngineColor, null\r\n
-    \   Color_1: %UnityEngineColor, null\r\n    instance_15: %VRCUdonUdonBehaviour,
-    this\r\n    eventName_2: %SystemString, null\r\n    line: %VRCUdonUdonBehaviour,
-    this\r\n    isDrawing: %SystemBoolean, null\r\n    startPosition: %UnityEngineVector3,
-    null\r\n    minMoveDistance: %SystemSingle, null\r\n    points: %UnityEngineVector3Array,
-    null\r\n    lineRenderer: %UnityEngineLineRenderer, null\r\n    penTip: %UnityEngineTransform,
-    this\r\n    currentIndex: %SystemInt32, null\r\n    __returnValue: %SystemObject,
-    null\r\n    pointsPerUpdate: %SystemInt32, null\r\n    linesContainer: %UnityEngineTransform,
+    \   Type_4: %SystemType, null\r\n    line: %VRCUdonUdonBehaviour, this\r\n    isDrawing:
+    %SystemBoolean, null\r\n    startPosition: %UnityEngineVector3, null\r\n    minMoveDistance:
+    %SystemSingle, null\r\n    points: %UnityEngineVector3Array, null\r\n    lineRenderer:
+    %UnityEngineLineRenderer, null\r\n    penTip: %UnityEngineTransform, this\r\n
+    \   currentIndex: %SystemInt32, null\r\n    __returnValue: %SystemObject, null\r\n
+    \   pointsPerUpdate: %SystemInt32, null\r\n    linesContainer: %UnityEngineTransform,
     this\r\n    nextLineIndex: %SystemInt32, null\r\n    pool: %UnityEngineGameObjectArray,
     null\r\n    linePool: %UnityEngineLineRendererArray, null\r\n    color: %UnityEngineColor,
     null\r\n    selfRenderer: %UnityEngineMeshRenderer, null\r\n    lastColor: %UnityEngineColor,
@@ -169,21 +164,7 @@ MonoBehaviour:
     \       PUSH, result_1\r\n        JUMP_IF_FALSE, 0x000007F0\r\n        PUSH, Type_4\r\n
     \       PUSH, type_2\r\n        COPY\r\n        PUSH, object_1\r\n        PUSH,
     selfRenderer\r\n        COPY\r\n        PUSH, object_1\r\n        PUSH, selfRenderer\r\n
-    \       COPY\r\n        JUMP, 0x000007F0\r\n        JUMP, 0xFFFFFFFC\r\n    \r\n
-    \   .export UpdateColor\r\n    \r\n    UpdateColor:\r\n    \r\n        PUSH, selfRenderer\r\n
-    \       PUSH, object_2\r\n        COPY\r\n        PUSH, object_2\r\n        PUSH,
-    result_2\r\n        EXTERN, \"VRCSDKBaseUtilities.__IsValid__SystemObject__SystemBoolean\"\r\n
-    \       PUSH, result_2\r\n        JUMP_IF_FALSE, 0x00000894\r\n        PUSH, selfRenderer\r\n
-    \       PUSH, instance_14\r\n        COPY\r\n        PUSH, instance_14\r\n        PUSH,
-    instance_13\r\n        EXTERN, \"UnityEngineMeshRenderer.__get_sharedMaterial__UnityEngineMaterial\"\r\n
-    \       PUSH, instance_13\r\n        PUSH, color\r\n        EXTERN, \"UnityEngineMaterial.__set_color__UnityEngineColor__SystemVoid\"\r\n
-    \       PUSH, color\r\n        PUSH, lastColor\r\n        COPY\r\n        JUMP,
-    0x00000894\r\n        JUMP, 0xFFFFFFFC\r\n    \r\n    .export _onDeserialization\r\n
-    \   \r\n    _onDeserialization:\r\n    \r\n        PUSH, lastColor\r\n        PUSH,
-    color\r\n        PUSH, Boolean_7\r\n        EXTERN, \"UnityEngineColor.__op_Inequality__UnityEngineColor_UnityEngineColor__SystemBoolean\"\r\n
-    \       PUSH, Boolean_7\r\n        JUMP_IF_FALSE, 0x000008EC\r\n        PUSH,
-    instance_15\r\n        PUSH, eventName_2\r\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\r\n
-    \       JUMP, 0x000008EC\r\n        JUMP, 0xFFFFFFFC\r\n    \r\n\r\n.code_end\r\n"
+    \       COPY\r\n        JUMP, 0x000007F0\r\n        JUMP, 0xFFFFFFFC\r\n    \r\n\r\n.code_end\r\n"
   assemblyError: 
   graphData:
     name: 
@@ -1350,7 +1331,7 @@ MonoBehaviour:
       nodeUIDs:
       - 
       flowUIDs:
-      - bdf18086-de94-427a-bffe-0ac4f7df13c2
+      - 
       nodeValues:
       - unityObjectValue: {fileID: 0}
         stringValue: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|UpdateColor
@@ -1370,7 +1351,7 @@ MonoBehaviour:
       position: {x: -1770, y: 490}
       nodeUIDs: []
       flowUIDs:
-      - ae3bd979-eee5-4127-bb90-45777f937b12
+      - 
       nodeValues: []
     - fullName: VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid
       uid: f1efcd35-d263-41c2-84d7-c677fa182b0c
@@ -1707,8 +1688,11 @@ MonoBehaviour:
   - type: 5
     uid: dc0a01cb-b0a2-4dad-8220-1d5d34238fc4
     jsonData: '{"visible":true,"layout":{"serializedVersion":"2","x":10.0,"y":130.0,"width":245.0,"height":508.0}}'
+  - type: 5
+    uid: 2d268316-baaf-4353-9107-f320e89d4926
+    jsonData: '{"visible":true,"layout":{"serializedVersion":"2","x":15.0,"y":61.0,"width":245.0,"height":508.0}}'
   viewTransform:
-    position: {x: 1384.4956, y: 248.39136}
-    scale: 0.49717674
+    position: {x: 943.1248, y: -242.88608}
+    scale: 0.7561437
   version: 1.0.0
   showAssembly: 0
