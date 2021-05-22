@@ -68,8 +68,8 @@ public class GameManager : UdonSharpBehaviour
         var promptsThisRound = prompts.GetPromptSequenceForRound(seed, promptSequence, round);
         for (var i = 0; i < playerManagers.Length; i++)
         {
-            playerManagers[i].SetPrompt(promptSequence[i]);
-            Debug.Log($"Player {i} received prompt {promptSequence[i]}");
+            playerManagers[i].SetPrompt(promptsThisRound[i]);
+            Debug.Log($"Player {i} received prompt {promptsThisRound[i]}");
         }
     }
 }
