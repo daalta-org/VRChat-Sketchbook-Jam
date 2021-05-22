@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Prompts : UdonSharpBehaviour
 {
-    private readonly string[] promts = new[]
+    private readonly string[] promts = new[] // TODO Switch this to a text parser
     {
         "Beach","Pool","Lake","Ocean","Canal","Pond","Puddle",
         "Travel","Wander","Explore","Arrive","Depart","Discover","Walk",
@@ -39,8 +39,9 @@ public class Prompts : UdonSharpBehaviour
     /// <returns>Seven similar prompts</returns>
     public string[] GetPrompt(int index)
     {
+        Debug.Log("Retrieving prompt " + index);
         var result = new string[7];
-        for (var i = 0; i <= 7; i++)
+        for (var i = 0; i < 7; i++)
         {
             result[i] = promts[index * 7 + i];
         }

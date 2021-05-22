@@ -1,7 +1,10 @@
 ﻿using UdonSharp;
+using UnityEngine;
 
 public class PlayerManager : UdonSharpBehaviour
 {
+    [SerializeField] private PlayerUI playerUI = null;
+    
     [UdonSynced] private int prompt = -1;
 
     void Start()
@@ -12,5 +15,6 @@ public class PlayerManager : UdonSharpBehaviour
     public void SetPrompt(int index)
     {
         prompt = index;
+        playerUI.SetPrompt(index);
     }
 }
