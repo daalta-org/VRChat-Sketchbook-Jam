@@ -19,11 +19,11 @@ public class GameManager : UdonSharpBehaviour
     private void Start()
     {
         if (!Networking.IsMaster) return;
-        StartGame();
     }
 
-    private void StartGame()
+    public void StartGame()
     {
+        if (!Networking.LocalPlayer.isMaster) return;
         seed = UnityEngine.Random.Range(-int.MaxValue, int.MaxValue);
         round = 0;
         Debug.Log("Requesting Deserialization...");
