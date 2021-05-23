@@ -2835,16 +2835,16 @@ MonoBehaviour:
   DynamicMaterials:
   - {fileID: 2100000, guid: 4752c805bd4477c4484e1b5647966b29, type: 2}
   - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  - {fileID: 2100000, guid: 09991caeff77623418680c1aead38d84, type: 2}
   - {fileID: 2100000, guid: 93155d1e32fd97946b38a7544b9faeb4, type: 2}
-  - {fileID: 2100000, guid: 14c201546189da747a191842fe08aeea, type: 2}
-  - {fileID: 2100000, guid: ea20f741152bef84d8ac63306a6861e8, type: 2}
-  - {fileID: 2100000, guid: 2d9b5076cdf22f444a75f80a06522b83, type: 2}
   - {fileID: 2100000, guid: cf2c5e54add751d48bdd3bdc208a31f7, type: 2}
-  - {fileID: 2100000, guid: 0586dcc353b0b904abd923750c0a77e8, type: 2}
   - {fileID: 2100000, guid: 6574aa39d65d2a243ab4e9ffc3c7e4d7, type: 2}
+  - {fileID: 2100000, guid: 14c201546189da747a191842fe08aeea, type: 2}
   - {fileID: 2100000, guid: e716634c389301c4dbe715b08d24e491, type: 2}
+  - {fileID: 2100000, guid: 2d9b5076cdf22f444a75f80a06522b83, type: 2}
+  - {fileID: 2100000, guid: 0586dcc353b0b904abd923750c0a77e8, type: 2}
   - {fileID: 2100000, guid: fd20e45036ef323459e8286e9c23c02c, type: 2}
+  - {fileID: 2100000, guid: ea20f741152bef84d8ac63306a6861e8, type: 2}
+  - {fileID: 2100000, guid: 09991caeff77623418680c1aead38d84, type: 2}
   - {fileID: 2100000, guid: 1c987494452b85f4ab4cac3322415907, type: 2}
   LightMapsNear: []
   LightMapsFar: []
@@ -3380,6 +3380,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4927540338060091599, guid: d0a301f5c5988b24f8930a76f438ba3e,
+        type: 3}
+      propertyPath: m_Colors.m_NormalColor.a
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5527136143722657048, guid: d0a301f5c5988b24f8930a76f438ba3e,
         type: 3}
