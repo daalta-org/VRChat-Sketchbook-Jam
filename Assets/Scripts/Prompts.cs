@@ -75,9 +75,8 @@ public class Prompts : UdonSharpBehaviour
         return result;
     }
 
-    public int[] GetPromptSequenceForRound(int seed, int[] promptSequence, int round)
+    public int[] GetPromptSequenceForRound(int[] promptSequence, int round)
     {
-        UnityEngine.Random.InitState(seed);
         Debug.Log("Prompt sequence length: " + promptSequence.Length);
         
         var numPromptsPerRound = 4;

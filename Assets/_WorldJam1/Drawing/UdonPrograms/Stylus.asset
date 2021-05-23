@@ -15,13 +15,13 @@ MonoBehaviour:
   serializedUdonProgramAsset: {fileID: 11400000, guid: 688ab790d2b842649aa596781e9c997b,
     type: 2}
   udonAssembly: ".data_start\r\n\r\n    .export minMoveDistance\r\n    .export penTip\r\n
-    \   .export pointsPerUpdate\r\n    .export linesContainer\r\n    .sync nextLineIndex,
-    none\r\n    .sync color, none\r\n    \r\n    object_0: %SystemObject, null\r\n
-    \   Type_0: %SystemType, null\r\n    result_0: %SystemBoolean, null\r\n    instance_1:
-    %UnityEngineLineRenderer, null\r\n    type_0: %SystemType, null\r\n    Type_1:
-    %SystemType, null\r\n    player_0: %VRCSDKBaseVRCPlayerApi, null\r\n    obj_0:
-    %UnityEngineGameObject, this\r\n    instance_3: %UnityEngineGameObject, this\r\n
-    \   value_0: %SystemBoolean, null\r\n    instance_2: %UnityEngineLineRenderer,
+    \   .export pointsPerUpdate\r\n    .export linesContainer\r\n    .export gameManager\r\n
+    \   .sync nextLineIndex, none\r\n    .sync color, none\r\n    \r\n    object_0:
+    %SystemObject, null\r\n    Type_0: %SystemType, null\r\n    result_0: %SystemBoolean,
+    null\r\n    instance_1: %UnityEngineLineRenderer, null\r\n    type_0: %SystemType,
+    null\r\n    Type_1: %SystemType, null\r\n    player_0: %VRCSDKBaseVRCPlayerApi,
+    null\r\n    obj_0: %UnityEngineGameObject, this\r\n    instance_3: %UnityEngineGameObject,
+    this\r\n    value_0: %SystemBoolean, null\r\n    instance_2: %UnityEngineLineRenderer,
     null\r\n    instance_0: %UnityEngineLineRendererArray, null\r\n    Int32_0: %SystemInt32,
     null\r\n    Boolean_0: %SystemBoolean, null\r\n    Int32_1: %SystemInt32, null\r\n
     \   Int32_2: %SystemInt32, null\r\n    instance_4: %UnityEngineLineRendererArray,
@@ -61,10 +61,10 @@ MonoBehaviour:
     this\r\n    nextLineIndex: %SystemInt32, null\r\n    pool: %UnityEngineGameObjectArray,
     null\r\n    linePool: %UnityEngineLineRendererArray, null\r\n    color: %UnityEngineColor,
     null\r\n    selfRenderer: %UnityEngineMeshRenderer, null\r\n    lastColor: %UnityEngineColor,
-    null\r\n\r\n.data_end\r\n\r\n.code_start\r\n\r\n    .export _onPickupUseDown\r\n
-    \   \r\n    _onPickupUseDown:\r\n    \r\n        PUSH, linePool\r\n        PUSH,
-    instance_0\r\n        COPY\r\n        PUSH, instance_0\r\n        PUSH, nextLineIndex\r\n
-    \       PUSH, lineRenderer\r\n        EXTERN, \"UnityEngineLineRendererArray.__Get__SystemInt32__UnityEngineLineRenderer\"\r\n
+    null\r\n    gameManager: %VRCUdonUdonBehaviour, this\r\n\r\n.data_end\r\n\r\n.code_start\r\n\r\n
+    \   .export _onPickupUseDown\r\n    \r\n    _onPickupUseDown:\r\n    \r\n        PUSH,
+    linePool\r\n        PUSH, instance_0\r\n        COPY\r\n        PUSH, instance_0\r\n
+    \       PUSH, nextLineIndex\r\n        PUSH, lineRenderer\r\n        EXTERN, \"UnityEngineLineRendererArray.__Get__SystemInt32__UnityEngineLineRenderer\"\r\n
     \       PUSH, linePool\r\n        PUSH, instance_0\r\n        COPY\r\n        PUSH,
     lineRenderer\r\n        PUSH, instance_1\r\n        COPY\r\n        PUSH, Type_0\r\n
     \       PUSH, type_0\r\n        COPY\r\n        PUSH, lineRenderer\r\n        PUSH,
@@ -1691,8 +1691,11 @@ MonoBehaviour:
   - type: 5
     uid: 2d268316-baaf-4353-9107-f320e89d4926
     jsonData: '{"visible":true,"layout":{"serializedVersion":"2","x":15.0,"y":61.0,"width":245.0,"height":508.0}}'
+  - type: 5
+    uid: 76643935-4947-4fe1-929f-9cdec5708da2
+    jsonData: '{"visible":true,"layout":{"serializedVersion":"2","x":15.0,"y":61.0,"width":245.0,"height":508.0}}'
   viewTransform:
-    position: {x: 943.1248, y: -242.88608}
-    scale: 0.7561437
+    position: {x: 2475.3274, y: -1467.2087}
+    scale: 1.3225
   version: 1.0.0
   showAssembly: 0

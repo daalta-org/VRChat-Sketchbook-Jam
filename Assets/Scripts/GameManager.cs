@@ -5,6 +5,8 @@ using VRC.SDKBase;
 
 public class GameManager : UdonSharpBehaviour
 {
+    public GameObject myPen = null;
+    
     [SerializeField] private GameUI gameUI = null;
     [SerializeField] private PlayerManager[] playerManagers = null;
     [SerializeField] private Prompts prompts = null;
@@ -73,10 +75,12 @@ public class GameManager : UdonSharpBehaviour
 
     private void UpdatePromptsForPlayers()
     {
-        var promptsThisRound = prompts.GetPromptSequenceForRound(seed, promptSequence, round);
+        UnityEngine.Random.InitState(seed);
+        var promptsThisRound = prompts.GetPromptSequenceForRound(promptSequence, round);
         for (var i = 0; i < playerManagers.Length; i++)
         {
             playerManagers[i].SetPrompt(promptsThisRound[i]);
+            playerManagers[i].SetCorrectIndex(UnityEngine.Random.Range(0, 7));
             Debug.Log($"Player {i} received prompt {promptsThisRound[i]}");
         }
     }
