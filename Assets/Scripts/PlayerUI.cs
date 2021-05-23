@@ -1,40 +1,48 @@
-﻿
-using System;
+﻿using System;
 using TMPro;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
-using VRC.SDKBase;
-using VRC.Udon;
 
 public class PlayerUI : UdonSharpBehaviour
 {
-    [SerializeField] private Prompts prompts = null;
     [SerializeField] private TextMeshProUGUI[] text = null;
-    [SerializeField] private Button[] button = null;
+    [SerializeField] private Animator[] buttonAnimators = null;
 
     private bool localPlayerCanVote = false;
-    
-    void Start()
-    {
-        
-    }
+    private readonly int IsCorrect = Animator.StringToHash("IsCorrect");
+    private readonly int IsNeutral = Animator.StringToHash("IsNeutral");
 
-    public void SetPrompt(int index)
+    public void SetPrompt(int index, Prompts prompts)
     {
         var prompt = prompts.GetPrompt(index);
         for (var i = 0; i < 7; i++)
         {
-            text[i].text = prompt[i];
+            text[i].text = prompt[i]; // Object reference not set error
         }
     }
 
     public void SetCorrectPrompt(int index, bool isOwner)
     {
         localPlayerCanVote = !isOwner;
-        for (var i = 0; i < button.Length; i++)
+        for (var i = 0; i < buttonAnimators.Length; i++)
         {
-            button[i].interactable = !isOwner || (isOwner && index == i);
+            if (isOwner && index == i)
+            {
+                buttonAnimators[i].SetTrigger(IsCorrect);
+            }
+            else
+            {
+                buttonAnimators[i].SetTrigger(IsNeutral);
+            }
+        }
+    }
+
+    public void Reset()
+    {
+        foreach (var t in buttonAnimators)
+        {
+            t.SetTrigger(IsNeutral);
         }
     }
 }

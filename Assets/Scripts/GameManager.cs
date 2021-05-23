@@ -84,4 +84,12 @@ public class GameManager : UdonSharpBehaviour
             Debug.Log($"Player {i} received prompt {promptsThisRound[i]}");
         }
     }
+
+    public void ResetAllPlayerManagedPlayedIds(int playerId)
+    {
+        foreach (var p in playerManagers)
+        {
+            p.ResetManagedPlayedId(playerId);
+        }   
+    }
 }
