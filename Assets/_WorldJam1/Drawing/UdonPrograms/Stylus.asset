@@ -1849,8 +1849,11 @@ MonoBehaviour:
   - type: 5
     uid: 76643935-4947-4fe1-929f-9cdec5708da2
     jsonData: '{"visible":true,"layout":{"serializedVersion":"2","x":15.0,"y":61.0,"width":245.0,"height":508.0}}'
+  - type: 5
+    uid: 8a3c67e6-7504-4f32-ac79-d53e86978ec2
+    jsonData: '{"visible":true,"layout":{"serializedVersion":"2","x":15.0,"y":61.0,"width":245.0,"height":508.0}}'
   viewTransform:
-    position: {x: 2059.3965, y: -574.57336}
-    scale: 0.8695652
+    position: {x: 1357.5485, y: -936.801}
+    scale: 0.65751624
   version: 1.0.0
   showAssembly: 0
