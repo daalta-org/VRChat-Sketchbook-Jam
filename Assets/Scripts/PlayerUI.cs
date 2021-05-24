@@ -11,7 +11,7 @@ public class PlayerUI : UdonSharpBehaviour
     public void SetPrompt(int index, Prompts prompts)
     {
         var prompt = prompts.GetPrompt(index);
-        for (var i = 0; i < 7; i++)
+        for (var i = 0; i < 6; i++)
         {
             buttonManagers[i].SetText(prompt[i]); // Object reference not set error
         }

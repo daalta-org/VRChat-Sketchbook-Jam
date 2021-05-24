@@ -7,8 +7,6 @@ using VRC.Udon.Common.Interfaces;
 
 public class GameManager : UdonSharpBehaviour
 {
-    public GameObject myPen = null;
-
     [SerializeField] private GameUI gameUI = null;
     [SerializeField] private PlayerManager[] playerManagers = null;
     [SerializeField] private Prompts prompts = null;

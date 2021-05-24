@@ -1,36 +1,37 @@
-﻿using BestHTTP.Logger;
-using UdonSharp;
+﻿using UdonSharp;
 using UnityEngine;
 
 public class Prompts : UdonSharpBehaviour
 {
-    private readonly string[] promts = new[] // TODO Switch this to a text parser
+    [SerializeField] private TextAsset textAsset = null;
+
+    private string[] prompts = null;
+
+    public string[] LoadPromptsFromFile()
     {
-        "Beach","Pool","Lake","Ocean","Canal","Pond","Puddle",
-        "Travel","Wander","Explore","Arrive","Depart","Discover","Walk",
-        "North America","South America","Europe","Africa","Asia","Oceania","Antarctica",
-        "Frog","Newt","Toad","Salamander","Chameleon","Iguana","Axolotl",
-        "CyanLaser","Fionna","1","Merlin","Owlboy","LuciferMStar","Jar",
-        "Deer","Moose","Reindeer","Elk","Antelope","Fawn","Horse",
-        "Dingo","Shiba","Chihuahua","Pug","Hyena","Pitbull","Great Dane",
-        "Telescope","Surveillance Camera","Night Vision Goggles","Binoculars","Scope","GoPro","Hidden Camera",
-        "Museum","Cemetery ","Memorial ","President's Office","Town Hall","Battlefield","National Park",
-        "Car","Bus","Truck","Limousine","Campervan","Cabriolet","Sports Car",
-        "The Great Pug","The Room Of The Rain","The Black Cat","Japan Shrine","Summer Solitude","Just B Club","Aquarius",
-        "Brush","Ugandan Knuckles","Kanna","Nikei","Unity-Chan","Miku","Kermit",
-        "Mountain","Hill","Valley","Canyon","Cliff","Peak","Volcano",
-        "Catch Me If You Can","The Darjeeling Limited","Seven Years in Tibet","In Bruges","Midnight in Paris","Lost in Translation","Eat Pray Love",
-        "Tennis Racket","Baseball Bat","Golf Club","Ski Pole","Skis","Hockey Stick","Fishing Pole",
-        "I've Been Everywhere","I'm Gonna Be","Travelin' Man","A Thousand Miles","Highway To Hell","Hit The Road Jack","Sweet Home Alabama",
-        "Indiana Jones","Bear Grylls","Tintin","Nathan Drake","Lara Croft","Steve Irwin","Marco Polo",
-        "Adventure","Experience","Journey","Mission","Quest","Enterprise","Expedition",
-        "Draw","Paint","Sketch","Scribble","Sculpt","Silhouette","Doodle",
-        "Cat","Dog","Fox","Pig","Rabbit","Squirrel","Hedgehog",
-        "Map","Blueprint","Brochure","Atlas","Design","Draft","Directions",
-        "Beanie","Beret","Cowboy Hat","Sombrero","Top Hat","Fedora","Fez",
-        "Soda","Water","Tea","Coffee","Juice","Milk","Lemonade",
-        "Dance","Limbo","Jump","Breakdance","Backflip","Pirouette","Moonwalk"
-    };
+        if (prompts != null)
+        {
+            Debug.Log("Cached prompts loaded. There are " + prompts.Length);
+            return prompts;
+        }
+        
+        var input = textAsset.text;
+        var inputLines = input.Split('\n');
+        var result =  new string[(inputLines.Length-1) * 6];
+        for (var y = 0; y < inputLines.Length - 1; y++)
+        {
+            var line = inputLines[y + 1].Split(',');
+            for (var x = 0; x < 6; x++)
+            {
+                var index = y * 6 + x;
+                result[index] = line[x + 1];
+            }
+        }
+
+        prompts = result;
+        Debug.Log("Prompts loaded from file. There are " + prompts.Length);
+        return prompts;
+    }
 
     /// <summary>
     /// Returns seven prompts for a given index
@@ -43,7 +44,7 @@ public class Prompts : UdonSharpBehaviour
         var result = new string[7];
         for (var i = 0; i < 7; i++)
         {
-            result[i] = promts[index * 7 + i];
+            result[i] = LoadPromptsFromFile()[index * 7 + i];
         }
 
         return result;
@@ -51,7 +52,7 @@ public class Prompts : UdonSharpBehaviour
 
     private int GetNumPrompts()
     {
-        return promts.Length / 7;
+        return LoadPromptsFromFile().Length / 7;
     }
 
     /// <summary>
