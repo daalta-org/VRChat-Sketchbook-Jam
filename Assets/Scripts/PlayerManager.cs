@@ -1,6 +1,7 @@
 ﻿using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
+using VRC.Udon;
 using VRC.Udon.Common.Interfaces;
 
 public class PlayerManager : UdonSharpBehaviour
@@ -8,7 +9,7 @@ public class PlayerManager : UdonSharpBehaviour
     private GameManager gameManager = null; // Not serialized because it would break as a prefab. Inserted by GameManager
     [SerializeField] private PlayerUI playerUI = null;
     private Prompts prompts = null; // Not serialized because it would break as a prefab. Inserted by GameManager
-    [SerializeField] private GameObject stylus;
+    [SerializeField] private UdonBehaviour stylus;
     
     [UdonSynced] private int ownerPlayerId = -1;
     private int ownerPlayerIdOld = -1;
@@ -58,8 +59,8 @@ public class PlayerManager : UdonSharpBehaviour
     {
         if (!Networking.LocalPlayer.isMaster) return;
         Debug.Log("I'm the master. I'll try to add owner of this stylus to owner ID of the player manager.");
-        gameManager.RemoveManagedPlayerId(Networking.GetOwner(stylus).playerId);
-        ownerPlayerId = Networking.GetOwner(stylus).playerId;
+        gameManager.RemoveManagedPlayerId(Networking.GetOwner(stylus.gameObject).playerId);
+        ownerPlayerId = Networking.GetOwner(stylus.gameObject).playerId;
         gameManager.RequestPlayerManagerSerialization();
         OnDeserialization();
     }
@@ -83,7 +84,13 @@ public class PlayerManager : UdonSharpBehaviour
     public void OnRoundChanged(int seed, int round)
     {
         playerUI.MakeAllPromptsNeutral();
+        ClearLines();
         if (LocalIsOwner()) playerUI.SetPromptCorrect(GetCorrectIndex(seed, round));
+    }
+
+    private void ClearLines()
+    {
+        stylus.SendCustomEvent("ResetLines");
     }
 
     private int GetCorrectIndex(int seed, int round)
