@@ -10,6 +10,15 @@ public class PlayerUI : UdonSharpBehaviour
     [SerializeField] private MeshRenderer[] meshRenderersColor = null;
     [SerializeField] private Material[] materialsColor = null;
 
+    public void SetButtonInfo(PlayerManager pm)
+    {
+        for (var index = 0; index < buttonManagers.Length; index++)
+        {
+            var buttonManager = buttonManagers[index];
+            buttonManager.SetButtonInfo(pm, index);
+        }
+    }
+    
     public void SetColor(int colorIndex)
     {
         foreach (var meshRenderer in meshRenderersColor)

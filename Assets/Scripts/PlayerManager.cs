@@ -12,8 +12,15 @@ public class PlayerManager : UdonSharpBehaviour
     [SerializeField] private UdonBehaviour stylus;
     
     [UdonSynced] private int ownerPlayerId = -1;
+    private int playerIndex = -1;
     private int ownerPlayerIdOld = -1;
     private int correctIndex = -1;
+
+    public void SetButtonInfo(int pi)
+    {
+        playerIndex = pi;
+        playerUI.SetButtonInfo(this);
+    }
     
     public void SetPrompt(int index)
     {
@@ -88,7 +95,8 @@ public class PlayerManager : UdonSharpBehaviour
         if (round < 0) return;
         
         ClearLines();
-        if (LocalIsOwner()) playerUI.SetPromptCorrect(GetCorrectIndex(seed, round));
+        correctIndex = GetCorrectIndex(seed, round);
+        if (LocalIsOwner()) playerUI.SetPromptCorrect(correctIndex);
     }
 
     private void ClearLines()
@@ -96,7 +104,7 @@ public class PlayerManager : UdonSharpBehaviour
         stylus.SendCustomNetworkEvent(NetworkEventTarget.All, "ResetLines");
     }
 
-    private int GetCorrectIndex(int seed, int round)
+    public int GetCorrectIndex(int seed, int round)
     {
         Random.InitState(seed + round);
         return UnityEngine.Random.Range(0, 6);
@@ -106,5 +114,10 @@ public class PlayerManager : UdonSharpBehaviour
     {
         prompts = prompts1;
         gameManager = gameManager1;
+    }
+
+    public void OnButtonPressed(int buttonIndex)
+    {
+        playerUI.SetPromptState(buttonIndex, buttonIndex == correctIndex ? 2 : 1);
     }
 }

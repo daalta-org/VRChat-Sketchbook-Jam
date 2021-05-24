@@ -1760,6 +1760,12 @@ MonoBehaviour:
         stringValue: 
       - unityObjectValue: {fileID: 0}
         stringValue: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|0
+    - fullName: Type_UnityEngineUIButtonButtonClickedEventArray
+      uid: 23263a9c-38b1-4444-8d0a-7e77dda29f73
+      position: {x: -726.1833, y: 1632.2534}
+      nodeUIDs: []
+      flowUIDs: []
+      nodeValues: []
     updateOrder: 0
   graphElementData:
   - type: 2
@@ -1846,7 +1852,7 @@ MonoBehaviour:
     uid: 4e7c7a53-823b-40fb-834d-297585c5615d
     jsonData: '{"visible":true,"layout":{"serializedVersion":"2","x":15.0,"y":61.0,"width":245.0,"height":508.0}}'
   viewTransform:
-    position: {x: 1339.4636, y: -1315.3507}
-    scale: 0.8695652
+    position: {x: 939.99805, y: -256.68015}
+    scale: 0.43232757
   version: 1.0.0
   showAssembly: 0

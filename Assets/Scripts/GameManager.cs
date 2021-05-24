@@ -20,12 +20,14 @@ public class GameManager : UdonSharpBehaviour
     private void Start()
     {
         SetPlayerColors();
-        
-        foreach (var p in playerManagers)
+
+        for (var index = 0; index < playerManagers.Length; index++)
         {
+            var p = playerManagers[index];
             p.SetPromptsAndGameManager(prompts, this);
+            p.SetButtonInfo(index);
         }
-        
+
         if (!Networking.IsMaster) return;
     }
 
