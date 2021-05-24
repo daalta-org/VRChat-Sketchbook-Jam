@@ -1,12 +1,14 @@
 ﻿using System;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.Experimental.PlayerLoop;
 using VRC.SDKBase;
+using VRC.Udon.Common.Interfaces;
 
 public class GameManager : UdonSharpBehaviour
 {
     public GameObject myPen = null;
-    
+
     [SerializeField] private GameUI gameUI = null;
     [SerializeField] private PlayerManager[] playerManagers = null;
     [SerializeField] private Prompts prompts = null;
@@ -17,11 +19,16 @@ public class GameManager : UdonSharpBehaviour
     [UdonSynced] private int round = -1;
     private int roundOld = -1;
 
-    private int[] promptSequence = null;
+    public int[] promptSequence = null;
 
     private void Start()
     {
         if (!Networking.IsMaster) return;
+    }
+
+    public void RequestStartGame()
+    {
+        SendCustomNetworkEvent(NetworkEventTarget.Owner, nameof(StartGame));
     }
 
     public void StartGame()
@@ -69,27 +76,38 @@ public class GameManager : UdonSharpBehaviour
 
     private void OnRoundChanged()
     {
-        UpdatePromptsForPlayers();
+        SetPromptsForPlayersThisRound();
+        foreach (var playerManager in playerManagers)
+        {
+            playerManager.OnRoundChanged(seed, round);
+        }
         gameUI.OnRoundChanged(round);
     }
 
-    private void UpdatePromptsForPlayers()
+    private void SetPromptsForPlayersThisRound()
     {
         UnityEngine.Random.InitState(seed);
         var promptsThisRound = prompts.GetPromptSequenceForRound(promptSequence, round);
         for (var i = 0; i < playerManagers.Length; i++)
         {
             playerManagers[i].SetPrompt(promptsThisRound[i]);
-            playerManagers[i].SetCorrectIndex(UnityEngine.Random.Range(0, 7));
-            Debug.Log($"Player {i} received prompt {promptsThisRound[i]}");
         }
     }
 
-    public void ResetAllPlayerManagedPlayedIds(int playerId)
+    public void RemoveManagedPlayerId(int playerId)
     {
         foreach (var p in playerManagers)
         {
             p.ResetManagedPlayedId(playerId);
-        }   
+        }
+    }
+
+    public void RequestPlayerManagerSerialization()
+    {
+        if (!Networking.LocalPlayer.isMaster) return;
+        foreach (var p in playerManagers)
+        {
+            p.RequestSerialization();
+        }
     }
 }

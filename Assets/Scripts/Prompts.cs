@@ -14,7 +14,7 @@ public class Prompts : UdonSharpBehaviour
         "Deer","Moose","Reindeer","Elk","Antelope","Fawn","Horse",
         "Dingo","Shiba","Chihuahua","Pug","Hyena","Pitbull","Great Dane",
         "Telescope","Surveillance Camera","Night Vision Goggles","Binoculars","Scope","GoPro","Hidden Camera",
-        "Museum","Cemetery ","Memorial ","Presidential Site","Taverns","Battlefields","National Parks",
+        "Museum","Cemetery ","Memorial ","President's Office","Town Hall","Battlefield","National Park",
         "Car","Bus","Truck","Limousine","Campervan","Cabriolet","Sports Car",
         "The Great Pug","The Room Of The Rain","The Black Cat","Japan Shrine","Summer Solitude","Just B Club","Aquarius",
         "Brush","Ugandan Knuckles","Kanna","Nikei","Unity-Chan","Miku","Kermit",
@@ -86,7 +86,6 @@ public class Prompts : UdonSharpBehaviour
         var result = new int[numTotalPerRound];
         for (var p = 0; p < numPromptsPerRound; p++)
         {
-            Debug.Log(p + round * numPromptsPerRound);
             result[p * numPlayersPerPrompt] = promptSequence[p + round * numPromptsPerRound];
             result[p * numPlayersPerPrompt + 1] = result[p * numPlayersPerPrompt];
         }

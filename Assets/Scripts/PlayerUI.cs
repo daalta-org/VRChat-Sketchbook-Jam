@@ -8,8 +8,6 @@ public class PlayerUI : UdonSharpBehaviour
 {
     [SerializeField] private ButtonManager[] buttonManagers = null;
 
-    private readonly int animHashState = Animator.StringToHash("State");
-
     public void SetPrompt(int index, Prompts prompts)
     {
         var prompt = prompts.GetPrompt(index);
@@ -19,13 +17,24 @@ public class PlayerUI : UdonSharpBehaviour
         }
     }
 
-    public void SetCorrectPrompt(int index, bool isOwner)
+    public void SetPromptCorrect(int index)
     {
-        Debug.Log($"Setting correct index {index} for " + (isOwner ? "owner" : "not owner"));
-        for (var i = 0; i < buttonManagers.Length; i++)
-        {
-            buttonManagers[i].SetAnimatorState(!isOwner ? 0 : index == i ? 2 : 1);
-        }
+        SetPromptState(index, 2);
+    }
+    
+    public void SetPromptWrong(int index)
+    {
+        SetPromptState(index, 1);
+    }
+        
+    public void SetPromptNeutral(int index)
+    {
+        SetPromptState(index, 0);
+    }
+    
+    public void SetPromptState(int index, int value)
+    {
+        buttonManagers[index].SetAnimatorState(value);
     }
 
     public void ResetAnimatorState()
@@ -33,6 +42,22 @@ public class PlayerUI : UdonSharpBehaviour
         foreach (var t in buttonManagers)
         {
             t.SetAnimatorState(0);
+        }
+    }
+
+    public void SetIsOwner(bool b)
+    {
+        foreach (var buttonManager in buttonManagers)
+        {
+            buttonManager.SetIsOwner(b);
+        }
+    }
+
+    public void MakeAllPromptsNeutral()
+    {
+        foreach (var buttonManager in buttonManagers)
+        {
+            buttonManager.SetAnimatorState(0);
         }
     }
 }
