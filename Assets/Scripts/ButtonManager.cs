@@ -9,12 +9,12 @@ public class ButtonManager : UdonSharpBehaviour
     private readonly int animatorState = Animator.StringToHash("State");
     private readonly int animatorSpinOnce = Animator.StringToHash("SpinOnce");
 
-    public void SetText(string newText)
+    private string newText = ""; 
+    
+    public void SetText(string s)
     {
-        foreach (var text in texts)
-        {
-            text.text = newText;
-        }
+        newText = s;
+        SpinOnce();
     }
 
     public void SetAnimatorState(int state)
@@ -26,5 +26,21 @@ public class ButtonManager : UdonSharpBehaviour
     private void SpinOnce()
     {
         animator.SetTrigger(animatorSpinOnce);
+    }
+
+    public void UpdateAfterNeutral()
+    {
+        texts[1].text = newText;
+        texts[2].text = newText;
+    }
+    public void UpdateAfterWrong()
+    {
+        texts[0].text = newText;
+        texts[2].text = newText;
+    }
+    public void UpdateAfterCorrect()
+    {
+        texts[0].text = newText;
+        texts[1].text = newText;
     }
 }
