@@ -1728,7 +1728,7 @@ MonoBehaviour:
       - 62bbb0d6-26a9-4d09-b799-a5a5a558c10f|0
       - 
       flowUIDs:
-      - 58d86aa4-3580-485c-8344-0249f7a0a7df
+      - 80c3c49b-6e1d-4662-942b-a9f89a86ade3
       nodeValues:
       - unityObjectValue: {fileID: 0}
         stringValue: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|0
@@ -1738,7 +1738,7 @@ MonoBehaviour:
         stringValue: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|1
     - fullName: UnityEngineLineRendererArray.__Get__SystemInt32__UnityEngineLineRenderer
       uid: c76f6990-2329-405c-a41d-2383ca4f1a26
-      position: {x: -797.39325, y: 1956.6771}
+      position: {x: -826.4882, y: 1932.8721}
       nodeUIDs:
       - b751cc87-d713-4539-a102-db3e6ecbd5c7|0
       - daf2f5a5-3275-42f1-abda-4fa371ead369|0
@@ -1749,13 +1749,12 @@ MonoBehaviour:
       - unityObjectValue: {fileID: 0}
         stringValue: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|0
     - fullName: UnityEngineLineRenderer.__set_positionCount__SystemInt32__SystemVoid
-      uid: 58d86aa4-3580-485c-8344-0249f7a0a7df
-      position: {x: -489.49185, y: 1772.9388}
+      uid: 80c3c49b-6e1d-4662-942b-a9f89a86ade3
+      position: {x: -583.2836, y: 1743.8036}
       nodeUIDs:
       - c76f6990-2329-405c-a41d-2383ca4f1a26|0
       - 
-      flowUIDs:
-      - 
+      flowUIDs: []
       nodeValues:
       - unityObjectValue: {fileID: 0}
         stringValue: 
@@ -1843,8 +1842,11 @@ MonoBehaviour:
   - type: 5
     uid: 8a3c67e6-7504-4f32-ac79-d53e86978ec2
     jsonData: '{"visible":true,"layout":{"serializedVersion":"2","x":15.0,"y":61.0,"width":245.0,"height":508.0}}'
+  - type: 5
+    uid: 4e7c7a53-823b-40fb-834d-297585c5615d
+    jsonData: '{"visible":true,"layout":{"serializedVersion":"2","x":15.0,"y":61.0,"width":245.0,"height":508.0}}'
   viewTransform:
-    position: {x: 1213.479, y: -742.9887}
-    scale: 0.57175326
+    position: {x: 1339.4636, y: -1315.3507}
+    scale: 0.8695652
   version: 1.0.0
   showAssembly: 0
