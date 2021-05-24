@@ -84,13 +84,16 @@ public class PlayerManager : UdonSharpBehaviour
     public void OnRoundChanged(int seed, int round)
     {
         playerUI.MakeAllPromptsNeutral();
+        
+        if (round < 0) return;
+        
         ClearLines();
         if (LocalIsOwner()) playerUI.SetPromptCorrect(GetCorrectIndex(seed, round));
     }
 
     private void ClearLines()
     {
-        stylus.SendCustomEvent("ResetLines");
+        stylus.SendCustomNetworkEvent(NetworkEventTarget.All, "ResetLines");
     }
 
     private int GetCorrectIndex(int seed, int round)

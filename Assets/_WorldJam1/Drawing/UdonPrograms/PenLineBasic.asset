@@ -814,7 +814,7 @@ MonoBehaviour:
     uid: b0e7eec9-ad53-4ae1-8b99-67cc560e3190
     jsonData: '{"uid":"b0e7eec9-ad53-4ae1-8b99-67cc560e3190","layout":{"serializedVersion":"2","x":760.0,"y":620.0,"width":715.0,"height":422.0},"containedElements":["c5c4268d-e894-4978-bd7b-eb20b8c2a98e","e2347eda-7f95-484f-b0d8-503d9483b02e","9a4f528b-5e20-4df0-8e7d-97a1eb128524","7b7dbada-d3ec-4fee-a4e0-82c6a6b64bf2","455e89ff-bc54-4a82-a5a8-a90f0258f871","c93c5d5a-290d-4d29-9f12-62002cdf6093"],"title":"BakeMesh","layer":0,"elementTypeColor":{"r":0.0,"g":0.0,"b":0.0,"a":0.0}}'
   viewTransform:
-    position: {x: 30.489702, y: 557.9988}
-    scale: 0.8695652
+    position: {x: 638.72614, y: -927.72327}
+    scale: 1
   version: 1.0.0
   showAssembly: 0

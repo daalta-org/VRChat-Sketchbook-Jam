@@ -517,7 +517,7 @@ MonoBehaviour:
       nodeValues: []
     - fullName: Set_Variable
       uid: b0494c5c-7fed-4455-8b26-fa2d38009c1b
-      position: {x: 1480, y: 420}
+      position: {x: 1487, y: 403}
       nodeUIDs:
       - 
       - 56d912a9-d487-4a4d-af8b-d1d3aaea708e|0
@@ -594,7 +594,7 @@ MonoBehaviour:
       Trigger Exit, Re-Enable Target and Clear It","layer":0,"elementTypeColor":{"r":0.0,"g":0.0,"b":0.0,"a":0.0}}'
   - type: 2
     uid: cbf5d186-aa89-44ba-bbd0-f522c7425c22
-    jsonData: '{"uid":"cbf5d186-aa89-44ba-bbd0-f522c7425c22","layout":{"serializedVersion":"2","x":120.0,"y":120.0,"width":1570.0,"height":544.0},"containedElements":["8bffc394-102c-4739-b13b-e812a6466c2e","e85aff26-746a-428c-8ce7-1320b1e3d162","1f51b7e5-c07b-451d-b55b-8593e14a838a","64c298c2-c47a-4072-97c7-c61939225203","be1fcf8e-c393-407a-a372-cba12e21bdc3","3e761ff3-8b51-48d5-b5dd-4c92c63e5a0c","f49b0018-25dd-4a65-b23b-b904e76c1027","56d912a9-d487-4a4d-af8b-d1d3aaea708e","250e2bce-fc19-47ae-9bbe-42b257a3848b","b0494c5c-7fed-4455-8b26-fa2d38009c1b","50b99953-4dc1-4076-96dc-a9f0fb83bab4","b3513e9d-fd50-49a8-8d51-f05b5f09eb48"],"title":"Look
+    jsonData: '{"uid":"cbf5d186-aa89-44ba-bbd0-f522c7425c22","layout":{"serializedVersion":"2","x":115.0,"y":116.0,"width":1565.0,"height":542.0},"containedElements":["8bffc394-102c-4739-b13b-e812a6466c2e","e85aff26-746a-428c-8ce7-1320b1e3d162","1f51b7e5-c07b-451d-b55b-8593e14a838a","64c298c2-c47a-4072-97c7-c61939225203","be1fcf8e-c393-407a-a372-cba12e21bdc3","3e761ff3-8b51-48d5-b5dd-4c92c63e5a0c","f49b0018-25dd-4a65-b23b-b904e76c1027","56d912a9-d487-4a4d-af8b-d1d3aaea708e","250e2bce-fc19-47ae-9bbe-42b257a3848b","b0494c5c-7fed-4455-8b26-fa2d38009c1b","50b99953-4dc1-4076-96dc-a9f0fb83bab4","b3513e9d-fd50-49a8-8d51-f05b5f09eb48"],"title":"Look
       for Valid Targets on Trigger Enter","layer":0,"elementTypeColor":{"r":0.0,"g":0.0,"b":0.0,"a":0.0}}'
   - type: 2
     uid: 2e2d9b86-b14c-4651-b9f5-64daecf1eaf4
@@ -611,7 +611,7 @@ MonoBehaviour:
     uid: 44ecb895-be4c-4688-ad0a-172eca4195a2
     jsonData: '{"visible":true,"layout":{"serializedVersion":"2","x":10.0,"y":20.0,"width":0.0,"height":0.0}}'
   viewTransform:
-    position: {x: 225.64594, y: 0.68756104}
-    scale: 0.25269344
+    position: {x: 146.7922, y: -83.25256}
+    scale: 0.43232757
   version: 1.0.0
   showAssembly: 1
