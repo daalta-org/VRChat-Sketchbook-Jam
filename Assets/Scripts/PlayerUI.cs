@@ -45,14 +45,6 @@ public class PlayerUI : UdonSharpBehaviour
         }
     }
 
-    public void SetIsOwner(bool b)
-    {
-        foreach (var buttonManager in buttonManagers)
-        {
-            buttonManager.SetIsOwner(b);
-        }
-    }
-
     public void MakeAllPromptsNeutral()
     {
         foreach (var buttonManager in buttonManagers)

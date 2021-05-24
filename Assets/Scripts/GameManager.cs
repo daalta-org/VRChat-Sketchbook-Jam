@@ -96,10 +96,23 @@ public class GameManager : UdonSharpBehaviour
 
     public void RemoveManagedPlayerId(int playerId)
     {
-        foreach (var p in playerManagers)
+        if (playerId < 0)
         {
-            p.ResetManagedPlayedId(playerId);
+            Debug.LogWarning($"Someone asked to remove ID {playerId} from all pens. That's an invalid ID though!");
+            return;
         }
+        
+        for (var index = 0; index < playerManagers.Length; index++)
+        {
+            var p = playerManagers[index];
+            if (p.ResetManagedPlayedId(playerId))
+            {
+                Debug.Log($"Pen {index} was removed from player {playerId}");
+                return;
+            }
+        }
+
+        Debug.Log($"Player {playerId} did not previously own any pens.");
     }
 
     public void RequestPlayerManagerSerialization()

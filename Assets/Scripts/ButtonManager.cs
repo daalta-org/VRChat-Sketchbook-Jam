@@ -7,7 +7,6 @@ public class ButtonManager : UdonSharpBehaviour
     [SerializeField] private TextMeshProUGUI[] texts = null;
     [SerializeField] private Animator animator = null;
     private readonly int animatorState = Animator.StringToHash("State");
-    private  readonly int animatorIsOwner = Animator.StringToHash("OnRoundStart");
 
     public void SetText(string newText)
     {
@@ -28,10 +27,5 @@ public class ButtonManager : UdonSharpBehaviour
         {
             transform.SetPositionAndRotation(animator.targetPosition, animator.targetRotation);
         }
-    }
-
-    public void SetIsOwner(bool b)
-    {
-        animator.SetBool(animatorIsOwner, b);
     }
 }
