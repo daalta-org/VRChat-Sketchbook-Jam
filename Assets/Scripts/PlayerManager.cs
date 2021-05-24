@@ -1,6 +1,7 @@
 ﻿using System;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 using VRC.SDKBase;
 
 public class PlayerManager : UdonSharpBehaviour
@@ -10,19 +11,20 @@ public class PlayerManager : UdonSharpBehaviour
     [SerializeField] private Prompts prompts = null;
     [UdonSynced] private int managedPlayerID = -1;
     private int managedPlayerIDold = -1;
-    private int prompt = -1;
-    private int correctIndex = -1;
 
     public void SetPrompt(int index)
     {
-        prompt = index;
         playerUI.SetPrompt(index, prompts);
     }
 
     public void SetCorrectIndex(int index)
     {
-        correctIndex = index;
-        playerUI.SetCorrectPrompt(index, managedPlayerID > 0 && GetManagedPlayerByID().isLocal);
+        playerUI.SetCorrectPrompt(index, LocalIsOwner());
+    }
+
+    private bool LocalIsOwner()
+    {
+        return managedPlayerID > 0 && GetManagedPlayerByID().isLocal;
     }
 
     public override void OnDeserialization()
@@ -59,8 +61,7 @@ public class PlayerManager : UdonSharpBehaviour
         if (managedPlayerID == playerId)
         {
             managedPlayerID = -1;
-            playerUI.Reset();
+            playerUI.ResetAnimatorState();
         }
-        OnDeserialization();
     }
 }
