@@ -23,6 +23,11 @@ public class GameManager : UdonSharpBehaviour
 
     private void Start()
     {
+        foreach (var p in playerManagers)
+        {
+            p.SetPromptsAndGameManager(prompts, this);
+        }
+        
         if (!Networking.IsMaster) return;
     }
 

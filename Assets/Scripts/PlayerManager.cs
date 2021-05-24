@@ -5,9 +5,9 @@ using VRC.Udon.Common.Interfaces;
 
 public class PlayerManager : UdonSharpBehaviour
 {
-    [SerializeField] private GameManager gameManager = null;
+    private GameManager gameManager = null; // Not serialized because it would break as a prefab. Inserted by GameManager
     [SerializeField] private PlayerUI playerUI = null;
-    [SerializeField] private Prompts prompts = null;
+    private Prompts prompts = null; // Not serialized because it would break as a prefab. Inserted by GameManager
     [SerializeField] private GameObject stylus;
     
     [UdonSynced] private int ownerPlayerId = -1;
@@ -85,5 +85,11 @@ public class PlayerManager : UdonSharpBehaviour
     {
         Random.InitState(seed + round);
         return UnityEngine.Random.Range(0, 7);
+    }
+
+    public void SetPromptsAndGameManager(Prompts prompts1, GameManager gameManager1)
+    {
+        prompts = prompts1;
+        gameManager = gameManager1;
     }
 }

@@ -7,6 +7,7 @@ public class ButtonManager : UdonSharpBehaviour
     [SerializeField] private TextMeshProUGUI[] texts = null;
     [SerializeField] private Animator animator = null;
     private readonly int animatorState = Animator.StringToHash("State");
+    private readonly int animatorSpinOnce = Animator.StringToHash("SpinOnce");
 
     public void SetText(string newText)
     {
@@ -18,14 +19,12 @@ public class ButtonManager : UdonSharpBehaviour
 
     public void SetAnimatorState(int state)
     {
+        SpinOnce();
         animator.SetInteger(animatorState, state);
     }
-    
-    private void OnAnimatorMove() 
+
+    private void SpinOnce()
     {
-        if (animator != null)
-        {
-            transform.SetPositionAndRotation(animator.targetPosition, animator.targetRotation);
-        }
+        animator.SetTrigger(animatorSpinOnce);
     }
 }
