@@ -7,11 +7,15 @@ public class Prompts : UdonSharpBehaviour
 
     private string[] prompts = null;
 
+    private bool cacheUsedMessageShown = false;
+
     public string[] LoadPromptsFromFile()
     {
         if (prompts != null)
         {
-            Debug.Log("Cached prompts loaded. There are " + prompts.Length);
+            if (!cacheUsedMessageShown) Debug.Log($"Cached prompts loaded. There are {prompts.Length} prompts.\n" +
+                                                  "This message will not be shown again.");
+            cacheUsedMessageShown = true;
             return prompts;
         }
         
@@ -29,7 +33,8 @@ public class Prompts : UdonSharpBehaviour
         }
 
         prompts = result;
-        Debug.Log("Prompts loaded from file. There are " + prompts.Length);
+        Debug.Log($"Prompts loaded from file. There are {prompts.Length}");
+        
         return prompts;
     }
 
@@ -40,7 +45,6 @@ public class Prompts : UdonSharpBehaviour
     /// <returns>Seven similar prompts</returns>
     public string[] GetPrompt(int index)
     {
-        Debug.Log("Retrieving prompt " + index);
         var result = new string[7];
         for (var i = 0; i < 7; i++)
         {
@@ -70,7 +74,6 @@ public class Prompts : UdonSharpBehaviour
         for (var i = 0; i < amount; i++)
         {
             result[i] = allIndicesShuffled[i];
-            Debug.Log(result[i]);
         }
 
         return result;

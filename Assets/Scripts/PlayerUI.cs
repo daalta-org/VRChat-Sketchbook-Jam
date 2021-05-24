@@ -7,6 +7,16 @@ using UnityEngine.UI;
 public class PlayerUI : UdonSharpBehaviour
 {
     [SerializeField] private ButtonManager[] buttonManagers = null;
+    [SerializeField] private MeshRenderer[] meshRenderersColor = null;
+    [SerializeField] private Material[] materialsColor = null;
+
+    public void SetColor(int colorIndex)
+    {
+        foreach (var meshRenderer in meshRenderersColor)
+        {
+            meshRenderer.material = materialsColor[colorIndex];
+        }
+    }
 
     public void SetPrompt(int index, Prompts prompts)
     {

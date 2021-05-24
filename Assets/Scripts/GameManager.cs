@@ -1,7 +1,5 @@
-﻿using System;
-using UdonSharp;
+﻿using UdonSharp;
 using UnityEngine;
-using UnityEngine.Experimental.PlayerLoop;
 using VRC.SDKBase;
 using VRC.Udon.Common.Interfaces;
 
@@ -21,12 +19,22 @@ public class GameManager : UdonSharpBehaviour
 
     private void Start()
     {
+        SetPlayerColors();
+        
         foreach (var p in playerManagers)
         {
             p.SetPromptsAndGameManager(prompts, this);
         }
         
         if (!Networking.IsMaster) return;
+    }
+
+    private void SetPlayerColors()
+    {
+        for (var index = 0; index < playerManagers.Length; index++)
+        {
+            playerManagers[index].SetColor(index);
+        }
     }
 
     public void RequestStartGame()
@@ -62,10 +70,18 @@ public class GameManager : UdonSharpBehaviour
         }
     }
 
+    public void RequestNextRound()
+    {
+        SendCustomNetworkEvent(NetworkEventTarget.Owner, nameof(NextRound));
+        Debug.Log("Requesting that the master progresses to the next round...");
+    }
+    
     public void NextRound()
     {
+        Debug.Log("Master: Increasing round counter and sending it to clients.");
         round++;
-        OnRoundChanged();
+        RequestSerialization();
+        OnDeserialization();
     }
 
     private void OnSeedChanged()

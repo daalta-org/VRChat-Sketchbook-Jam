@@ -19,6 +19,11 @@ public class PlayerManager : UdonSharpBehaviour
         playerUI.SetPrompt(index, prompts);
     }
 
+    public void SetColor(int colorIndex)
+    {
+        playerUI.SetColor(colorIndex);
+    }
+    
     private bool LocalIsOwner()
     {
         return ownerPlayerId > 0 && GetManagedPlayerByID().isLocal;
@@ -84,7 +89,7 @@ public class PlayerManager : UdonSharpBehaviour
     private int GetCorrectIndex(int seed, int round)
     {
         Random.InitState(seed + round);
-        return UnityEngine.Random.Range(0, 7);
+        return UnityEngine.Random.Range(0, 6);
     }
 
     public void SetPromptsAndGameManager(Prompts prompts1, GameManager gameManager1)
