@@ -73,6 +73,7 @@ GameObject:
   - component: {fileID: 3993011573050705039}
   - component: {fileID: 6140641242637959240}
   - component: {fileID: 2928462994441460269}
+  - component: {fileID: 535922951860708822}
   m_Layer: 0
   m_Name: PromptButtonRoot
   m_TagString: Untagged
@@ -169,6 +170,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &535922951860708822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2005935378746093278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1533785930, guid: 661092b4961be7145bfbe56e1e62337b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2199105267207394856
 GameObject:
   m_ObjectHideFlags: 0

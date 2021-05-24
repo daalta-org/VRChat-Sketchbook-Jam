@@ -45,10 +45,10 @@ public class Prompts : UdonSharpBehaviour
     /// <returns>Seven similar prompts</returns>
     public string[] GetPrompt(int index)
     {
-        var result = new string[7];
-        for (var i = 0; i < 7; i++)
+        var result = new string[6];
+        for (var i = 0; i < 6; i++)
         {
-            result[i] = LoadPromptsFromFile()[index * 7 + i];
+            result[i] = LoadPromptsFromFile()[index * 6 + i];
         }
 
         return result;
@@ -56,7 +56,7 @@ public class Prompts : UdonSharpBehaviour
 
     private int GetNumPrompts()
     {
-        return LoadPromptsFromFile().Length / 7;
+        return LoadPromptsFromFile().Length / 6;
     }
 
     /// <summary>
