@@ -10,8 +10,7 @@ public class PlayerUI : UdonSharpBehaviour
     [SerializeField] private Animator[] buttonAnimators = null;
 
     private bool localPlayerCanVote = false;
-    private readonly int IsCorrect = Animator.StringToHash("IsCorrect");
-    private readonly int IsNeutral = Animator.StringToHash("IsNeutral");
+    private readonly int animHashState = Animator.StringToHash("State");
 
     public void SetPrompt(int index, Prompts prompts)
     {
@@ -27,14 +26,7 @@ public class PlayerUI : UdonSharpBehaviour
         localPlayerCanVote = !isOwner;
         for (var i = 0; i < buttonAnimators.Length; i++)
         {
-            if (isOwner && index == i)
-            {
-                buttonAnimators[i].SetTrigger(IsCorrect);
-            }
-            else
-            {
-                buttonAnimators[i].SetTrigger(IsNeutral);
-            }
+            buttonAnimators[i].SetInteger(animHashState, !isOwner ? 0 : index == i ? 2 : 1);
         }
     }
 
@@ -42,7 +34,7 @@ public class PlayerUI : UdonSharpBehaviour
     {
         foreach (var t in buttonAnimators)
         {
-            t.SetTrigger(IsNeutral);
+            t.SetInteger(animHashState, 0);
         }
     }
 }
