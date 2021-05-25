@@ -90,7 +90,7 @@ public class Prompts : UdonSharpBehaviour
         var result = new int[numTotalPerRound];
         for (var p = 0; p < numPromptsPerRound; p++)
         {
-            result[p * numPlayersPerPrompt] = promptSequence[p + round * numPromptsPerRound];
+            result[p * numPlayersPerPrompt] = promptSequence[p + round * numPromptsPerRound]; // ERROR index outside array
             result[p * numPlayersPerPrompt + 1] = result[p * numPlayersPerPrompt];
         }
 
