@@ -1,4 +1,5 @@
-﻿using UdonSharp;
+﻿using System;
+using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon.Common.Interfaces;
@@ -143,5 +144,19 @@ public class GameManager : UdonSharpBehaviour
         {
             p.RequestSerialization();
         }
+    }
+
+    public int GetMyPlayerManagerId()
+    {
+        for (var index = 0; index < playerManagers.Length; index++)
+        {
+            var p = playerManagers[index];
+            if (p.GetOwnerPlayerId() == Networking.LocalPlayer.playerId)
+            {
+                return index;
+            }
+        }
+
+        return -1;
     }
 }
