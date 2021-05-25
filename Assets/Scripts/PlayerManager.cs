@@ -188,7 +188,7 @@ public class PlayerManager : UdonSharpBehaviour
         Debug.Log($"{Networking.LocalPlayer.displayName} tried to vote for {GetOwnerName()}, but that's not allowed right now.");
     }
 
-    private void OnVoteEmptyPlayer(int id)
+    private void OnVoteEmptyPlayer()
     {
         Debug.Log($"{Networking.LocalPlayer.displayName} tried to vote for index {playerIndex}, but there's no player there.");
     }
