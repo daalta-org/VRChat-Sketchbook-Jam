@@ -6,9 +6,18 @@ using UnityEngine.UI;
 
 public class PlayerUI : UdonSharpBehaviour
 {
+    [SerializeField] private TextMeshProUGUI textInstruction = null;
     [SerializeField] private ButtonManager[] buttonManagers = null;
     [SerializeField] private MeshRenderer[] meshRenderersColor = null;
     [SerializeField] private Material[] materialsColor = null;
+
+    [Header("Strings")] 
+    [SerializeField] private string stringJoin = "<b>Join!</b>\n<size=60%>Pick up a pen to play</size>";
+    [SerializeField] private string stringOccupied = "<b>{0}</b>\n<size=60%>Is ready to play!</size>";
+    [SerializeField] private string stringEmptyGameRunning = " \n<size=60%>Empty, please join the next game!</size>";
+    [SerializeField] private string stringVoteSubmitted= "<b>Voted!</b>\n<size=60%>Keep guessing other drawings!\nGet points for guessing fast!</size>";
+    [SerializeField] private string stringVoteGuess= "<b>Guess!</b>\n<size=60%>Click to guess what {0} is drawing!\nYou only get 1 vote!</size>";
+    [SerializeField] private string stringDraw = "<b>Draw!</b>\n<size=60%>Draw the green prompt!\nGet points when players guess it!</size>";
 
     public void SetButtonInfo(PlayerManager pm)
     {
@@ -50,7 +59,7 @@ public class PlayerUI : UdonSharpBehaviour
     {
         SetPromptState(index, 0);
     }
-    
+
     public void SetPromptState(int index, int value)
     {
         buttonManagers[index].SetAnimatorState(value);
@@ -70,5 +79,35 @@ public class PlayerUI : UdonSharpBehaviour
         {
             buttonManager.SetAnimatorState(0);
         }
+    }
+
+    public void UpdateInstructions(int round, string ownerName, bool isOwner, bool hasVoted)
+    {
+        string s;
+        if (round < 0)
+        {
+            if (ownerName == null)
+            {
+                s = stringJoin;
+            }
+            else
+            {
+                s = string.Format(stringOccupied, ownerName);
+            }
+        }
+        else if (ownerName == null)
+        {
+            s = stringEmptyGameRunning;
+        }
+        else if (isOwner)
+        {
+            s = stringDraw;
+        }
+        else
+        {
+            s = !hasVoted ? string.Format(stringVoteGuess, ownerName) : stringVoteSubmitted;
+        }
+
+        textInstruction.text = s;
     }
 }

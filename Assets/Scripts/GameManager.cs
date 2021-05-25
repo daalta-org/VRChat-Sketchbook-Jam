@@ -118,6 +118,7 @@ public class GameManager : UdonSharpBehaviour
 
     public void RemoveManagedPlayerId(int playerId)
     {
+        Debug.Log("Trying to remove playerId " + playerId + " from all pens.");
         if (playerId < 0)
         {
             Debug.LogWarning($"Someone asked to remove ID {playerId} from all pens. That's an invalid ID though!");
@@ -158,5 +159,10 @@ public class GameManager : UdonSharpBehaviour
         }
 
         return -1;
+    }
+
+    public int GetRound()
+    {
+        return round;
     }
 }

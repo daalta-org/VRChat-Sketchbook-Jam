@@ -1,4 +1,5 @@
-﻿using UdonSharp;
+﻿using System;
+using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
@@ -22,10 +23,13 @@ public class PlayerManager : UdonSharpBehaviour
     private int ownerPlayerIdOld = -1;
     private int correctIndex = -1;
 
+    private bool localHasVotedForThis = false;
+
     public void SetButtonInfo(int pi)
     {
         playerIndex = pi;
         playerUI.SetButtonInfo(this);
+        UpdateInstructions();
     }
     
     public void SetPrompt(int index)
@@ -47,9 +51,15 @@ public class PlayerManager : UdonSharpBehaviour
     {
         if (ownerPlayerId != ownerPlayerIdOld)
         {
-            Debug.Log($"Owner player ID changed from {ownerPlayerIdOld} to {ownerPlayerId}");
-            ownerPlayerIdOld = -1;
+            Debug.Log($"Owner player ID of pen {playerIndex} changed from {ownerPlayerIdOld} to {ownerPlayerId}");
+            ownerPlayerIdOld = ownerPlayerId;
+            UpdateInstructions();
         }
+    }
+
+    private void UpdateInstructions()
+    {
+        playerUI.UpdateInstructions(gameManager.GetRound(), GetOwnerName(), Networking.LocalPlayer.playerId == ownerPlayerId, localHasVotedForThis);
     }
 
     public override bool OnOwnershipRequest(VRCPlayerApi requestingPlayer, VRCPlayerApi requestedOwner)
@@ -93,6 +103,7 @@ public class PlayerManager : UdonSharpBehaviour
         if (ownerPlayerId == playerId)
         {
             ownerPlayerId = -1;
+            OnDeserialization();
             return true;
         }
 
@@ -102,6 +113,7 @@ public class PlayerManager : UdonSharpBehaviour
     public void OnRoundChanged(int seed, int round)
     {
         playerUI.MakeAllPromptsNeutral();
+        UpdateInstructions();
         
         if (round < 0) return;
 
@@ -118,7 +130,7 @@ public class PlayerManager : UdonSharpBehaviour
 
     public int GetCorrectIndex(int seed, int round)
     {
-        Random.InitState(seed + round);
+        UnityEngine.Random.InitState(seed + round);
         return UnityEngine.Random.Range(0, 6);
     }
 
@@ -126,6 +138,7 @@ public class PlayerManager : UdonSharpBehaviour
     {
         prompts = prompts1;
         gameManager = gameManager1;
+        UpdateInstructions();
     }
 
     public void OnButtonPressed(int buttonIndex)
@@ -151,31 +164,32 @@ public class PlayerManager : UdonSharpBehaviour
 
         if (buttonIndex != correctIndex)
         {
-            OnVoteSubmittedIncorret();
+            OnVoteSubmittedIncorrect(buttonIndex);
             return;
         }
 
-        OnVoteSubmittedCorrect(myId);
+        OnVoteSubmittedCorrect(myId, buttonIndex);
 
         //playerUI.SetPromptState(buttonIndex, buttonIndex == correctIndex ? 2 : 1);
     }
 
     private string GetOwnerName()
     {
+        if (ownerPlayerId < 0) return null;
         return VRCPlayerApi.GetPlayerById(ownerPlayerId).displayName;
     }
 
-    private void OnVoteSubmittedCorrect(int id)
+    private void OnVoteSubmittedCorrect(int id, int index)
     {
         Debug.Log($"CORRECT: {Networking.LocalPlayer.displayName} voted correctly for {GetOwnerName()}'s prompt {correctIndex}");
         SendCustomNetworkEvent(NetworkEventTarget.Owner, nameof(SubmitVoteCorrect) + "Player" + id);
-        // TODO prevent further votes and stuff
+        OnValidVoteSubmitted(index);
     }
 
-    private void OnVoteSubmittedIncorret()
+    private void OnVoteSubmittedIncorrect(int index)
     {
         Debug.Log($"WRONG: {Networking.LocalPlayer.displayName} voted incorrectly for {GetOwnerName()}'s prompt {correctIndex}");
-        // TODO Lock votes
+        OnValidVoteSubmitted(index);
     }
 
     private void OnVoteOwnPrompt()
@@ -191,6 +205,12 @@ public class PlayerManager : UdonSharpBehaviour
     private void OnVoteEmptyPlayer()
     {
         Debug.Log($"{Networking.LocalPlayer.displayName} tried to vote for index {playerIndex}, but there's no player there.");
+    }
+
+    private void OnValidVoteSubmitted(int index)
+    {
+        // TODO prevent further votes and stuff
+        playerUI.SetPromptState(index, -1);
     }
 
     private void ResetVotes()
