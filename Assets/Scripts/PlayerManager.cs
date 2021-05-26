@@ -127,17 +127,18 @@ public class PlayerManager : UdonSharpBehaviour
         UpdateInstructions();
         
         if (round < 0) return;
+        ClearLines();
         if (ownerPlayerId < 0) return;
 
         ResetVotes();
-        ClearLines();
         correctIndex = GetCorrectIndex(seed, round);
         if (LocalIsOwner()) playerUI.SetPromptCorrect(correctIndex);
     }
 
     private void ClearLines()
     {
-        stylus.SendCustomNetworkEvent(NetworkEventTarget.All, "ResetLines");
+        Debug.Log("Asking owner to clear drawn stylus lines");
+        stylus.SendCustomNetworkEvent(NetworkEventTarget.Owner, "Erase");
     }
 
     public int GetCorrectIndex(int seed, int round)

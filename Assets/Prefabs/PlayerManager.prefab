@@ -749,6 +749,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: StylusStuff 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1369191613730577119, guid: 01e82bb03c3dd7f4bba13e83a4ffd867,
+        type: 3}
+      propertyPath: programSource
+      value: 
+      objectReference: {fileID: 11400000, guid: a593783ccf9889a4abd01fa12bfe4e2c,
+        type: 2}
+    - target: {fileID: 1369191613730577119, guid: 01e82bb03c3dd7f4bba13e83a4ffd867,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 429881f16b72de9478813f7398ed9f72,
+        type: 2}
     - target: {fileID: 3363532029826953788, guid: 01e82bb03c3dd7f4bba13e83a4ffd867,
         type: 3}
       propertyPath: publicVariablesUnityEngineObjects.Array.size

@@ -1161,7 +1161,7 @@ MonoBehaviour:
     jsonData: '{"uid":"46f2b95d-f5f5-484c-85b1-67af7aab147b","layout":{"serializedVersion":"2","x":80.0,"y":420.0,"width":745.0,"height":424.0},"containedElements":["c63c8c91-c08a-41e1-a772-52e480e95526","a99bb75b-1c15-49a5-b57b-41c0ff272dfc","3a567ac6-37e7-45e4-9267-be52bb192ccd","351772dd-494d-49cf-8a1d-a453b9c89cca","0d8beb35-b587-457b-8862-fe4c02e11f25","4be10c6d-cf52-426f-8180-378dcccaaeb7"],"title":"Bake
       Mesh Collider","layer":0,"elementTypeColor":{"r":0.0,"g":0.0,"b":0.0,"a":0.0}}'
   viewTransform:
-    position: {x: 1082.6697, y: 326.57947}
-    scale: 0.7561437
+    position: {x: 960.5409, y: -324.8594}
+    scale: 0.57175326
   version: 1.0.0
   showAssembly: 0
