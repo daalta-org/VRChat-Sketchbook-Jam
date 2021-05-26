@@ -15,13 +15,13 @@ MonoBehaviour:
   serializedUdonProgramAsset: {fileID: 11400000, guid: 688ab790d2b842649aa596781e9c997b,
     type: 2}
   udonAssembly: ".data_start\r\n\r\n    .export minMoveDistance\r\n    .export penTip\r\n
-    \   .export pointsPerUpdate\r\n    .export linesContainer\r\n    .sync nextLineIndex,
-    none\r\n    .sync color, none\r\n    \r\n    object_0: %SystemObject, null\r\n
-    \   Type_0: %SystemType, null\r\n    result_0: %SystemBoolean, null\r\n    instance_1:
-    %UnityEngineLineRenderer, null\r\n    type_0: %SystemType, null\r\n    Type_1:
-    %SystemType, null\r\n    player_0: %VRCSDKBaseVRCPlayerApi, null\r\n    obj_0:
-    %UnityEngineGameObject, this\r\n    instance_3: %UnityEngineGameObject, this\r\n
-    \   value_0: %SystemBoolean, null\r\n    instance_2: %UnityEngineLineRenderer,
+    \   .export pointsPerUpdate\r\n    .export linesContainer\r\n    .export playerManager\r\n
+    \   .sync nextLineIndex, none\r\n    .sync color, none\r\n    \r\n    object_0:
+    %SystemObject, null\r\n    Type_0: %SystemType, null\r\n    result_0: %SystemBoolean,
+    null\r\n    instance_1: %UnityEngineLineRenderer, null\r\n    type_0: %SystemType,
+    null\r\n    Type_1: %SystemType, null\r\n    player_0: %VRCSDKBaseVRCPlayerApi,
+    null\r\n    obj_0: %UnityEngineGameObject, this\r\n    instance_3: %UnityEngineGameObject,
+    this\r\n    value_0: %SystemBoolean, null\r\n    instance_2: %UnityEngineLineRenderer,
     null\r\n    instance_0: %UnityEngineLineRendererArray, null\r\n    Int32_0: %SystemInt32,
     null\r\n    Boolean_0: %SystemBoolean, null\r\n    Int32_1: %SystemInt32, null\r\n
     \   Int32_2: %SystemInt32, null\r\n    instance_4: %UnityEngineLineRendererArray,
@@ -57,7 +57,11 @@ MonoBehaviour:
     %UnityEngineColor, null\r\n    instance_14: %UnityEngineMeshRenderer, null\r\n
     \   Boolean_7: %SystemBoolean, null\r\n    Color_0: %UnityEngineColor, null\r\n
     \   Color_1: %UnityEngineColor, null\r\n    instance_15: %VRCUdonUdonBehaviour,
-    this\r\n    eventName_2: %SystemString, null\r\n    line: %VRCUdonUdonBehaviour,
+    this\r\n    eventName_2: %SystemString, null\r\n    message_0: %SystemObject,
+    null\r\n    instance_16: %VRCUdonUdonBehaviour, this\r\n    eventName_3: %SystemString,
+    null\r\n    String_0: %SystemString, null\r\n    message_1: %SystemObject, null\r\n
+    \   instance_17: %VRCUdonUdonBehaviour, this\r\n    eventName_4: %SystemString,
+    null\r\n    String_1: %SystemString, null\r\n    line: %VRCUdonUdonBehaviour,
     this\r\n    isDrawing: %SystemBoolean, null\r\n    startPosition: %UnityEngineVector3,
     null\r\n    minMoveDistance: %SystemSingle, null\r\n    points: %UnityEngineVector3Array,
     null\r\n    lineRenderer: %UnityEngineLineRenderer, null\r\n    penTip: %UnityEngineTransform,
@@ -66,10 +70,10 @@ MonoBehaviour:
     this\r\n    nextLineIndex: %SystemInt32, null\r\n    pool: %UnityEngineGameObjectArray,
     null\r\n    linePool: %UnityEngineLineRendererArray, null\r\n    color: %UnityEngineColor,
     null\r\n    selfRenderer: %UnityEngineMeshRenderer, null\r\n    lastColor: %UnityEngineColor,
-    null\r\n\r\n.data_end\r\n\r\n.code_start\r\n\r\n    .export _onPickupUseDown\r\n
-    \   \r\n    _onPickupUseDown:\r\n    \r\n        PUSH, linePool\r\n        PUSH,
-    instance_0\r\n        COPY\r\n        PUSH, instance_0\r\n        PUSH, nextLineIndex\r\n
-    \       PUSH, lineRenderer\r\n        EXTERN, \"UnityEngineLineRendererArray.__Get__SystemInt32__UnityEngineLineRenderer\"\r\n
+    null\r\n    playerManager: %VRCUdonUdonBehaviour, this\r\n\r\n.data_end\r\n\r\n.code_start\r\n\r\n
+    \   .export _onPickupUseDown\r\n    \r\n    _onPickupUseDown:\r\n    \r\n        PUSH,
+    linePool\r\n        PUSH, instance_0\r\n        COPY\r\n        PUSH, instance_0\r\n
+    \       PUSH, nextLineIndex\r\n        PUSH, lineRenderer\r\n        EXTERN, \"UnityEngineLineRendererArray.__Get__SystemInt32__UnityEngineLineRenderer\"\r\n
     \       PUSH, linePool\r\n        PUSH, instance_0\r\n        COPY\r\n        PUSH,
     lineRenderer\r\n        PUSH, instance_1\r\n        COPY\r\n        PUSH, Type_0\r\n
     \       PUSH, type_0\r\n        COPY\r\n        PUSH, lineRenderer\r\n        PUSH,
@@ -183,7 +187,19 @@ MonoBehaviour:
     color\r\n        PUSH, Boolean_7\r\n        EXTERN, \"UnityEngineColor.__op_Inequality__UnityEngineColor_UnityEngineColor__SystemBoolean\"\r\n
     \       PUSH, Boolean_7\r\n        JUMP_IF_FALSE, 0x000008EC\r\n        PUSH,
     instance_15\r\n        PUSH, eventName_2\r\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\r\n
-    \       JUMP, 0x000008EC\r\n        JUMP, 0xFFFFFFFC\r\n    \r\n\r\n.code_end\r\n"
+    \       JUMP, 0x000008EC\r\n        JUMP, 0xFFFFFFFC\r\n    \r\n    .export _onOwnershipTransferred\r\n
+    \   \r\n    _onOwnershipTransferred:\r\n    \r\n        PUSH, String_0\r\n        PUSH,
+    message_0\r\n        COPY\r\n        PUSH, message_0\r\n        EXTERN, \"UnityEngineDebug.__Log__SystemObject__SystemVoid\"\r\n
+    \       PUSH, playerManager\r\n        PUSH, instance_16\r\n        COPY\r\n        PUSH,
+    String_0\r\n        PUSH, eventName_3\r\n        COPY\r\n        PUSH, instance_16\r\n
+    \       PUSH, eventName_3\r\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\r\n
+    \       JUMP, 0xFFFFFFFC\r\n    \r\n    .export _onPickup\r\n    \r\n    _onPickup:\r\n
+    \   \r\n        PUSH, String_1\r\n        PUSH, message_1\r\n        COPY\r\n
+    \       PUSH, message_1\r\n        EXTERN, \"UnityEngineDebug.__Log__SystemObject__SystemVoid\"\r\n
+    \       PUSH, playerManager\r\n        PUSH, instance_17\r\n        COPY\r\n        PUSH,
+    String_1\r\n        PUSH, eventName_4\r\n        COPY\r\n        PUSH, instance_17\r\n
+    \       PUSH, eventName_4\r\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\r\n
+    \       JUMP, 0xFFFFFFFC\r\n    \r\n\r\n.code_end\r\n"
   assemblyError: 
   graphData:
     name: 
@@ -1634,6 +1650,83 @@ MonoBehaviour:
       nodeValues:
       - unityObjectValue: {fileID: 0}
         stringValue: 
+    - fullName: Event_OnOwnershipTransferred
+      uid: 7a4bc3b7-5bd3-4a47-848b-772f57da1f2d
+      position: {x: -1786.2369, y: 1455.6967}
+      nodeUIDs: []
+      flowUIDs:
+      - ec5a37c4-ae66-4372-ab38-4ff9cc9226d8
+      nodeValues: []
+    - fullName: VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid
+      uid: 5b10ddc1-d287-4ab5-baf0-10e2e45c5fc3
+      position: {x: -1381.9784, y: 1490.7122}
+      nodeUIDs:
+      - cd72dd90-9113-424a-9cb0-e261e2a3e543|0
+      - 71f06d80-ba6e-4081-9319-754b9b0a7626|0
+      flowUIDs: []
+      nodeValues:
+      - unityObjectValue: {fileID: 0}
+        stringValue: 
+      - unityObjectValue: {fileID: 0}
+        stringValue: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|UpdateOwnerID
+    - fullName: Variable_VRCUdonCommonInterfacesIUdonEventReceiver
+      uid: 698e2e38-86a3-411f-a579-e7e7251f3376
+      position: {x: 0, y: 0}
+      nodeUIDs:
+      - 
+      - 
+      - 
+      - 
+      - 
+      flowUIDs: []
+      nodeValues:
+      - unityObjectValue: {fileID: 0}
+        stringValue: 
+      - unityObjectValue: {fileID: 0}
+        stringValue: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|playerManager
+      - unityObjectValue: {fileID: 0}
+        stringValue: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|True
+      - unityObjectValue: {fileID: 0}
+        stringValue: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|False
+      - unityObjectValue: {fileID: 0}
+        stringValue: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|none
+    - fullName: Get_Variable
+      uid: cd72dd90-9113-424a-9cb0-e261e2a3e543
+      position: {x: -1768.8453, y: 1604.3925}
+      nodeUIDs:
+      - 
+      flowUIDs: []
+      nodeValues:
+      - unityObjectValue: {fileID: 0}
+        stringValue: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|698e2e38-86a3-411f-a579-e7e7251f3376
+      - unityObjectValue: {fileID: 0}
+        stringValue: 
+    - fullName: UnityEngineDebug.__Log__SystemObject__SystemVoid
+      uid: ec5a37c4-ae66-4372-ab38-4ff9cc9226d8
+      position: {x: -1515.9069, y: 1401.1489}
+      nodeUIDs:
+      - 71f06d80-ba6e-4081-9319-754b9b0a7626|0
+      flowUIDs:
+      - 5b10ddc1-d287-4ab5-baf0-10e2e45c5fc3
+      nodeValues:
+      - unityObjectValue: {fileID: 0}
+        stringValue: 
+    - fullName: Const_SystemString
+      uid: 71f06d80-ba6e-4081-9319-754b9b0a7626
+      position: {x: -1751.6569, y: 1706.7272}
+      nodeUIDs:
+      - 
+      flowUIDs: []
+      nodeValues:
+      - unityObjectValue: {fileID: 0}
+        stringValue: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|UpdateOwnerID
+    - fullName: Event_OnPickup
+      uid: 517f227c-0dac-44f0-86e6-d4e38dc2936e
+      position: {x: -1766.8867, y: 1332.1014}
+      nodeUIDs: []
+      flowUIDs:
+      - ec5a37c4-ae66-4372-ab38-4ff9cc9226d8
+      nodeValues: []
     updateOrder: 0
   graphElementData:
   - type: 2
@@ -1708,7 +1801,7 @@ MonoBehaviour:
     uid: dc0a01cb-b0a2-4dad-8220-1d5d34238fc4
     jsonData: '{"visible":true,"layout":{"serializedVersion":"2","x":10.0,"y":130.0,"width":245.0,"height":508.0}}'
   viewTransform:
-    position: {x: 1092.2866, y: -288.01337}
-    scale: 0.7561437
+    position: {x: 1872.3496, y: -935.7467}
+    scale: 0.8695652
   version: 1.0.0
   showAssembly: 0
