@@ -14,6 +14,8 @@ It contains VRChat's starter project, a `.gitignore` and some additional package
 
 Missing something? Check the VRCPrefabs database at https://docs.google.com/spreadsheets/d/e/2PACX-1vTP-eIkYLZh7pDhpO-untxy1zbuoiqdzVP2z5-vg_9ijBW7k8ZC9VP6cVL-ct5yKrySPBPJ6V2ymlWS/pubhtml
 
+If you'd like to use the project without any additional packages, visit VRChat's official repository for the jam. https://github.com/vrchat/VRChat-Sketchbook-Jam
+
 # How to use
 
 You can either fork the repository, or download it as a zip.
