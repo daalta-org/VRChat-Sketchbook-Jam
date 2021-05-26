@@ -122,10 +122,12 @@ public class PlayerManager : UdonSharpBehaviour
 
     public void OnRoundChanged(int seed, int round)
     {
+        localHasVotedForThis = false;
         playerUI.MakeAllPromptsNeutral();
         UpdateInstructions();
         
         if (round < 0) return;
+        if (ownerPlayerId < 0) return;
 
         ResetVotes();
         ClearLines();
@@ -153,6 +155,7 @@ public class PlayerManager : UdonSharpBehaviour
 
     public void OnButtonPressed(int buttonIndex)
     {
+        if (localHasVotedForThis) return;
         if (ownerPlayerId < 0)
         {
             OnVoteEmptyPlayer();
@@ -219,8 +222,9 @@ public class PlayerManager : UdonSharpBehaviour
 
     private void OnValidVoteSubmitted(int index)
     {
-        // TODO prevent further votes and stuff
+        localHasVotedForThis = true; // TODO Check if this works
         playerUI.SetPromptState(index, -1);
+        playerUI.UpdateInstructions(gameManager.GetRound(), GetOwnerName(), LocalIsOwner(), localHasVotedForThis);
     }
 
     private void ResetVotes()
