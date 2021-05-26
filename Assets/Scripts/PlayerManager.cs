@@ -25,6 +25,11 @@ public class PlayerManager : UdonSharpBehaviour
 
     private bool localHasVotedForThis = false;
 
+    private void Start()
+    {
+        votes = new int[0];
+    }
+
     public void SetButtonInfo(int pi)
     {
         playerIndex = pi;
@@ -59,6 +64,10 @@ public class PlayerManager : UdonSharpBehaviour
 
     private void UpdateInstructions()
     {
+        Debug.Log(gameManager.GetRound());
+        Debug.Log(GetOwnerName());
+        Debug.Log(Networking.LocalPlayer.playerId == ownerPlayerId);
+        Debug.Log(localHasVotedForThis);
         playerUI.UpdateInstructions(gameManager.GetRound(), GetOwnerName(), Networking.LocalPlayer.playerId == ownerPlayerId, localHasVotedForThis);
     }
 

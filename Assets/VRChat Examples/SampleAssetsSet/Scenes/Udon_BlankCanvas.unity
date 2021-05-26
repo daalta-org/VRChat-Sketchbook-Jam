@@ -2892,6 +2892,7 @@ GameObject:
   - component: {fileID: 1926776993}
   - component: {fileID: 1926776992}
   - component: {fileID: 1926776991}
+  - component: {fileID: 1926776994}
   m_Layer: 0
   m_Name: SceneDescriptor
   m_TagString: Untagged
@@ -2955,8 +2956,8 @@ MonoBehaviour:
   useAssignedLayers: 0
   DynamicPrefabs: []
   DynamicMaterials:
-  - {fileID: 2100000, guid: 5594ff326f24b2e4285f10e48257f341, type: 3}
   - {fileID: 2100000, guid: 4752c805bd4477c4484e1b5647966b29, type: 2}
+  - {fileID: 2100000, guid: 5594ff326f24b2e4285f10e48257f341, type: 3}
   - {fileID: 2100000, guid: 93155d1e32fd97946b38a7544b9faeb4, type: 2}
   - {fileID: 2100000, guid: fd20e45036ef323459e8286e9c23c02c, type: 2}
   LightMapsNear: []
@@ -2999,6 +3000,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1926776994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1926776990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 229740497, guid: 4ecd63eff847044b68db9453ce219299, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  contentType: 1
 --- !u!1 &1926834758
 GameObject:
   m_ObjectHideFlags: 0
