@@ -10,6 +10,7 @@ public class PlayerUI : UdonSharpBehaviour
     [SerializeField] private ButtonManager[] buttonManagers = null;
     [SerializeField] private MeshRenderer[] meshRenderersColor = null;
     [SerializeField] private Material[] materialsColor = null;
+    [SerializeField] private Animator[] animatorsVoteResult = null;
 
     [Header("Strings")] 
     [SerializeField] private string stringJoin = "<b>Join!</b>\n<size=60%>Pick up a pen to play</size>";
@@ -116,6 +117,22 @@ public class PlayerUI : UdonSharpBehaviour
         for (var i = 0; i < 6; i++)
         {
             buttonManagers[i].SetText("");
+        }
+    }
+
+    public void SetVoteResults(int[] votes, bool isRevealed)
+    {
+        for (var i = 0; i < animatorsVoteResult.Length; i++)
+        {
+            var isSubmitted = votes[i] > -1;
+            if (isSubmitted)
+            {
+                var isCorrect = votes[i] < 10;
+                animatorsVoteResult[i].SetBool("IsVoteCorrect", isCorrect);
+                animatorsVoteResult[i].SetBool("IsVoteRevealed", isRevealed);
+            }
+
+            animatorsVoteResult[i].SetBool("IsVoteSubmitted", isSubmitted);
         }
     }
 }

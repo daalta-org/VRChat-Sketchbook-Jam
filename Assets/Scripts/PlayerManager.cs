@@ -1,4 +1,5 @@
-﻿using UdonSharp;
+﻿using System.Linq;
+using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
@@ -34,7 +35,19 @@ public class PlayerManager : UdonSharpBehaviour
 
     private void Start()
     {
-        votes = new int[0];
+        ResetVotes();
+    }
+
+    private void UpdateVotesEveryone()
+    {
+        Debug.Log("Telling all players to update their vote displays...");
+        SendCustomNetworkEvent(NetworkEventTarget.All, nameof(UpdateVotesLocal));
+    }
+    
+    public void UpdateVotesLocal()
+    {
+        Debug.Log("Master told us to update out vote displays!");
+        playerUI.SetVoteResults(votes, true); // TODO stupid
     }
 
     public void InsertDummyPlayer()
@@ -91,6 +104,8 @@ public class PlayerManager : UdonSharpBehaviour
             ownerPlayerIdOld = ownerPlayerId;
             UpdateInstructions();
         }
+
+        UpdateVotesLocal(); // TODO Remove this. Probably not needed due to the networked event which calls this
     }
 
     private void UpdateInstructions()
@@ -240,7 +255,7 @@ public class PlayerManager : UdonSharpBehaviour
     private void OnVoteSubmittedIncorrect(int id, int index)
     {
         Debug.Log($"WRONG: {Networking.LocalPlayer.displayName} voted incorrectly for {GetOwnerName()}'s prompt {correctIndex}");
-        var eventName = "SubmitVoteCorrectPlayer" + id;
+        var eventName = "SubmitVoteWrongPlayer" + id;
         SendCustomNetworkEvent(NetworkEventTarget.Owner, eventName);
         OnValidVoteSubmitted(index);
     }
@@ -272,8 +287,12 @@ public class PlayerManager : UdonSharpBehaviour
         votes = new int[8];
         for (var i = 0; i < votes.Length; i++)
         {
+
             votes[i] = -1;
         }
+
+        RequestSerialization();
+        OnDeserialization();
     }
 
     private void SubmitVote(int pi, bool correct)
@@ -289,7 +308,10 @@ public class PlayerManager : UdonSharpBehaviour
             if (votes[index] == -1)
             {
                 votes[index] = pi + (correct ? 0 : 10);
-                Debug.Log((correct ? "Correct" : "Wrong") + " vote received by player " + pi);
+                Debug.Log((correct ? "Correct" : "Wrong") + $" vote {votes[index]} received by player {pi}");
+                RequestSerialization();
+                OnDeserialization();
+                UpdateVotesEveryone();
                 return;
             }
         }
@@ -375,5 +397,7 @@ public class PlayerManager : UdonSharpBehaviour
     public void SubmitVoteWrongPlayer7()
     {
         SubmitVote(7, false);
-    } 
+    }
+    
+    
 }
