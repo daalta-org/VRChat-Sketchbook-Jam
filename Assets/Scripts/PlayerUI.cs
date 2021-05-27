@@ -80,6 +80,8 @@ public class PlayerUI : UdonSharpBehaviour
         {
             buttonManager.SetAnimatorState(0);
         }
+
+        HideVoteResults(); // TODO This might not belong here. Probably called too often.
     }
 
     public void UpdateInstructions(int round, string ownerName, bool isOwner, bool hasVoted)
@@ -120,19 +122,36 @@ public class PlayerUI : UdonSharpBehaviour
         }
     }
 
-    public void SetVoteResults(int[] votes, bool isRevealed)
+    public void SetVoteResults(int[] votes, bool isRevealed, int[] scoresVote)
     {
+        var scoreIndex = 0;
         for (var i = 0; i < animatorsVoteResult.Length; i++)
         {
             var isSubmitted = votes[i] > -1;
             if (isSubmitted)
             {
+                var score = 0;
                 var isCorrect = votes[i] < 10;
-                animatorsVoteResult[i].SetBool("IsVoteCorrect", isCorrect);
+                if (isCorrect)
+                {
+                    score = scoresVote[scoreIndex];
+                    scoreIndex++;
+                }
+                animatorsVoteResult[i].SetInteger("Score", score); // TODO placeholder score
                 animatorsVoteResult[i].SetBool("IsVoteRevealed", isRevealed);
             }
 
             animatorsVoteResult[i].SetBool("IsVoteSubmitted", isSubmitted);
+        }
+    }
+
+    public void HideVoteResults()
+    {
+        for (int i = 0; i < animatorsVoteResult.Length; i++)
+        {
+            animatorsVoteResult[i].SetInteger("Score", -1);
+            animatorsVoteResult[i].SetBool("IsVoteRevealed", false);
+            animatorsVoteResult[i].SetBool("IsVoteSubmitted", false);
         }
     }
 }

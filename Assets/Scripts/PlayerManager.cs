@@ -32,6 +32,7 @@ public class PlayerManager : UdonSharpBehaviour
     private int playerIndex = -1;
     private int ownerPlayerIdOld = -1;
     private int correctIndex = -1;
+    [SerializeField] private ScoreScript scoreScript;
 
     private void Start()
     {
@@ -57,7 +58,17 @@ public class PlayerManager : UdonSharpBehaviour
     public void UpdateVotesLocal()
     {
         Debug.Log("Master told us to update out vote displays!");
-        playerUI.SetVoteResults(votes, true); // TODO stupid
+        if (gameManager != null)
+        {
+            var playerCount = gameManager.GetPlayerCount();
+            var pointsArray = scoreScript.GetGuessPointsArray(playerCount);
+            playerUI.SetVoteResults(votes, true, pointsArray); // TODO isRevealed is always true
+        }
+        else
+        {
+            playerUI.HideVoteResults();
+        }
+        
     }
 
     public void InsertDummyPlayer()

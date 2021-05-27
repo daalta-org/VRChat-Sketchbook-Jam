@@ -17,12 +17,23 @@ public class ScoreScript : UdonSharpBehaviour
     /// <returns>Points that player would receive, or -1 if the parameters were invalid.</returns>
     public int GetGuessPoints(int playerCount, int placement)
     {
-        if (playerCount < 3 || playerCount > 8)
+        if (!IsPlayerCountValid(playerCount))
         {
             return -1;
         }
 
         return pointsGuess[playerCount][placement];
+    }
+
+    public int[] GetGuessPointsArray(int playerCount)
+    {
+        if (!IsPlayerCountValid(playerCount)) return null;
+        return pointsGuess[playerCount];
+    }
+
+    private bool IsPlayerCountValid(int playerCount)
+    {
+        return 3 <= playerCount && playerCount <= 8;
     }
     
     /// <summary>
@@ -33,7 +44,7 @@ public class ScoreScript : UdonSharpBehaviour
     /// <returns>Points that player would receive, or -1 if the parameters were invalid.</returns>
     public int GetBonusPoints(int playerCount, int placement)
     {
-        if (playerCount < 3 || playerCount > 8)
+        if (!IsPlayerCountValid(playerCount))
         {
             return -1;
         }

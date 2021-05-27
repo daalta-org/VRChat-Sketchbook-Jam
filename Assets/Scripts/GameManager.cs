@@ -18,6 +18,8 @@ public class GameManager : UdonSharpBehaviour
 
     public int[] promptSequence = null;
 
+    [UdonSynced] private int playerCount = -1; 
+
     private void Start()
     {
         SetPlayerColors();
@@ -53,6 +55,11 @@ public class GameManager : UdonSharpBehaviour
         Debug.Log("Requesting Deserialization...");
         RequestSerialization();
         OnDeserialization();
+    }
+
+    public int GetPlayerCount()
+    {
+        return playerCount;
     }
 
     public override void OnDeserialization()
@@ -103,9 +110,23 @@ public class GameManager : UdonSharpBehaviour
         {
             playerManager.OnRoundChanged(seed, round);
         }
+
+        playerCount = CountPlayers();
+
         gameUI.OnRoundChanged(round);
     }
 
+    private int CountPlayers()
+    {
+        var count = 0;
+        foreach (var p in playerManagers)
+        {
+            if (p.GetIsPlaying()) count++;
+        }
+
+        return count;
+    }
+    
     private void SetPromptsForPlayersThisRound()
     {
         UnityEngine.Random.InitState(seed);
