@@ -1,5 +1,4 @@
-﻿using System;
-using UdonSharp;
+﻿using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
@@ -7,18 +6,20 @@ using VRC.Udon.Common.Interfaces;
 
 public class PlayerManager : UdonSharpBehaviour
 {
-    private GameManager gameManager = null; // Not serialized because it would break as a prefab. Inserted by GameManager
+    private GameManager
+        gameManager = null; // Not serialized because it would break as a prefab. Inserted by GameManager
+
     [SerializeField] private PlayerUI playerUI = null;
     private Prompts prompts = null; // Not serialized because it would break as a prefab. Inserted by GameManager
     [SerializeField] private UdonBehaviour stylus;
-    
+
     [UdonSynced] private int ownerPlayerId = -1;
 
     /// <summary>
     /// Index of prompt, index of player, index of prompt, index of player, ...
     /// </summary>
     [UdonSynced] private int[] votes = null;
-    
+
     private int playerIndex = -1;
     private int ownerPlayerIdOld = -1;
     private int correctIndex = -1;
@@ -28,6 +29,13 @@ public class PlayerManager : UdonSharpBehaviour
     private void Start()
     {
         votes = new int[0];
+    }
+
+    public void InsertDummyPlayer()
+    {
+        ownerPlayerId = 123456;
+        gameManager.RequestPlayerManagerSerialization();
+        OnDeserialization();
     }
 
     public void SetButtonInfo(int pi)
@@ -49,7 +57,24 @@ public class PlayerManager : UdonSharpBehaviour
     
     private bool LocalIsOwner()
     {
-        return ownerPlayerId > 0 && GetManagedPlayerByID().isLocal;
+        if (ownerPlayerId <= 0) return false;
+        var managedPlayer = VRCPlayerApi.GetPlayerById(ownerPlayerId);
+        if (managedPlayer == null)
+        {
+            Debug.LogWarning("Managed player was not cleared before LocalIsOwner was called. Odd!");
+            if (ownerPlayerId == 123456)
+            {
+                Debug.Log("Oh, it's a dummy player! False alarm, carry on.");
+            }
+            else
+            {
+                ownerPlayerId = -1;
+            }
+
+            return false;
+
+        }
+        return managedPlayer.isLocal;
     }
 
     public override void OnDeserialization()
@@ -72,17 +97,22 @@ public class PlayerManager : UdonSharpBehaviour
         return true;
     }
 
-    private VRCPlayerApi GetManagedPlayerByID()
-    {
-        return VRCPlayerApi.GetPlayerById(ownerPlayerId);
-    }
-
+    /*
+     No longer called from the graph
+    /// <summary>
+    /// Called from the stylus Udon graph to update ownership.
+    /// </summary>
     public void RequestUpdateOwnerID()
     {
         Debug.Log("Asking master to become owner of this pen.");
         SendCustomNetworkEvent(NetworkEventTarget.Owner, nameof(UpdateOwnerID));
     }
+    */
 
+    /// <summary>
+    /// Called from the graph when ownership changed or when this is picked up.
+    /// Either way, the master should correctly update the owner ID when this method is called.
+    /// </summary>
     public void UpdateOwnerID()
     {
         if (!Networking.LocalPlayer.isMaster) return;
@@ -101,7 +131,7 @@ public class PlayerManager : UdonSharpBehaviour
 
     public override void OnPlayerLeft(VRCPlayerApi player)
     {
-        if (GetManagedPlayerByID() == player) ownerPlayerId = -1;
+        if (ownerPlayerId == player.playerId) ownerPlayerId = -1;
     }
 
     public bool ResetManagedPlayedId(int playerId)
@@ -190,7 +220,8 @@ public class PlayerManager : UdonSharpBehaviour
     private string GetOwnerName()
     {
         if (ownerPlayerId < 0) return null;
-        return VRCPlayerApi.GetPlayerById(ownerPlayerId).displayName;
+        var player = VRCPlayerApi.GetPlayerById(ownerPlayerId);
+        return player != null ? player.displayName : "!ERROR, TELL FAX!";
     }
 
     private void OnVoteSubmittedCorrect(int id, int index)
