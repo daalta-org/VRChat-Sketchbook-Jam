@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
@@ -7,8 +8,7 @@ using VRC.Udon.Common.Interfaces;
 
 public class PlayerManager : UdonSharpBehaviour
 {
-    private GameManager
-        gameManager = null; // Not serialized because it would break as a prefab. Inserted by GameManager
+    private GameManager gameManager = null; // Not serialized because it would break as a prefab. Inserted by GameManager
 
     [SerializeField] private PlayerUI playerUI = null;
     private Prompts prompts = null; // Not serialized because it would break as a prefab. Inserted by GameManager
@@ -27,15 +27,25 @@ public class PlayerManager : UdonSharpBehaviour
     /// </summary>
     [UdonSynced] private int[] votes = null;
 
+    [UdonSynced] private bool isPlaying = false;
+
     private int playerIndex = -1;
     private int ownerPlayerIdOld = -1;
     private int correctIndex = -1;
 
-    private bool localHasVotedForThis = false;
-
     private void Start()
     {
         ResetVotes();
+    }
+
+    private void SetIsPlaying(bool b)
+    {
+        isPlaying = b;
+    }
+
+    public bool GetIsPlaying()
+    {
+        return isPlaying;
     }
 
     private void UpdateVotesEveryone()
@@ -110,7 +120,7 @@ public class PlayerManager : UdonSharpBehaviour
 
     private void UpdateInstructions()
     {
-        playerUI.UpdateInstructions(gameManager.GetRound(), GetOwnerName(), Networking.LocalPlayer.playerId == ownerPlayerId, localHasVotedForThis);
+        playerUI.UpdateInstructions(gameManager.GetRound(), GetOwnerName(), Networking.LocalPlayer.playerId == ownerPlayerId, LocalHasVotedForThis());
     }
 
     public override bool OnOwnershipRequest(VRCPlayerApi requestingPlayer, VRCPlayerApi requestedOwner)
@@ -169,7 +179,6 @@ public class PlayerManager : UdonSharpBehaviour
 
     public void OnRoundChanged(int seed, int round)
     {
-        localHasVotedForThis = false;
         playerUI.MakeAllPromptsNeutral();
         UpdateInstructions();
         
@@ -178,9 +187,12 @@ public class PlayerManager : UdonSharpBehaviour
         if (ownerPlayerId < 0)
         {
             playerUI.ClearText();
+            isPlaying = false;
             return;
-        };
+        }
 
+        isPlaying = true;
+        
         ResetVotes();
         correctIndex = GetCorrectIndex(seed, round);
         if (LocalIsOwner()) playerUI.SetPromptCorrect(correctIndex);
@@ -207,7 +219,7 @@ public class PlayerManager : UdonSharpBehaviour
 
     public void OnButtonPressed(int buttonIndex)
     {
-        if (localHasVotedForThis) return;
+        if (LocalHasVotedForThis()) return;
         if (ownerPlayerId < 0)
         {
             OnVoteEmptyPlayer();
@@ -236,6 +248,21 @@ public class PlayerManager : UdonSharpBehaviour
         OnVoteSubmittedCorrect(myId, buttonIndex);
 
         //playerUI.SetPromptState(buttonIndex, buttonIndex == correctIndex ? 2 : 1);
+    }
+
+    private bool LocalHasVotedForThis()
+    {
+        Debug.Log("Checking whether local voted for this");
+        var myId = gameManager.GetMyPlayerManagerId();
+        if (myId < 0) return true;
+        foreach (var vote in votes)
+        {
+            Debug.Log("Vote " + vote);
+            if (vote == myId || vote - 10 == myId) return true;
+        }
+
+        Debug.Log("Player was not in vote list.");
+        return false;
     }
 
     private string GetOwnerName()
@@ -277,9 +304,8 @@ public class PlayerManager : UdonSharpBehaviour
 
     private void OnValidVoteSubmitted(int index)
     {
-        localHasVotedForThis = true; // TODO Check if this works
         playerUI.SetPromptState(index, -1);
-        playerUI.UpdateInstructions(gameManager.GetRound(), GetOwnerName(), LocalIsOwner(), localHasVotedForThis);
+        playerUI.UpdateInstructions(gameManager.GetRound(), GetOwnerName(), LocalIsOwner(), LocalHasVotedForThis());
     }
 
     private void ResetVotes()
