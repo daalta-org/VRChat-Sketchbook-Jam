@@ -34,6 +34,8 @@ public class PlayerManager : UdonSharpBehaviour
     private int correctIndex = -1;
     private ScoreScript scoreScript;
 
+    private bool localHasVoted = false;
+
     private void Start()
     {
         ResetVotes();
@@ -191,6 +193,7 @@ public class PlayerManager : UdonSharpBehaviour
     public void OnRoundChanged(int seed, int round)
     {
         playerUI.MakeAllPromptsNeutral();
+        localHasVoted = false;
         UpdateInstructions();
         
         if (round < 0) return;
@@ -264,6 +267,8 @@ public class PlayerManager : UdonSharpBehaviour
 
     private bool LocalHasVotedForThis()
     {
+        return localHasVoted;
+        /*
         Debug.Log("Checking whether local voted for this");
         if (gameManager == null) return false;
         var myId = gameManager.GetMyPlayerManagerId();
@@ -275,7 +280,7 @@ public class PlayerManager : UdonSharpBehaviour
         }
 
         Debug.Log("Player was not in vote list.");
-        return false;
+        return false;*/
     }
 
     private string GetOwnerName()
@@ -317,6 +322,7 @@ public class PlayerManager : UdonSharpBehaviour
 
     private void OnValidVoteSubmitted(int index)
     {
+        localHasVoted = true;
         playerUI.SetPromptState(index, -1);
         playerUI.UpdateInstructions(gameManager.GetRound(), GetOwnerName(), LocalIsOwner(), LocalHasVotedForThis());
     }
