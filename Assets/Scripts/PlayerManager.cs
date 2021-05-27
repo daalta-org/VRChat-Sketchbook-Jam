@@ -64,7 +64,9 @@ public class PlayerManager : UdonSharpBehaviour
         {
             var playerCount = gameManager.GetPlayerCount();
             var pointsArray = scoreScript.GetGuessPointsArray(playerCount);
-            playerUI.SetVoteResults(votes, true, pointsArray); // TODO isRevealed is always true
+            int[] networkIds = gameManager.GetPlayerNetworkIds(votes);
+            
+            playerUI.SetVoteResults(votes, true, pointsArray, networkIds); // TODO isRevealed is always true
         }
         else
         {
@@ -133,7 +135,7 @@ public class PlayerManager : UdonSharpBehaviour
 
     private void UpdateInstructions()
     {
-        playerUI.UpdateInstructions(gameManager.GetRound(), GetOwnerName(), Networking.LocalPlayer.playerId == ownerPlayerId, LocalHasVotedForThis());
+        playerUI.UpdateInstructions(gameManager.GetRound(), GetOwnerName(), LocalIsOwner(), LocalHasVotedForThis());
     }
 
     public override bool OnOwnershipRequest(VRCPlayerApi requestingPlayer, VRCPlayerApi requestedOwner)
@@ -324,7 +326,7 @@ public class PlayerManager : UdonSharpBehaviour
     {
         localHasVoted = true;
         playerUI.SetPromptState(index, -1);
-        playerUI.UpdateInstructions(gameManager.GetRound(), GetOwnerName(), LocalIsOwner(), LocalHasVotedForThis());
+        UpdateInstructions();
     }
 
     private void ResetVotes()

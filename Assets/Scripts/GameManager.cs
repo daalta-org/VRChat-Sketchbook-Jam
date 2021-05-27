@@ -19,7 +19,7 @@ public class GameManager : UdonSharpBehaviour
 
     public int[] promptSequence = null;
 
-    [UdonSynced] private int playerCount = -1; 
+    [UdonSynced] private int playerCount = -1;
 
     private void Start()
     {
@@ -186,5 +186,20 @@ public class GameManager : UdonSharpBehaviour
     public int GetRound()
     {
         return round;
+    }
+
+    public int[] GetPlayerNetworkIds(int[] playerIndices)
+    {
+        var result = new int[playerIndices.Length];
+        for (var i = 0; i < playerIndices.Length; i++)
+        {
+            var index = playerIndices[i];
+            if (index == -1) return result;
+            if (index >= 10) index -= 10; // False votes are 10 higher than normal. Remove that. Modulo would also work
+            var id = playerManagers[index].GetOwnerPlayerId();
+            result[i] = id;
+        }
+
+        return result;
     }
 }

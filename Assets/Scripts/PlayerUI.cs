@@ -3,6 +3,7 @@ using TMPro;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
+using VRC.SDKBase;
 
 public class PlayerUI : UdonSharpBehaviour
 {
@@ -11,6 +12,7 @@ public class PlayerUI : UdonSharpBehaviour
     [SerializeField] private MeshRenderer[] meshRenderersColor = null;
     [SerializeField] private Material[] materialsColor = null;
     [SerializeField] private Animator[] animatorsVoteResult = null;
+    [SerializeField] private TextMeshProUGUI[] textVoteResult = null;
 
     [Header("Strings")] 
     [SerializeField] private string stringJoin = "<b>Join!</b>\n<size=60%>Pick up a pen to play</size>";
@@ -122,7 +124,7 @@ public class PlayerUI : UdonSharpBehaviour
         }
     }
 
-    public void SetVoteResults(int[] votes, bool isRevealed, int[] scoresVote)
+    public void SetVoteResults(int[] votes, bool isRevealed, int[] scoresVote, int[] playerIds)
     {
         var scoreIndex = 0;
         for (var i = 0; i < animatorsVoteResult.Length; i++)
@@ -137,6 +139,11 @@ public class PlayerUI : UdonSharpBehaviour
                     score = scoresVote[scoreIndex];
                     scoreIndex++;
                 }
+
+                Debug.Log("aaa " + i);
+                Debug.Log("poo " + playerIds[i]);
+                var player = VRCPlayerApi.GetPlayerById(playerIds[i]);
+                textVoteResult[i].text = player == null ? "ERROR" : player.displayName; // TODO Danger zone!
                 animatorsVoteResult[i].SetInteger("Score", score); // TODO placeholder score
                 animatorsVoteResult[i].SetBool("IsVoteRevealed", isRevealed);
             }
