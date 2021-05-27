@@ -16,7 +16,13 @@ public class PlayerManager : UdonSharpBehaviour
     [UdonSynced] private int ownerPlayerId = -1;
 
     /// <summary>
-    /// Index of prompt, index of player, index of prompt, index of player, ...
+    /// Votes by players who guessed correctly. Ordered by who guessed first.
+    /// 0 = player 0 voted correctly
+    /// 1 = player 1 voted correctly, and so on.
+    ///
+    /// Also contains wrong votes! // TODO
+    /// 10 = player 0 voted incorrectly
+    /// 11 = player 1 voted incorrectly, and so on.
     /// </summary>
     [UdonSynced] private int[] votes = null;
 
@@ -208,7 +214,7 @@ public class PlayerManager : UdonSharpBehaviour
 
         if (buttonIndex != correctIndex)
         {
-            OnVoteSubmittedIncorrect(buttonIndex);
+            OnVoteSubmittedIncorrect(myId, buttonIndex);
             return;
         }
 
@@ -227,13 +233,15 @@ public class PlayerManager : UdonSharpBehaviour
     private void OnVoteSubmittedCorrect(int id, int index)
     {
         Debug.Log($"CORRECT: {Networking.LocalPlayer.displayName} voted correctly for {GetOwnerName()}'s prompt {correctIndex}");
-        SendCustomNetworkEvent(NetworkEventTarget.Owner, nameof(SubmitVoteCorrect) + "Player" + id);
+        SendCustomNetworkEvent(NetworkEventTarget.Owner, nameof(SubmitVote) + "CorrectPlayer" + id);
         OnValidVoteSubmitted(index);
     }
 
-    private void OnVoteSubmittedIncorrect(int index)
+    private void OnVoteSubmittedIncorrect(int id, int index)
     {
         Debug.Log($"WRONG: {Networking.LocalPlayer.displayName} voted incorrectly for {GetOwnerName()}'s prompt {correctIndex}");
+        var eventName = "SubmitVoteCorrectPlayer" + id;
+        SendCustomNetworkEvent(NetworkEventTarget.Owner, eventName);
         OnValidVoteSubmitted(index);
     }
 
@@ -268,7 +276,7 @@ public class PlayerManager : UdonSharpBehaviour
         }
     }
 
-    private void SubmitVoteCorrect(int pi)
+    private void SubmitVote(int pi, bool correct)
     {
         for (var index = 0; index < votes.Length; index++)
         {
@@ -280,50 +288,92 @@ public class PlayerManager : UdonSharpBehaviour
 
             if (votes[index] == -1)
             {
-                votes[index] = pi;
-                Debug.Log($"Correct vote received by player {pi}");
+                votes[index] = pi + (correct ? 0 : 10);
+                Debug.Log((correct ? "Correct" : "Wrong") + " vote received by player " + pi);
                 return;
             }
         }
+        
+        Debug.LogWarning("Um ran out of space in the votes array. What");
     }
     
     public void SubmitVoteCorrectPlayer0()
     {
-        SubmitVoteCorrect(0);
+        SubmitVote(0, true);
     } 
     
     public void SubmitVoteCorrectPlayer1()
     {
-        SubmitVoteCorrect(1);
+        SubmitVote(1, true);
     } 
     
     public void SubmitVoteCorrectPlayer2()
     {
-        SubmitVoteCorrect(2);
+        SubmitVote(2, true);
     } 
     
     public void SubmitVoteCorrectPlayer3()
     {
-        SubmitVoteCorrect(3);
+        SubmitVote(3, true);
     } 
     
     public void SubmitVoteCorrectPlayer4()
     {
-        SubmitVoteCorrect(4);
+        SubmitVote(4, true);
     } 
     
     public void SubmitVoteCorrectPlayer5()
     {
-        SubmitVoteCorrect(5);
+        SubmitVote(5, true);
     } 
     
     public void SubmitVoteCorrectPlayer6()
     {
-        SubmitVoteCorrect(6);
+        SubmitVote(6, true);
     } 
     
     public void SubmitVoteCorrectPlayer7()
     {
-        SubmitVoteCorrect(7);
+        SubmitVote(7, true);
+    }
+    
+    public void SubmitVoteWrongPlayer0()
+    {
+        SubmitVote(0, false);
+    } 
+    
+    public void SubmitVoteWrongPlayer1()
+    {
+        SubmitVote(1, false);
+    } 
+    
+    public void SubmitVoteWrongPlayer2()
+    {
+        SubmitVote(2, false);
+    } 
+    
+    public void SubmitVoteWrongPlayer3()
+    {
+        SubmitVote(3, false);
+    } 
+    
+    public void SubmitVoteWrongPlayer4()
+    {
+        SubmitVote(4, false);
+    } 
+    
+    public void SubmitVoteWrongPlayer5()
+    {
+        SubmitVote(5, false);
+    } 
+    
+    public void SubmitVoteWrongPlayer6()
+    {
+        SubmitVote(6, false);
+    } 
+    
+    public void SubmitVoteWrongPlayer7()
+    {
+        SubmitVote(7, false);
     } 
 }
