@@ -713,7 +713,7 @@ MonoBehaviour:
       Data: 
     - Name: declarationType
       Entry: 3
-      Data: 1
+      Data: 2
     - Name: syncMode
       Entry: 3
       Data: 0
@@ -737,13 +737,7 @@ MonoBehaviour:
       Data: 47|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
     - Name: 
       Entry: 12
-      Data: 1
-    - Name: 
-      Entry: 7
-      Data: 48|UnityEngine.SerializeField, UnityEngine.CoreModule
-    - Name: 
-      Entry: 8
-      Data: 
+      Data: 0
     - Name: 
       Entry: 13
       Data: 

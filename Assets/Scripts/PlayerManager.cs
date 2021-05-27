@@ -32,7 +32,7 @@ public class PlayerManager : UdonSharpBehaviour
     private int playerIndex = -1;
     private int ownerPlayerIdOld = -1;
     private int correctIndex = -1;
-    [SerializeField] private ScoreScript scoreScript;
+    private ScoreScript scoreScript;
 
     private void Start()
     {
@@ -221,10 +221,11 @@ public class PlayerManager : UdonSharpBehaviour
         return UnityEngine.Random.Range(0, 6);
     }
 
-    public void SetPromptsAndGameManager(Prompts prompts1, GameManager gameManager1)
+    public void SetPromptsAndGameManager(Prompts prompts1, GameManager gameManager1, ScoreScript s)
     {
         prompts = prompts1;
         gameManager = gameManager1;
+        scoreScript = s;
         UpdateInstructions();
     }
 
@@ -264,6 +265,7 @@ public class PlayerManager : UdonSharpBehaviour
     private bool LocalHasVotedForThis()
     {
         Debug.Log("Checking whether local voted for this");
+        if (gameManager == null) return false;
         var myId = gameManager.GetMyPlayerManagerId();
         if (myId < 0) return true;
         foreach (var vote in votes)

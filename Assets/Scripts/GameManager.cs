@@ -10,6 +10,7 @@ public class GameManager : UdonSharpBehaviour
     [SerializeField] private PlayerManager[] playerManagers = null;
     [SerializeField] private Prompts prompts = null;
     [SerializeField] private int numRounds = 5;
+    [SerializeField] private ScoreScript scoreScript;
 
     [UdonSynced] private int seed = -1;
     private int seedOld = -1;
@@ -27,7 +28,7 @@ public class GameManager : UdonSharpBehaviour
         for (var index = 0; index < playerManagers.Length; index++)
         {
             var p = playerManagers[index];
-            p.SetPromptsAndGameManager(prompts, this);
+            p.SetPromptsAndGameManager(prompts, this, scoreScript);
             p.SetButtonInfo(index);
         }
 
