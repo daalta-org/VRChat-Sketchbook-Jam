@@ -110,4 +110,12 @@ public class PlayerUI : UdonSharpBehaviour
 
         textInstruction.text = s;
     }
+
+    public void ClearText()
+    {
+        for (var i = 0; i < 6; i++)
+        {
+            buttonManagers[i].SetText("");
+        }
+    }
 }

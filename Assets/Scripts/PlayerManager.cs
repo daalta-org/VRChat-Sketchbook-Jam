@@ -64,10 +64,6 @@ public class PlayerManager : UdonSharpBehaviour
 
     private void UpdateInstructions()
     {
-        Debug.Log(gameManager.GetRound());
-        Debug.Log(GetOwnerName());
-        Debug.Log(Networking.LocalPlayer.playerId == ownerPlayerId);
-        Debug.Log(localHasVotedForThis);
         playerUI.UpdateInstructions(gameManager.GetRound(), GetOwnerName(), Networking.LocalPlayer.playerId == ownerPlayerId, localHasVotedForThis);
     }
 
@@ -128,7 +124,11 @@ public class PlayerManager : UdonSharpBehaviour
         
         if (round < 0) return;
         ClearLines();
-        if (ownerPlayerId < 0) return;
+        if (ownerPlayerId < 0)
+        {
+            playerUI.ClearText();
+            return;
+        };
 
         ResetVotes();
         correctIndex = GetCorrectIndex(seed, round);
