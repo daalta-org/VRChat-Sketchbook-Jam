@@ -21,9 +21,9 @@ public class PlayerUI : UdonSharpBehaviour
     [SerializeField] private string stringVoteSubmitted= "<b>Voted!</b>\n<size=60%>Keep guessing other drawings!\nGet points for guessing fast!</size>";
     [SerializeField] private string stringVoteGuess= "<b>Guess!</b>\n<size=60%>Click to guess what {0} is drawing!\nYou only get 1 vote!</size>";
     [SerializeField] private string stringDraw = "<b>Draw!</b>\n<size=60%>Draw the green prompt!\nGet points when players guess it!</size>";
-    private static readonly int Score = Animator.StringToHash("Score");
-    private static readonly int IsVoteRevealed = Animator.StringToHash("IsVoteRevealed");
-    private static readonly int IsVoteSubmitted = Animator.StringToHash("IsVoteSubmitted");
+    private readonly int Score = Animator.StringToHash("Score");
+    private readonly int IsVoteRevealed = Animator.StringToHash("IsVoteRevealed");
+    private readonly int IsVoteSubmitted = Animator.StringToHash("IsVoteSubmitted");
 
     public void SetButtonInfo(PlayerManager pm)
     {
@@ -142,9 +142,7 @@ public class PlayerUI : UdonSharpBehaviour
                     score = scoresVote[scoreIndex];
                     scoreIndex++;
                 }
-
-                Debug.Log("aaa " + i);
-                Debug.Log("poo " + playerIds[i]);
+                
                 var player = VRCPlayerApi.GetPlayerById(playerIds[i]);
                 textVoteResult[i].text = player == null ? "ERROR" : player.displayName; // TODO Danger zone!
                 animatorsVoteResult[i].SetInteger(Score, score); // TODO placeholder score

@@ -35,6 +35,7 @@ public class GameManager : UdonSharpBehaviour
         }
 
         if (!Networking.IsMaster) return;
+        ResetBonusPointPlacement();
     }
 
     private void SetPlayerColors()
@@ -81,6 +82,8 @@ public class GameManager : UdonSharpBehaviour
             roundOld = round;
             OnRoundChanged();
         }
+
+        UpdateBonusPointUI(); // TODO probably happens too often
     }
 
     public void RequestNextRound()
@@ -212,18 +215,48 @@ public class GameManager : UdonSharpBehaviour
     /// <param name="playerIndex">Index of the player top attempt the bonus point placement for.</param>
     public void TryBonusPointPlacement(int playerIndex)
     {
-        if (HasPlacement(playerIndex)) return; 
-        
-        if (!HasVotedForEveryone(playerIndex)) return;
+        if (HasPlacement(playerIndex))
+        {
+            Debug.LogWarning("Player already has a placement! This function should not have been called.");
+            return;
+        }
+
+        if (!HasVotedForEveryone(playerIndex))
+        {
+            Debug.Log("Player has not yet voted for everyone, so they can't get bonus points yet.");
+            return;
+        }
 
         for (var i = 0; i < bonusPointPlacement.Length; i++)
         {
             if (bonusPointPlacement[i] < 0)
             {
                 bonusPointPlacement[i] = playerIndex;
+                Debug.Log($"Player {playerIndex} got bonus points for finishing!");
+                RequestSerialization();
+                OnDeserialization();
                 return;
             }
         }
+    }
+
+    private void UpdateBonusPointUI()
+    {
+        var arrayLen = 0;
+        foreach (var b in bonusPointPlacement)
+        {
+            if (b == -1) break;
+            arrayLen++;
+        }
+        
+        var points = new int[arrayLen];
+        var names = new string[arrayLen];
+        for (int i = 0; i < points.Length; i++)
+        {
+            points[i] = scoreScript.GetBonusPoints(playerCount, bonusPointPlacement[i]);
+            names[i] = playerManagers[i].GetOwnerName();
+        }
+        gameUI.SetBonusPoints(points, names);
     }
 
     private bool HasPlacement(int playerIndex)
@@ -236,21 +269,35 @@ public class GameManager : UdonSharpBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Gives each player the bonus points depending on their placement.
+    /// </summary>
+    private void FinalizeAndGiveBonusPoints()
+    {
+        for (var index = 0; index < bonusPointPlacement.Length; index++)
+        {
+            var playerIndex = bonusPointPlacement[index];
+            playerManagers[playerIndex].AddPoints(scoreScript.GetBonusPoints(playerIndex, index));
+        }
+    }
+
     private bool HasVotedForEveryone(int playerIndex)
     {
         var numVotes = 0;
         foreach (var p in playerManagers)
         {
             if (p.HasBeenVotedForBy(playerIndex)) numVotes++;
-            if (numVotes == playerCount) return true;
+            if (numVotes == playerCount - 1) return true; // Can't vote for self, hence the -1
         }
+        
+        Debug.Log($"Hasn't voted for everyone only {numVotes} votes");
 
         return false;
     }
 
     private void ResetBonusPointPlacement()
     {
-        bonusPointPlacement = new int[8];
+        bonusPointPlacement = new int[7];
         for (int i = 0; i < bonusPointPlacement.Length; i++)
         {
             bonusPointPlacement[i] = -1;

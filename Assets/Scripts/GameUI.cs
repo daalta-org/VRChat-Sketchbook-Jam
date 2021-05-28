@@ -11,9 +11,9 @@ public class GameUI : UdonSharpBehaviour
     [SerializeField] private TextMeshProUGUI[] bonusTexts = null;
     
     private readonly int IsMusicRunning = Animator.StringToHash("IsMusicRunning");
-    private static readonly int Score = Animator.StringToHash("Score");
-    private static readonly int IsVoteRevealed = Animator.StringToHash("IsVoteRevealed");
-    private static readonly int IsVoteSubmitted = Animator.StringToHash("IsVoteSubmitted");
+    private readonly int Score = Animator.StringToHash("Score");
+    private readonly int IsVoteRevealed = Animator.StringToHash("IsVoteRevealed");
+    private readonly int IsVoteSubmitted = Animator.StringToHash("IsVoteSubmitted");
     public void OnRoundChanged(int round)
     {
         textRound.text = "Round " + (round+1);
@@ -25,12 +25,22 @@ public class GameUI : UdonSharpBehaviour
 
     public void SetBonusPoints(int[] points, string[] names)
     {
-        for (int i = 0; i < bonusAnimators.Length; i++)
+        Debug.Log("Points length " + points.Length);
+
+        if (points.Length == 0)
         {
-            bonusAnimators[i].SetInteger(Score, points[i]);
+            ResetBonusPoints();
+            return;
+        }
+        
+        for (var i = 0; i < bonusAnimators.Length; i++)
+        {
+            Debug.Log(i);
+            var isValid = i < points.Length;
+            bonusAnimators[i].SetInteger(Score, isValid ? points[i] : -1);
             bonusAnimators[i].SetBool(IsVoteRevealed, true);
             bonusAnimators[i].SetBool(IsVoteSubmitted, true);
-            bonusTexts[i].text = names[i];
+            bonusTexts[i].text = isValid ? names[i] : "";
         }
     }
 

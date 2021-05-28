@@ -287,7 +287,7 @@ public class PlayerManager : UdonSharpBehaviour
         return false;*/
     }
 
-    private string GetOwnerName()
+    public string GetOwnerName()
     {
         if (ownerPlayerId < 0) return null;
         var player = VRCPlayerApi.GetPlayerById(ownerPlayerId);
@@ -358,10 +358,10 @@ public class PlayerManager : UdonSharpBehaviour
             {
                 votes[index] = pi + (correct ? 0 : 10);
                 Debug.Log((correct ? "Correct" : "Wrong") + $" vote {votes[index]} received by player {pi}");
-
-                gameManager.TryBonusPointPlacement(pi);
+                
                 RequestSerialization();
                 OnDeserialization();
+                gameManager.TryBonusPointPlacement(pi);
                 UpdateVotesEveryone();
                 return;
             }
@@ -377,9 +377,10 @@ public class PlayerManager : UdonSharpBehaviour
     /// <returns>Whether that player has voted for this player manager</returns>
     public bool HasBeenVotedForBy(int p)
     {
+        Debug.Log($"Checking whether {p} has been voted for {playerIndex}");
         foreach (var vote in votes)
         {
-            if (vote == p || vote + 10 == p) return true;
+            if (vote == p || vote - 10 == p) return true;
         }
 
         return false;
@@ -464,6 +465,10 @@ public class PlayerManager : UdonSharpBehaviour
     {
         SubmitVote(7, false);
     }
-    
-    
+
+
+    public void AddPoints(int points)
+    {
+        score += points;
+    }
 }
