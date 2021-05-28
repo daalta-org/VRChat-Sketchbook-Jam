@@ -21,6 +21,9 @@ public class PlayerUI : UdonSharpBehaviour
     [SerializeField] private string stringVoteSubmitted= "<b>Voted!</b>\n<size=60%>Keep guessing other drawings!\nGet points for guessing fast!</size>";
     [SerializeField] private string stringVoteGuess= "<b>Guess!</b>\n<size=60%>Click to guess what {0} is drawing!\nYou only get 1 vote!</size>";
     [SerializeField] private string stringDraw = "<b>Draw!</b>\n<size=60%>Draw the green prompt!\nGet points when players guess it!</size>";
+    private static readonly int Score = Animator.StringToHash("Score");
+    private static readonly int IsVoteRevealed = Animator.StringToHash("IsVoteRevealed");
+    private static readonly int IsVoteSubmitted = Animator.StringToHash("IsVoteSubmitted");
 
     public void SetButtonInfo(PlayerManager pm)
     {
@@ -144,11 +147,11 @@ public class PlayerUI : UdonSharpBehaviour
                 Debug.Log("poo " + playerIds[i]);
                 var player = VRCPlayerApi.GetPlayerById(playerIds[i]);
                 textVoteResult[i].text = player == null ? "ERROR" : player.displayName; // TODO Danger zone!
-                animatorsVoteResult[i].SetInteger("Score", score); // TODO placeholder score
-                animatorsVoteResult[i].SetBool("IsVoteRevealed", isRevealed);
+                animatorsVoteResult[i].SetInteger(Score, score); // TODO placeholder score
+                animatorsVoteResult[i].SetBool(IsVoteRevealed, isRevealed);
             }
 
-            animatorsVoteResult[i].SetBool("IsVoteSubmitted", isSubmitted);
+            animatorsVoteResult[i].SetBool(IsVoteSubmitted, isSubmitted);
         }
     }
 
@@ -156,9 +159,9 @@ public class PlayerUI : UdonSharpBehaviour
     {
         for (int i = 0; i < animatorsVoteResult.Length; i++)
         {
-            animatorsVoteResult[i].SetInteger("Score", -1);
-            animatorsVoteResult[i].SetBool("IsVoteRevealed", false);
-            animatorsVoteResult[i].SetBool("IsVoteSubmitted", false);
+            animatorsVoteResult[i].SetInteger(Score, -1);
+            animatorsVoteResult[i].SetBool(IsVoteRevealed, false);
+            animatorsVoteResult[i].SetBool(IsVoteSubmitted, false);
         }
     }
 }

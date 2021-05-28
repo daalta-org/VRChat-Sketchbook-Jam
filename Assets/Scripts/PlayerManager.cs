@@ -358,6 +358,8 @@ public class PlayerManager : UdonSharpBehaviour
             {
                 votes[index] = pi + (correct ? 0 : 10);
                 Debug.Log((correct ? "Correct" : "Wrong") + $" vote {votes[index]} received by player {pi}");
+
+                gameManager.TryBonusPointPlacement(pi);
                 RequestSerialization();
                 OnDeserialization();
                 UpdateVotesEveryone();

@@ -21,6 +21,8 @@ public class GameManager : UdonSharpBehaviour
 
     [UdonSynced] private int playerCount = -1;
 
+    [UdonSynced] private int[] bonusPointPlacement;
+
     private void Start()
     {
         SetPlayerColors();
@@ -107,6 +109,7 @@ public class GameManager : UdonSharpBehaviour
     private void OnRoundChanged()
     {
         SetPromptsForPlayersThisRound();
+        ResetBonusPointPlacement();
         foreach (var playerManager in playerManagers)
         {
             playerManager.OnRoundChanged(seed, round);
@@ -203,7 +206,37 @@ public class GameManager : UdonSharpBehaviour
         return result;
     }
 
-    public bool HasVotedForEveryone(int playerIndex)
+    /// <summary>
+    /// Try to give the player bonus points, unless they're not done yet or are already placed.
+    /// </summary>
+    /// <param name="playerIndex">Index of the player top attempt the bonus point placement for.</param>
+    public void TryBonusPointPlacement(int playerIndex)
+    {
+        if (HasPlacement(playerIndex)) return; 
+        
+        if (!HasVotedForEveryone(playerIndex)) return;
+
+        for (var i = 0; i < bonusPointPlacement.Length; i++)
+        {
+            if (bonusPointPlacement[i] < 0)
+            {
+                bonusPointPlacement[i] = playerIndex;
+                return;
+            }
+        }
+    }
+
+    private bool HasPlacement(int playerIndex)
+    {
+        foreach (var p in bonusPointPlacement)
+        {
+            if (p == playerIndex) return true;
+        }
+
+        return false;
+    }
+
+    private bool HasVotedForEveryone(int playerIndex)
     {
         var numVotes = 0;
         foreach (var p in playerManagers)
@@ -213,5 +246,14 @@ public class GameManager : UdonSharpBehaviour
         }
 
         return false;
+    }
+
+    private void ResetBonusPointPlacement()
+    {
+        bonusPointPlacement = new int[8];
+        for (int i = 0; i < bonusPointPlacement.Length; i++)
+        {
+            bonusPointPlacement[i] = -1;
+        }
     }
 }
