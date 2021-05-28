@@ -202,4 +202,16 @@ public class GameManager : UdonSharpBehaviour
 
         return result;
     }
+
+    public bool HasVotedForEveryone(int playerIndex)
+    {
+        var numVotes = 0;
+        foreach (var p in playerManagers)
+        {
+            if (p.HasBeenVotedForBy(playerIndex)) numVotes++;
+            if (numVotes == playerCount) return true;
+        }
+
+        return false;
+    }
 }

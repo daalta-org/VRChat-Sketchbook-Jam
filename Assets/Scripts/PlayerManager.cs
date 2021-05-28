@@ -29,6 +29,8 @@ public class PlayerManager : UdonSharpBehaviour
 
     [UdonSynced] private bool isPlaying = false;
 
+    [UdonSynced] private int score = 0;
+
     private int playerIndex = -1;
     private int ownerPlayerIdOld = -1;
     private int correctIndex = -1;
@@ -364,6 +366,21 @@ public class PlayerManager : UdonSharpBehaviour
         }
         
         Debug.LogWarning("Um ran out of space in the votes array. What");
+    }
+
+    /// <summary>
+    /// Whether the given player index has voted for the player represented by this player manager.
+    /// </summary>
+    /// <param name="p">Index of the player to check for</param>
+    /// <returns>Whether that player has voted for this player manager</returns>
+    public bool HasBeenVotedForBy(int p)
+    {
+        foreach (var vote in votes)
+        {
+            if (vote == p || vote + 10 == p) return true;
+        }
+
+        return false;
     }
     
     public void SubmitVoteCorrectPlayer0()
