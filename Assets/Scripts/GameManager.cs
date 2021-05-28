@@ -85,6 +85,13 @@ public class GameManager : UdonSharpBehaviour
             roundOld = round;
             OnRoundChanged();
         }
+
+        if (isRoundOver != isRoundOverOld)
+        {
+            isRoundOverOld = isRoundOver;
+            gameUI.OnRoundOver();
+        }
+        
         /* Removed to check if bonus point calc is working as expected
         if (isRoundOver != isRoundOverOld)
         {
@@ -261,7 +268,9 @@ public class GameManager : UdonSharpBehaviour
             {
                 bonusPointPlacement[i] = playerIndex;
                 Debug.Log($"Player {playerIndex} will get bonus points for finishing!");
-                if (IsRoundOver()) isRoundOver = true;
+
+                isRoundOver = i + 1 >= playerCount - 1; // 2 players (1 + 1) >= 2 players (3 - 1)
+                
                 RequestSerialization();
                 OnDeserialization();
                 return;
@@ -372,6 +381,8 @@ public class GameManager : UdonSharpBehaviour
 
     private bool IsRoundOver()
     {
+        Debug.Log("Checking whether the round is over...");
+        var numPlacements = GetNumPlacements();
         return GetNumPlacements() + 1 >= playerCount;
     }
 }
