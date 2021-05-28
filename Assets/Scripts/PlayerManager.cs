@@ -225,7 +225,6 @@ public class PlayerManager : UdonSharpBehaviour
 
     private void ClearLines()
     {
-        Debug.Log("Asking owner to clear drawn stylus lines");
         stylus.SendCustomNetworkEvent(NetworkEventTarget.Owner, "Erase");
     }
 
@@ -305,7 +304,7 @@ public class PlayerManager : UdonSharpBehaviour
     {
         Debug.Log($"CORRECT: {Networking.LocalPlayer.displayName} voted correctly for {GetOwnerName()}'s prompt {correctIndex}");
         SendCustomNetworkEvent(NetworkEventTarget.Owner, nameof(SubmitVote) + "CorrectPlayer" + id);
-        OnValidVoteSubmitted(index);
+        OnValidVoteSubmitted(index, true);
     }
 
     private void OnVoteSubmittedIncorrect(int id, int index)
@@ -313,7 +312,7 @@ public class PlayerManager : UdonSharpBehaviour
         Debug.Log($"WRONG: {Networking.LocalPlayer.displayName} voted incorrectly for {GetOwnerName()}'s prompt {correctIndex}");
         var eventName = "SubmitVoteWrongPlayer" + id;
         SendCustomNetworkEvent(NetworkEventTarget.Owner, eventName);
-        OnValidVoteSubmitted(index);
+        OnValidVoteSubmitted(index, false);
     }
 
     private void OnVoteOwnPrompt()
@@ -331,10 +330,10 @@ public class PlayerManager : UdonSharpBehaviour
         Debug.Log($"{Networking.LocalPlayer.displayName} tried to vote for index {playerIndex}, but there's no player there.");
     }
 
-    private void OnValidVoteSubmitted(int index)
+    private void OnValidVoteSubmitted(int index, bool isCorrect)
     {
         localHasVoted = true;
-        playerUI.SetPromptState(index, -1);
+        playerUI.SetPromptState(index, isCorrect ? 2 : 1);
         UpdateInstructions();
     }
 
@@ -527,5 +526,13 @@ public class PlayerManager : UdonSharpBehaviour
         }
 
         return points;
+    }
+
+    public void Reset()
+    {
+        ResetVotes();
+        score = 0;
+        RequestSerialization();
+        OnDeserialization();
     }
 }

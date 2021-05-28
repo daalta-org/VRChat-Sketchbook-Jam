@@ -59,6 +59,10 @@ public class GameManager : UdonSharpBehaviour
         if (!Networking.LocalPlayer.isMaster) return;
         seed = UnityEngine.Random.Range(-int.MaxValue, int.MaxValue);
         round = 0;
+        foreach (var p in playerManagers)
+        {
+            p.Reset();
+        }
         Debug.Log("Requesting Deserialization...");
         RequestSerialization();
         OnDeserialization();
@@ -123,12 +127,14 @@ public class GameManager : UdonSharpBehaviour
 
     public void RequestNextRound()
     {
+        if (!isRoundOver || round >= 4) return;
         SendCustomNetworkEvent(NetworkEventTarget.Owner, nameof(NextRound));
         Debug.Log("Requesting that the master progresses to the next round...");
     }
     
     public void NextRound()
     {
+        if (!isRoundOver || round >= 4) return;
         Debug.Log("Master: Increasing round counter and sending it to clients.");
         round++;
         RequestSerialization();
