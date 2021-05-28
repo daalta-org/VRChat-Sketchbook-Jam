@@ -175,6 +175,7 @@ public class PlayerManager : UdonSharpBehaviour
     public override void OnPlayerLeft(VRCPlayerApi player)
     {
         if (ownerPlayerId == player.playerId) ownerPlayerId = -1;
+        gameManager.CheckEndRoundPlayerLeft();
     }
 
     public bool ResetManagedPlayedId(int playerId)
@@ -238,6 +239,7 @@ public class PlayerManager : UdonSharpBehaviour
     {
         if (LocalHasVotedForThis()) return;
         if (gameManager.GetRound() < 0) return;
+        if (gameManager.IsRoundOver()) return;
         if (ownerPlayerId < 0)
         {
             OnVoteEmptyPlayer();
