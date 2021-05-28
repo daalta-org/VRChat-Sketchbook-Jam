@@ -22,7 +22,7 @@ public class PlayerUI : UdonSharpBehaviour
     [SerializeField] private string stringVoteSubmitted= "<b>Voted!</b>\n<size=60%>Keep guessing other drawings!\nGet points for guessing fast!</size>";
     [SerializeField] private string stringVoteGuess= "<b>Guess!</b>\n<size=60%>Click to guess what {0} is drawing!\nYou only get 1 vote!</size>";
     [SerializeField] private string stringDraw = "<b>Draw!</b>\n<size=60%>Draw the green prompt!\nGet points when players guess it!</size>";
-    [SerializeField] private string stringRoundOver = "<b>Round Over</b>\n<size=60%>Press \"Next Round\" to continue!";
+    [SerializeField] private string stringRoundOver = "<b>Round Over</b>\n<size=60%>Press \"Next Round\" to continue, {0}!";
     private readonly int Score = Animator.StringToHash("Score");
     private readonly int IsVoteRevealed = Animator.StringToHash("IsVoteRevealed");
     private readonly int IsVoteSubmitted = Animator.StringToHash("IsVoteSubmitted");
