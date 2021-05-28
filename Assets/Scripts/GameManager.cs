@@ -100,20 +100,23 @@ public class GameManager : UdonSharpBehaviour
     {
         Debug.Log("Round is over!!");
         gameUI.OnRoundOver();
-
+        
         for (var index = 0; index < playerManagers.Length; index++)
         {
             Debug.Log("OnRoundOver for player " + index);
-            // TODO actually add up the points
+
             playerManagers[index].OnRoundOver(); // reveals which prompts were correct
             if (!Networking.IsMaster) continue;
-            playerManagers[index].GetPointsVoteCorrect(playerCount, index);
-            playerManagers[index].GetPointsDrawingHasBeenGuessed(playerCount);
+            var pointsToAdd = 0;
+            pointsToAdd += GetPointsCorrectOnOtherPlayers(index);
+            pointsToAdd += playerManagers[index].GetPointsDrawingHasBeenGuessed(playerCount);
+            playerManagers[index].AddPoints(pointsToAdd);
         }
         
         if (!Networking.IsMaster) return;
 
         ApplyBonusPoints();
+        RequestPlayerManagerSerialization();
         RequestSerialization();
         OnDeserialization();
     }
@@ -205,6 +208,7 @@ public class GameManager : UdonSharpBehaviour
         foreach (var p in playerManagers)
         {
             p.RequestSerialization();
+            p.OnDeserialization();
         }
     }
 
@@ -305,14 +309,13 @@ public class GameManager : UdonSharpBehaviour
     /// </summary>
     private void ApplyBonusPoints()
     {
-        Debug.Log(nameof(ApplyBonusPoints));
         for (var index = 0; index < bonusPointPlacement.Length; index++)
         {
-            Debug.Log(index);
             var playerIndex = bonusPointPlacement[index];
-            Debug.Log(playerIndex);
             if (playerIndex < 0) return;
-            playerManagers[playerIndex].AddPoints(scoreScript.GetBonusPoints(playerIndex, index));
+            var points = scoreScript.GetBonusPoints(playerCount, index);
+            Debug.Log($"Player {playerIndex} gets {points} bonus points for their No. {index+1} placement");
+            playerManagers[playerIndex].AddPoints(points);
         }
     }
 
@@ -322,9 +325,9 @@ public class GameManager : UdonSharpBehaviour
     private int GetPointsCorrectOnOtherPlayers(int playerIndex)
     {
         var total = 0;
-        foreach (var t in playerManagers)
+        foreach (var p in playerManagers)
         {
-            total += t.GetPointsVoteCorrect(playerCount, playerIndex);
+            total += p.GetPointsVoteCorrect(playerCount, playerIndex);
         }
 
         return total;

@@ -8,6 +8,7 @@ using VRC.SDKBase;
 public class PlayerUI : UdonSharpBehaviour
 {
     [SerializeField] private TextMeshProUGUI textInstruction = null;
+    [SerializeField] private TextMeshProUGUI textScore = null;
     [SerializeField] private ButtonManager[] buttonManagers = null;
     [SerializeField] private MeshRenderer[] meshRenderersColor = null;
     [SerializeField] private Material[] materialsColor = null;
@@ -161,5 +162,10 @@ public class PlayerUI : UdonSharpBehaviour
             animatorsVoteResult[i].SetBool(IsVoteRevealed, false);
             animatorsVoteResult[i].SetBool(IsVoteSubmitted, false);
         }
+    }
+
+    public void SetScore(int score)
+    {
+        textScore.text = score.ToString();
     }
 }

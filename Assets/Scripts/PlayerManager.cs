@@ -30,6 +30,7 @@ public class PlayerManager : UdonSharpBehaviour
     [UdonSynced] private bool isPlaying = false;
 
     [UdonSynced] private int score = 0;
+    private int scoreOld = 0;
 
     private int playerIndex = -1;
     private int ownerPlayerIdOld = -1;
@@ -66,7 +67,7 @@ public class PlayerManager : UdonSharpBehaviour
         {
             var playerCount = gameManager.GetPlayerCount();
             var pointsArray = scoreScript.GetGuessPointsArray(playerCount);
-            int[] networkIds = gameManager.GetPlayerNetworkIds(votes);
+            var networkIds = gameManager.GetPlayerNetworkIds(votes);
             
             playerUI.SetVoteResults(votes, true, pointsArray, networkIds); // TODO isRevealed is always true
         }
@@ -130,6 +131,12 @@ public class PlayerManager : UdonSharpBehaviour
             Debug.Log($"Owner player ID of pen {playerIndex} changed from {ownerPlayerIdOld} to {ownerPlayerId}");
             ownerPlayerIdOld = ownerPlayerId;
             UpdateInstructions();
+        }
+
+        if (score != scoreOld)
+        {
+            scoreOld = score;
+            playerUI.SetScore(score);
         }
 
         UpdateVotesLocal(); // TODO Remove this. Probably not needed due to the networked event which calls this
@@ -378,13 +385,13 @@ public class PlayerManager : UdonSharpBehaviour
     /// <returns>How many points they got</returns>
     public int GetPointsVoteCorrect(int playerCount, int p)
     {
-        Debug.Log(nameof(GetPointsVoteCorrect));
         for (var index = 0; index < votes.Length; index++)
         {
             var vote = votes[index];
-            if (vote == p || vote - 10 == p)
+            if (vote == p)
             {
-                return scoreScript.GetGuessPoints(playerCount, index);
+                var points = scoreScript.GetGuessPoints(playerCount, index);
+                return points;
             }
         }
 
@@ -490,6 +497,7 @@ public class PlayerManager : UdonSharpBehaviour
 
     public void AddPoints(int points)
     {
+        Debug.Log($"Adding {points} points to player {playerIndex}");
         score += points;
     }
 
