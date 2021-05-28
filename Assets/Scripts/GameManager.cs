@@ -23,6 +23,9 @@ public class GameManager : UdonSharpBehaviour
 
     [UdonSynced] private int[] bonusPointPlacement;
 
+    [UdonSynced] private bool isRoundOver = false;
+    private bool isRoundOverOld = false;
+
     private void Start()
     {
         SetPlayerColors();
@@ -82,18 +85,33 @@ public class GameManager : UdonSharpBehaviour
             roundOld = round;
             OnRoundChanged();
         }
+        /* Removed to check if bonus point calc is working as expected
+        if (isRoundOver != isRoundOverOld)
+        {
+            isRoundOverOld = isRoundOver;
+            if (isRoundOver) OnRoundOver();
+        }*/
 
         UpdateBonusPointUI(); // TODO probably happens too often
-        if (IsRoundOver()) OnRoundOver(); // TODO probably happens to often, too!
     }
 
     private void OnRoundOver()
     {
-        foreach (var p in playerManagers)
-        {
-            p.OnRoundOver();
-        }
+        Debug.Log("Round is over!!");
         gameUI.OnRoundOver();
+
+        if (!Networking.IsMaster) return;
+        
+        for (var index = 0; index < playerManagers.Length; index++)
+        {
+            playerManagers[index].GetPointsVoteCorrect(playerCount, index);
+            playerManagers[index].GetPointsDrawingHasBeenGuessed(playerCount);
+            playerManagers[index].OnRoundOver();
+        }
+
+        ApplyBonusPoints();
+        RequestSerialization();
+        OnDeserialization();
     }
 
     public void RequestNextRound()
@@ -242,7 +260,8 @@ public class GameManager : UdonSharpBehaviour
             if (bonusPointPlacement[i] < 0)
             {
                 bonusPointPlacement[i] = playerIndex;
-                Debug.Log($"Player {playerIndex} got bonus points for finishing!");
+                Debug.Log($"Player {playerIndex} will get bonus points for finishing!");
+                if (IsRoundOver()) isRoundOver = true;
                 RequestSerialization();
                 OnDeserialization();
                 return;
@@ -275,15 +294,45 @@ public class GameManager : UdonSharpBehaviour
     }
 
     /// <summary>
-    /// Gives each player the bonus points depending on their placement.
+    /// Gives each player the bonus points depending on their placement
     /// </summary>
-    private void FinalizeAndGiveBonusPoints()
+    private void ApplyBonusPoints()
     {
         for (var index = 0; index < bonusPointPlacement.Length; index++)
         {
             var playerIndex = bonusPointPlacement[index];
             playerManagers[playerIndex].AddPoints(scoreScript.GetBonusPoints(playerIndex, index));
         }
+    }
+
+    /// <summary>
+    /// Get the points received from voting correctly on other players' prompts
+    /// </summary>
+    private int GetPointsCorrectOnOtherPlayers(int playerIndex)
+    {
+        var total = 0;
+        foreach (var t in playerManagers)
+        {
+            total += t.GetPointsVoteCorrect(playerCount, playerIndex);
+        }
+
+        return total;
+    }
+
+    /// <summary>
+    /// How many points did this player receive because their drawing was guessed correctly?
+    /// </summary>
+    /// <param name="playerIndex">Index of player manager to check</param>
+    /// <returns>How many points they receive</returns>
+    private int GetPointsDrawingHasBeenGuessed(int playerIndex)
+    {
+        var total = 0;
+        foreach (var p in playerManagers)
+        {
+            total += p.GetPointsDrawingHasBeenGuessed(playerCount);
+        }
+
+        return total;
     }
 
     private bool HasVotedForEveryone(int playerIndex)

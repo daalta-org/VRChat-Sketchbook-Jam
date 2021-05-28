@@ -371,6 +371,26 @@ public class PlayerManager : UdonSharpBehaviour
     }
 
     /// <summary>
+    /// How many points would a player get for the vote they've submitted to this manager?
+    /// </summary>
+    /// <param name="p">Index of the player who votes</param>
+    /// <param name="playerCount">Player count in this game</param>
+    /// <returns>How many points they got</returns>
+    public int GetPointsVoteCorrect(int playerCount, int p)
+    {
+        for (var index = 0; index < votes.Length; index++)
+        {
+            var vote = votes[index];
+            if (vote == p || vote - 10 == p)
+            {
+                return scoreScript.GetGuessPoints(playerCount, index);
+            }
+        }
+
+        return 0;
+    }
+
+    /// <summary>
     /// Whether the given player index has voted for the player represented by this player manager.
     /// </summary>
     /// <param name="p">Index of the player to check for</param>
@@ -479,5 +499,23 @@ public class PlayerManager : UdonSharpBehaviour
             if (i == correctIndex) playerUI.SetPromptCorrect(i);
             else playerUI.SetPromptWrong(i);
         }
+    }
+
+    public int GetPointsDrawingHasBeenGuessed(int playerCount)
+    {
+        var points = 0;
+        var pointsArray = scoreScript.GetGuessPointsArray(playerCount);
+        var scoreIndex = 0;
+        foreach (var voteIndex in votes)
+        {
+            var isSubmitted = voteIndex > -1;
+            if (!isSubmitted) continue;
+            var isCorrect = voteIndex < 10;
+            if (!isCorrect) continue;
+            points += pointsArray[scoreIndex];
+            scoreIndex++;
+        }
+
+        return points;
     }
 }
