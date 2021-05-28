@@ -253,8 +253,8 @@ public class GameManager : UdonSharpBehaviour
         var names = new string[arrayLen];
         for (int i = 0; i < points.Length; i++)
         {
-            points[i] = scoreScript.GetBonusPoints(playerCount, bonusPointPlacement[i]);
-            names[i] = playerManagers[i].GetOwnerName();
+            points[i] = scoreScript.GetBonusPoints(playerCount, i);
+            names[i] = playerManagers[bonusPointPlacement[i]].GetOwnerName();
         }
         gameUI.SetBonusPoints(points, names);
     }
