@@ -1,6 +1,8 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UdonSharp;
 using UnityEngine;
+using VRC.SDKBase;
 
 public class GameUI : UdonSharpBehaviour
 {
@@ -14,6 +16,15 @@ public class GameUI : UdonSharpBehaviour
     private readonly int Score = Animator.StringToHash("Score");
     private readonly int IsVoteRevealed = Animator.StringToHash("IsVoteRevealed");
     private readonly int IsVoteSubmitted = Animator.StringToHash("IsVoteSubmitted");
+
+    private void Update()
+    {
+        transform.LookAt(Networking.LocalPlayer.GetPosition());
+        var rotation = transform.rotation;
+        rotation = Quaternion.Euler(rotation.eulerAngles.x, Mathf.Floor((rotation.eulerAngles.y- 22.5f) / 45)*45 + 45  , rotation.eulerAngles.z);
+        transform.rotation = rotation;
+    }
+
     public void OnRoundChanged(int round)
     {
         textRound.text = "Round " + (round+1);

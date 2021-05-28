@@ -144,25 +144,13 @@ public class PlayerManager : UdonSharpBehaviour
 
     private void UpdateInstructions()
     {
-        playerUI.UpdateInstructions(gameManager.GetRound(), GetOwnerName(), LocalIsOwner(), LocalHasVotedForThis());
+        playerUI.UpdateInstructions(gameManager.GetRound(), GetOwnerName(), LocalIsOwner(), LocalHasVotedForThis(), gameManager.IsRoundOver());
     }
 
     public override bool OnOwnershipRequest(VRCPlayerApi requestingPlayer, VRCPlayerApi requestedOwner)
     {
         return true;
     }
-
-    /*
-     No longer called from the graph
-    /// <summary>
-    /// Called from the stylus Udon graph to update ownership.
-    /// </summary>
-    public void RequestUpdateOwnerID()
-    {
-        Debug.Log("Asking master to become owner of this pen.");
-        SendCustomNetworkEvent(NetworkEventTarget.Owner, nameof(UpdateOwnerID));
-    }
-    */
 
     /// <summary>
     /// Called from the graph when ownership changed or when this is picked up.
@@ -507,6 +495,8 @@ public class PlayerManager : UdonSharpBehaviour
             if (i == correctIndex) playerUI.SetPromptCorrect(i);
             else playerUI.SetPromptWrong(i);
         }
+
+        UpdateInstructions();
     }
 
     public int GetPointsDrawingHasBeenGuessed(int playerCount)

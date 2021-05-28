@@ -56,7 +56,24 @@ public class GameManager : UdonSharpBehaviour
 
     public void StartGame()
     {
-        if (!Networking.LocalPlayer.isMaster) return;
+        if (!Networking.LocalPlayer.isMaster)
+        {
+            Debug.Log("Non-Master tried to call start game event. That's kinda sus");
+            return;
+        }
+
+        var numOfPlayers = 0; // This is calculated separately without using isPlaying - but it doesn't have to be. TBD.
+        foreach (var p in playerManagers)
+        {
+            if (p.GetOwnerPlayerId() < 0) continue;
+            numOfPlayers++;
+        }
+
+        if (numOfPlayers < 3)
+        {
+            Debug.Log("Player count is below 3.");
+            return;
+        }
         seed = UnityEngine.Random.Range(-int.MaxValue, int.MaxValue);
         round = 0;
         foreach (var p in playerManagers)
@@ -113,7 +130,7 @@ public class GameManager : UdonSharpBehaviour
             if (!Networking.IsMaster) continue;
             var pointsToAdd = 0;
             pointsToAdd += GetPointsCorrectOnOtherPlayers(index);
-            pointsToAdd += playerManagers[index].GetPointsDrawingHasBeenGuessed(playerCount);
+            pointsToAdd += playerManagers[index].GetPointsDrawingHasBeenGuessed(GetPlayerCount());
             playerManagers[index].AddPoints(pointsToAdd);
         }
         
@@ -277,7 +294,7 @@ public class GameManager : UdonSharpBehaviour
                 bonusPointPlacement[i] = playerIndex;
                 Debug.Log($"Player {playerIndex} will get bonus points for finishing!");
 
-                isRoundOver = i + 1 >= playerCount - 1; // 2 players (1 + 1) >= 2 players (3 - 1)
+                isRoundOver = i + 1 >= GetPlayerCount() - 1; // 2 players (1 + 1) >= 2 players (3 - 1)
                 
                 RequestSerialization();
                 OnDeserialization();
@@ -294,7 +311,7 @@ public class GameManager : UdonSharpBehaviour
         var names = new string[arrayLen];
         for (int i = 0; i < points.Length; i++)
         {
-            points[i] = scoreScript.GetBonusPoints(playerCount, i);
+            points[i] = scoreScript.GetBonusPoints(GetPlayerCount(), i);
             names[i] = playerManagers[bonusPointPlacement[i]].GetOwnerName();
         }
         gameUI.SetBonusPoints(points, names);
@@ -319,7 +336,7 @@ public class GameManager : UdonSharpBehaviour
         {
             var playerIndex = bonusPointPlacement[index];
             if (playerIndex < 0) return;
-            var points = scoreScript.GetBonusPoints(playerCount, index);
+            var points = scoreScript.GetBonusPoints(GetPlayerCount(), index);
             Debug.Log($"Player {playerIndex} gets {points} bonus points for their No. {index+1} placement");
             playerManagers[playerIndex].AddPoints(points);
         }
@@ -333,7 +350,7 @@ public class GameManager : UdonSharpBehaviour
         var total = 0;
         foreach (var p in playerManagers)
         {
-            total += p.GetPointsVoteCorrect(playerCount, playerIndex);
+            total += p.GetPointsVoteCorrect(GetPlayerCount(), playerIndex);
         }
 
         return total;
@@ -349,7 +366,7 @@ public class GameManager : UdonSharpBehaviour
         var total = 0;
         foreach (var p in playerManagers)
         {
-            total += p.GetPointsDrawingHasBeenGuessed(playerCount);
+            total += p.GetPointsDrawingHasBeenGuessed(GetPlayerCount());
         }
 
         return total;
@@ -361,7 +378,7 @@ public class GameManager : UdonSharpBehaviour
         foreach (var p in playerManagers)
         {
             if (p.HasBeenVotedForBy(playerIndex)) numVotes++;
-            if (numVotes == playerCount - 1) return true; // Can't vote for self, hence the -1
+            if (numVotes == GetPlayerCount() - 1) return true; // Can't vote for self, hence the -1
         }
         
         Debug.Log($"Hasn't voted for everyone only {numVotes} votes");
@@ -388,5 +405,10 @@ public class GameManager : UdonSharpBehaviour
         }
 
         return amount;
+    }
+
+    public bool IsRoundOver()
+    {
+        return isRoundOver;
     }
 }
