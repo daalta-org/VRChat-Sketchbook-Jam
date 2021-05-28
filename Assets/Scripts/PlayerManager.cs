@@ -378,6 +378,7 @@ public class PlayerManager : UdonSharpBehaviour
     /// <returns>How many points they got</returns>
     public int GetPointsVoteCorrect(int playerCount, int p)
     {
+        Debug.Log(nameof(GetPointsVoteCorrect));
         for (var index = 0; index < votes.Length; index++)
         {
             var vote = votes[index];
@@ -503,6 +504,7 @@ public class PlayerManager : UdonSharpBehaviour
 
     public int GetPointsDrawingHasBeenGuessed(int playerCount)
     {
+        Debug.Log(nameof(GetPointsDrawingHasBeenGuessed));
         var points = 0;
         var pointsArray = scoreScript.GetGuessPointsArray(playerCount);
         var scoreIndex = 0;

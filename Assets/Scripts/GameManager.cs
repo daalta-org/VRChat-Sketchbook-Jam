@@ -72,6 +72,7 @@ public class GameManager : UdonSharpBehaviour
     public override void OnDeserialization()
     {
         Debug.Log("OnDeserialization has been called");
+
         if (seed != seedOld)
         {
             Debug.Log("Seed has changed: " + seed);
@@ -89,16 +90,9 @@ public class GameManager : UdonSharpBehaviour
         if (isRoundOver != isRoundOverOld)
         {
             isRoundOverOld = isRoundOver;
-            gameUI.OnRoundOver();
+            if (isRoundOver && round >= 0) OnRoundOver();
         }
         
-        /* Removed to check if bonus point calc is working as expected
-        if (isRoundOver != isRoundOverOld)
-        {
-            isRoundOverOld = isRoundOver;
-            if (isRoundOver) OnRoundOver();
-        }*/
-
         UpdateBonusPointUI(); // TODO probably happens too often
     }
 
@@ -107,14 +101,17 @@ public class GameManager : UdonSharpBehaviour
         Debug.Log("Round is over!!");
         gameUI.OnRoundOver();
 
-        if (!Networking.IsMaster) return;
-        
         for (var index = 0; index < playerManagers.Length; index++)
         {
+            Debug.Log("OnRoundOver for player " + index);
+            // TODO actually add up the points
+            playerManagers[index].OnRoundOver(); // reveals which prompts were correct
+            if (!Networking.IsMaster) continue;
             playerManagers[index].GetPointsVoteCorrect(playerCount, index);
             playerManagers[index].GetPointsDrawingHasBeenGuessed(playerCount);
-            playerManagers[index].OnRoundOver();
         }
+        
+        if (!Networking.IsMaster) return;
 
         ApplyBonusPoints();
         RequestSerialization();
@@ -148,6 +145,7 @@ public class GameManager : UdonSharpBehaviour
     {
         SetPromptsForPlayersThisRound();
         ResetBonusPointPlacement();
+        isRoundOver = false;
         foreach (var playerManager in playerManagers)
         {
             playerManager.OnRoundChanged(seed, round);
@@ -307,9 +305,13 @@ public class GameManager : UdonSharpBehaviour
     /// </summary>
     private void ApplyBonusPoints()
     {
+        Debug.Log(nameof(ApplyBonusPoints));
         for (var index = 0; index < bonusPointPlacement.Length; index++)
         {
+            Debug.Log(index);
             var playerIndex = bonusPointPlacement[index];
+            Debug.Log(playerIndex);
+            if (playerIndex < 0) return;
             playerManagers[playerIndex].AddPoints(scoreScript.GetBonusPoints(playerIndex, index));
         }
     }
@@ -377,12 +379,5 @@ public class GameManager : UdonSharpBehaviour
         }
 
         return amount;
-    }
-
-    private bool IsRoundOver()
-    {
-        Debug.Log("Checking whether the round is over...");
-        var numPlacements = GetNumPlacements();
-        return GetNumPlacements() + 1 >= playerCount;
     }
 }
