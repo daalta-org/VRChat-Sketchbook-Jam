@@ -237,6 +237,7 @@ public class PlayerManager : UdonSharpBehaviour
     public void OnButtonPressed(int buttonIndex)
     {
         if (LocalHasVotedForThis()) return;
+        if (gameManager.GetRound() < 0) return;
         if (ownerPlayerId < 0)
         {
             OnVoteEmptyPlayer();
