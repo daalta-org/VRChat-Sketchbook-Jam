@@ -218,8 +218,12 @@ public class PlayerManager : UdonSharpBehaviour
 
     public int GetCorrectIndex(int seed, int round)
     {
-        UnityEngine.Random.InitState(seed + round);
-        return UnityEngine.Random.Range(0, 6);
+        Debug.Log($"Generating correct prompt from seed {seed} round {round} index {playerIndex}");
+        var newSeed = seed + round + playerIndex;
+        UnityEngine.Random.InitState(newSeed);
+        var index = UnityEngine.Random.Range(0, 6);
+        Debug.Log($"Generated correct index {index} from seed {newSeed}");
+        return index;
     }
 
     public void SetPromptsAndGameManager(Prompts prompts1, GameManager gameManager1, ScoreScript s)
