@@ -53,4 +53,9 @@ public class GameUI : UdonSharpBehaviour
             bonusTexts[i].text = "";
         }
     }
+
+    public void OnRoundOver()
+    {
+        animatorMusic.SetBool(IsMusicRunning, false);
+    }
 }

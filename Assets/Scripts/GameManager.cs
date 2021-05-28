@@ -84,6 +84,16 @@ public class GameManager : UdonSharpBehaviour
         }
 
         UpdateBonusPointUI(); // TODO probably happens too often
+        if (IsRoundOver()) OnRoundOver(); // TODO probably happens to often, too!
+    }
+
+    private void OnRoundOver()
+    {
+        foreach (var p in playerManagers)
+        {
+            p.OnRoundOver();
+        }
+        gameUI.OnRoundOver();
     }
 
     public void RequestNextRound()
@@ -242,12 +252,7 @@ public class GameManager : UdonSharpBehaviour
 
     private void UpdateBonusPointUI()
     {
-        var arrayLen = 0;
-        foreach (var b in bonusPointPlacement)
-        {
-            if (b == -1) break;
-            arrayLen++;
-        }
+        var arrayLen = GetNumPlacements();
         
         var points = new int[arrayLen];
         var names = new string[arrayLen];
@@ -302,5 +307,22 @@ public class GameManager : UdonSharpBehaviour
         {
             bonusPointPlacement[i] = -1;
         }
+    }
+
+    private int GetNumPlacements()
+    {
+        int amount = 0;
+        foreach (var b in bonusPointPlacement)
+        {
+            if (b < 0) return amount;
+            amount++;
+        }
+
+        return amount;
+    }
+
+    private bool IsRoundOver()
+    {
+        return GetNumPlacements() + 1 >= playerCount;
     }
 }

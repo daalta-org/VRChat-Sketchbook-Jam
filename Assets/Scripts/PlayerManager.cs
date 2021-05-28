@@ -471,4 +471,13 @@ public class PlayerManager : UdonSharpBehaviour
     {
         score += points;
     }
+
+    public void OnRoundOver()
+    {
+        for (var i = 0; i < 6; i++)
+        {
+            if (i == correctIndex) playerUI.SetPromptCorrect(i);
+            else playerUI.SetPromptWrong(i);
+        }
+    }
 }
