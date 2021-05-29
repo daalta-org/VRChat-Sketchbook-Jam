@@ -6962,6 +6962,7 @@ MonoBehaviour:
   useAssignedLayers: 0
   DynamicPrefabs: []
   DynamicMaterials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   - {fileID: 2100000, guid: 09991caeff77623418680c1aead38d84, type: 2}
   - {fileID: 2100000, guid: 4752c805bd4477c4484e1b5647966b29, type: 2}
   - {fileID: 2100000, guid: 93155d1e32fd97946b38a7544b9faeb4, type: 2}
@@ -8153,6 +8154,11 @@ PrefabInstance:
       propertyPath: m_Parameters.colorGradient.key1.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4301261488434754992, guid: d0a301f5c5988b24f8930a76f438ba3e,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 09991caeff77623418680c1aead38d84, type: 2}
     - target: {fileID: 4410853756727774564, guid: d0a301f5c5988b24f8930a76f438ba3e,
         type: 3}
       propertyPath: m_AnchorMin.y
