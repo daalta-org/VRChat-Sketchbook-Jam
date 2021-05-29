@@ -22,6 +22,7 @@ public class StylusSharp : UdonSharpBehaviour
     private GameObject[] pool;
     [SerializeField] private LineRenderer[] linePool;
     [SerializeField] private PlayerManager playerManager = null;
+    [SerializeField] private PenLineColorSharp[] penLineColorSharp = null;
 
     public override bool OnOwnershipRequest(VRCPlayerApi requestingPlayer, VRCPlayerApi requestedOwner)
     {
@@ -77,5 +78,13 @@ public class StylusSharp : UdonSharpBehaviour
     public override void OnPickup()
     {
         playerManager.SendCustomNetworkEvent(NetworkEventTarget.Owner, nameof(playerManager.UpdateOwnerID));
+    }
+
+    public void Erase()
+    {
+        foreach (var p in penLineColorSharp)
+        {
+            p.Erase();
+        }
     }
 }

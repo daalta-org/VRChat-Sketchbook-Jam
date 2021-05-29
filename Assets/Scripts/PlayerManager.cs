@@ -62,7 +62,6 @@ public class PlayerManager : UdonSharpBehaviour
     
     public void UpdateVotesLocal()
     {
-        Debug.Log("Master told us to update out vote displays!");
         if (gameManager != null)
         {
             var playerCount = gameManager.GetPlayerCount();
@@ -214,7 +213,7 @@ public class PlayerManager : UdonSharpBehaviour
 
     private void ClearLines()
     {
-        stylus.SendCustomNetworkEvent(NetworkEventTarget.Owner, "Erase");
+        stylus.SendCustomNetworkEvent(NetworkEventTarget.Owner, nameof(StylusSharp.Erase));
     }
 
     public int GetCorrectIndex(int seed, int round)
