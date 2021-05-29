@@ -11,7 +11,6 @@ public class PlayerUI : UdonSharpBehaviour
     [SerializeField] private TextMeshProUGUI textScore = null;
     [SerializeField] private ButtonManager[] buttonManagers = null;
     [SerializeField] private MeshRenderer[] meshRenderersColor = null;
-    [SerializeField] private Material[] materialsColor = null;
     [SerializeField] private Animator[] animatorsVoteResult = null;
     [SerializeField] private TextMeshProUGUI[] textVoteResult = null;
 
@@ -36,11 +35,11 @@ public class PlayerUI : UdonSharpBehaviour
         }
     }
     
-    public void SetColor(int colorIndex)
+    public void SetColor(Material m)
     {
         foreach (var meshRenderer in meshRenderersColor)
         {
-            meshRenderer.material = materialsColor[colorIndex];
+            meshRenderer.material = m;
         }
     }
 

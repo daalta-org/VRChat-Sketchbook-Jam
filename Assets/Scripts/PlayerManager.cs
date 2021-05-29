@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using UdonSharp;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
@@ -13,7 +14,8 @@ public class PlayerManager : UdonSharpBehaviour
     [SerializeField] private PlayerUI playerUI = null;
     private Prompts prompts = null; // Not serialized because it would break as a prefab. Inserted by GameManager
     [SerializeField] private StylusSharp stylus;
-
+    [SerializeField] private MeshRenderer[] meshesToRecolors = null; 
+    
     [UdonSynced] private int ownerPlayerId = -1;
 
     /// <summary>
@@ -38,6 +40,7 @@ public class PlayerManager : UdonSharpBehaviour
     private ScoreScript scoreScript;
 
     private bool localHasVoted = false;
+    [SerializeField] private Material[] materialsColor = null;
 
     private void Start()
     {
@@ -98,8 +101,13 @@ public class PlayerManager : UdonSharpBehaviour
 
     public void SetColor(int colorIndex)
     {
-        playerUI.SetColor(colorIndex);
+        var mat = materialsColor[colorIndex];
+        playerUI.SetColor(mat);
         stylus.SetColor(colorIndex);
+        foreach (var m in meshesToRecolors)
+        {
+            m.material = mat;
+        }
     }
     
     private bool LocalIsOwner()

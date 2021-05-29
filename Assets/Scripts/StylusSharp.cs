@@ -2,6 +2,7 @@
 using System;
 using UdonSharp;
 using UnityEngine;
+using VRC.SDK3.Components;
 using VRC.SDKBase;
 using VRC.Udon;
 using VRC.Udon.Common.Interfaces;
@@ -24,6 +25,7 @@ public class StylusSharp : UdonSharpBehaviour
     [SerializeField] private LineRenderer[] linePool;
     [SerializeField] private PlayerManager playerManager = null;
     [SerializeField] private PenLineColorSharp[] penLineColorSharp = null;
+    [SerializeField] private VRCObjectSync vrcObjectSync = null;
 
     public override bool OnOwnershipRequest(VRCPlayerApi requestingPlayer, VRCPlayerApi requestedOwner)
     {
@@ -79,6 +81,11 @@ public class StylusSharp : UdonSharpBehaviour
     public override void OnPickup()
     {
         playerManager.SendCustomNetworkEvent(NetworkEventTarget.Owner, nameof(playerManager.UpdateOwnerID));
+    }
+
+    public override void OnDrop()
+    {
+        vrcObjectSync.Respawn();
     }
 
     public void Erase()
