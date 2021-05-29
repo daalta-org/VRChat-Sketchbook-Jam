@@ -12,19 +12,11 @@ public class PenLineColorSharp : UdonSharpBehaviour
     private Mesh lineMesh;
     private MeshCollider lineCollider;
 
+    private bool isLineRendererSet = false;
+    
     void Start()
     {
-        //Cache LineRenderer
-        LineRenderer temp = GetComponent<LineRenderer>();
-        if (Utilities.IsValid(temp))
-        {
-            lineRenderer = temp;
-        }
-        else
-        {
-            Debug.Log("Couldn't find required component of type LineRenderer on " + gameObject.name);
-        }
-
+        GetLineRenderer();
         //Cache MeshCollider
         MeshCollider tempMesh = GetComponent<MeshCollider>();
         if (Utilities.IsValid(tempMesh))
@@ -37,6 +29,26 @@ public class PenLineColorSharp : UdonSharpBehaviour
         }
 
         lineMesh = new Mesh();
+    }
+
+    private LineRenderer GetLineRenderer()
+    {
+        if (isLineRendererSet) return lineRenderer;
+        
+        //Cache LineRenderer
+        LineRenderer temp = GetComponent<LineRenderer>();
+        if (Utilities.IsValid(temp))
+        {
+            lineRenderer = temp;
+            isLineRendererSet = true;
+            return lineRenderer;
+        }
+        else
+        {
+            Debug.Log("Couldn't find required component of type LineRenderer on " + gameObject.name);
+        }
+
+        return null;
     }
 
     public void OnUpdate() //OnUpdate event, set points from current line positions, check for color changes
@@ -83,7 +95,7 @@ public class PenLineColorSharp : UdonSharpBehaviour
 
     public void SetColor(Color color)
     {
-        lineRenderer.startColor = color;
-        lineRenderer.endColor = color;
+        GetLineRenderer().startColor = color;
+        GetLineRenderer().endColor = color;
     }
 }
