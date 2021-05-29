@@ -91,7 +91,7 @@ public class StylusSharp : UdonSharpBehaviour
 
     public void SetColor(int colorIndex)
     {
-        var color = Color.HSVToRGB(colorIndex * 0.125f, 0.5f, 1f);
+        var color = Color.HSVToRGB(colorIndex * 0.125f, 1f, 1f);
         foreach (var l in penLineColorSharp)
         {
             l.SetColor(color);
