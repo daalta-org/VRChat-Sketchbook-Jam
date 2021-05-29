@@ -28,6 +28,7 @@ MonoBehaviour:
     - {fileID: 11500000, guid: 96ac409de95304d43956a7b853e3b014, type: 3}
     - {fileID: 11500000, guid: b01f0bcca22071e488d4b3fee8453353, type: 3}
     - {fileID: 11500000, guid: 873b4390324f7484f88007ddc584bc40, type: 3}
+    - {fileID: 11500000, guid: 37754a84c53833e48bc92c371d206a97, type: 3}
     - {fileID: 11500000, guid: 1609870106331cd49bc4ccd631800854, type: 3}
     SerializedBytesString: 
     Prefab: {fileID: 0}
@@ -260,7 +261,7 @@ MonoBehaviour:
       Data: 17|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: VRC.Udon.UdonBehaviour, VRC.Udon
+      Data: StylusSharp, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -304,8 +305,8 @@ MonoBehaviour:
       Entry: 8
       Data: 
     - Name: userBehaviourSource
-      Entry: 6
-      Data: 
+      Entry: 10
+      Data: 3
     - Name: 
       Entry: 8
       Data: 
@@ -866,7 +867,7 @@ MonoBehaviour:
       Data: 
     - Name: userBehaviourSource
       Entry: 10
-      Data: 3
+      Data: 4
     - Name: 
       Entry: 8
       Data: 

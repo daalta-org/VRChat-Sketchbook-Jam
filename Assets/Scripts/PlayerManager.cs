@@ -12,7 +12,7 @@ public class PlayerManager : UdonSharpBehaviour
 
     [SerializeField] private PlayerUI playerUI = null;
     private Prompts prompts = null; // Not serialized because it would break as a prefab. Inserted by GameManager
-    [SerializeField] private UdonBehaviour stylus;
+    [SerializeField] private StylusSharp stylus;
 
     [UdonSynced] private int ownerPlayerId = -1;
 
@@ -99,6 +99,7 @@ public class PlayerManager : UdonSharpBehaviour
     public void SetColor(int colorIndex)
     {
         playerUI.SetColor(colorIndex);
+        stylus.SetColor(colorIndex);
     }
     
     private bool LocalIsOwner()

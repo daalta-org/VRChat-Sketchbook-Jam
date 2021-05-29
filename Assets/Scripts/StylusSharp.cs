@@ -1,4 +1,5 @@
 ﻿
+using System;
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
@@ -85,6 +86,15 @@ public class StylusSharp : UdonSharpBehaviour
         foreach (var p in penLineColorSharp)
         {
             p.Erase();
+        }
+    }
+
+    public void SetColor(int colorIndex)
+    {
+        var color = Color.HSVToRGB(colorIndex * 0.125f, 0.5f, 1f);
+        foreach (var l in penLineColorSharp)
+        {
+            l.SetColor(color);
         }
     }
 }

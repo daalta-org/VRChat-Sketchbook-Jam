@@ -11,7 +11,6 @@ public class PenLineColorSharp : UdonSharpBehaviour
     private LineRenderer lineRenderer;
     private Mesh lineMesh;
     private MeshCollider lineCollider;
-    public Color color;
 
     void Start()
     {
@@ -47,14 +46,6 @@ public class PenLineColorSharp : UdonSharpBehaviour
         RequestSerialization();
         lineRenderer.enabled = true;
     }
-    
-    public void UpdateLineColor()
-    {
-        lineRenderer.startColor = color;
-        float h, s, v;
-        Color.RGBToHSV(color, out h, out s, out v);
-        lineRenderer.endColor = Color.HSVToRGB(h - 0.1f, s, v);
-    }
 
     public void OnFinish()
     {
@@ -88,5 +79,11 @@ public class PenLineColorSharp : UdonSharpBehaviour
     public override bool OnOwnershipRequest(VRCPlayerApi requestingPlayer, VRCPlayerApi requestedOwner)
     {
         return true;
+    }
+
+    public void SetColor(Color color)
+    {
+        lineRenderer.startColor = color;
+        lineRenderer.endColor = color;
     }
 }
