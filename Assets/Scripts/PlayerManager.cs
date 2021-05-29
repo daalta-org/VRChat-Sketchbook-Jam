@@ -175,7 +175,7 @@ public class PlayerManager : UdonSharpBehaviour
     public override void OnPlayerLeft(VRCPlayerApi player)
     {
         if (ownerPlayerId == player.playerId) ownerPlayerId = -1;
-        gameManager.CheckEndRoundPlayerLeft();
+        //gameManager.CheckEndRoundPlayerLeft(); TODO
     }
 
     public bool ResetManagedPlayedId(int playerId)

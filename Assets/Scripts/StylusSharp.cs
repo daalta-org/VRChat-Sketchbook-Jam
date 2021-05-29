@@ -3,6 +3,7 @@ using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
+using VRC.Udon.Common.Interfaces;
 
 public class StylusSharp : UdonSharpBehaviour
 {
@@ -75,6 +76,6 @@ public class StylusSharp : UdonSharpBehaviour
 
     public override void OnPickup()
     {
-        playerManager.UpdateOwnerID();
+        playerManager.SendCustomNetworkEvent(NetworkEventTarget.Owner, nameof(playerManager.UpdateOwnerID));
     }
 }

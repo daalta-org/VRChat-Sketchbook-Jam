@@ -294,7 +294,7 @@ public class GameManager : UdonSharpBehaviour
                 bonusPointPlacement[i] = playerIndex;
                 Debug.Log($"Player {playerIndex} will get bonus points for finishing!");
 
-                isRoundOver = AreThereEnoughVotesToEndTheRound(); 
+                isRoundOver = i + 1 >= GetPlayerCount() - 1; // 2 players (1 + 1) >= 2 players (3 - 1)
                 
                 RequestSerialization();
                 OnDeserialization();
@@ -426,11 +426,11 @@ public class GameManager : UdonSharpBehaviour
     {
         return isRoundOver;
     }
-
+/*
     public void CheckEndRoundPlayerLeft()
     {
         if (AreThereEnoughVotesToEndTheRound()) isRoundOver = true;
         RequestSerialization();
         OnDeserialization();
-    }
+    }*/
 }
