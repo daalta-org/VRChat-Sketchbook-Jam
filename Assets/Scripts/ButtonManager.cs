@@ -64,7 +64,7 @@ public class ButtonManager : UdonSharpBehaviour
 
     public void OnHover()
     {
-        Networking.LocalPlayer.PlayHapticEventInHand(VRC_Pickup.PickupHand.Right, default, default, default);
-        Networking.LocalPlayer.PlayHapticEventInHand(VRC_Pickup.PickupHand.Left, default, default, default);
+        Networking.LocalPlayer.PlayHapticEventInHand(VRC_Pickup.PickupHand.Right, .1f, .3f, 1f);
+        Networking.LocalPlayer.PlayHapticEventInHand(VRC_Pickup.PickupHand.Left, .1f, .3f, 1f);
     }
 }

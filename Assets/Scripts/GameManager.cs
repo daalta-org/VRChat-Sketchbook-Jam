@@ -169,6 +169,8 @@ public class GameManager : UdonSharpBehaviour
 
     private void OnRoundChanged()
     {
+        Networking.LocalPlayer.PlayHapticEventInHand(VRC_Pickup.PickupHand.Right, .1f, .3f, 1f);
+        Networking.LocalPlayer.PlayHapticEventInHand(VRC_Pickup.PickupHand.Left, .1f, .3f, 1f);
         SetPromptsForPlayersThisRound();
         ResetBonusPointPlacement();
         isRoundOver = false;
