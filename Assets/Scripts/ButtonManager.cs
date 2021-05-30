@@ -2,6 +2,7 @@
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
+using VRC.SDKBase;
 
 public class ButtonManager : UdonSharpBehaviour
 {
@@ -59,5 +60,11 @@ public class ButtonManager : UdonSharpBehaviour
     {
         playerManager = pm;
         buttonIndex = bi;
+    }
+
+    public void OnHover()
+    {
+        Networking.LocalPlayer.PlayHapticEventInHand(VRC_Pickup.PickupHand.Right, default, default, default);
+        Networking.LocalPlayer.PlayHapticEventInHand(VRC_Pickup.PickupHand.Left, default, default, default);
     }
 }
