@@ -106,7 +106,7 @@ public class PlayerManager : UdonSharpBehaviour
         stylus.SetColor(colorIndex);
         foreach (var m in meshesToRecolors)
         {
-            m.material = mat;
+            m.materials[0] = mat;
         }
     }
     

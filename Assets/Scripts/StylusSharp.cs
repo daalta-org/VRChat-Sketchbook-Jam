@@ -26,7 +26,7 @@ public class StylusSharp : UdonSharpBehaviour
     [SerializeField] private PlayerManager playerManager = null;
     [SerializeField] private PenLineColorSharp[] penLineColorSharp = null;
     [SerializeField] private VRCObjectSync vrcObjectSync = null;
-
+    [SerializeField] private float[] colors = null;
     public override bool OnOwnershipRequest(VRCPlayerApi requestingPlayer, VRCPlayerApi requestedOwner)
     {
         return true;
@@ -98,7 +98,7 @@ public class StylusSharp : UdonSharpBehaviour
 
     public void SetColor(int colorIndex)
     {
-        var color = Color.HSVToRGB(colorIndex * 0.125f, 1f, 1f);
+        var color = Color.HSVToRGB(colors[colorIndex]/360, 1f, 1f);
         foreach (var l in penLineColorSharp)
         {
             l.SetColor(color);
