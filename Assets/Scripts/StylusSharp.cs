@@ -5,6 +5,7 @@ using UnityEngine;
 using VRC.SDK3.Components;
 using VRC.SDKBase;
 using VRC.Udon;
+using VRC.Udon.Common.Enums;
 using VRC.Udon.Common.Interfaces;
 
 public class StylusSharp : UdonSharpBehaviour
@@ -79,6 +80,11 @@ public class StylusSharp : UdonSharpBehaviour
     }
 
     public override void OnPickup()
+    {
+        SendCustomEventDelayedSeconds(nameof(SendOwnerUpdateNetworkId), 1f, EventTiming.Update);
+    }
+
+    public void SendOwnerUpdateNetworkId()
     {
         playerManager.SendCustomNetworkEvent(NetworkEventTarget.Owner, nameof(playerManager.UpdateOwnerID));
     }
