@@ -169,6 +169,7 @@ public class PlayerManager : UdonSharpBehaviour
         if (!Networking.LocalPlayer.isMaster) return;
         Debug.Log("I'm the master. I'll try to add owner of this stylus to owner ID of the player manager.");
         var tempId = Networking.GetOwner(stylus.gameObject).playerId;
+        if (tempId == ownerPlayerId) return; 
         gameManager.RemoveManagedPlayerId(tempId);
         ownerPlayerId = tempId;
         gameManager.RequestPlayerManagerSerialization();
