@@ -124,4 +124,9 @@ public class StylusSharp : UdonSharpBehaviour
     {
         collider.enabled = b;
     }
+
+    public override void OnPlayerLeft(VRCPlayerApi player)
+    {
+        if (player.IsOwner(gameObject)) vrcObjectSync.Respawn();
+    }
 }

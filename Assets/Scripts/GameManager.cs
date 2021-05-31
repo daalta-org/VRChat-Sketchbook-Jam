@@ -159,18 +159,9 @@ public class GameManager : UdonSharpBehaviour
         Debug.Log("Master: Increasing round counter and sending it to clients.");
         round++;
         isRoundOver = false;
-        SendCustomNetworkEvent(NetworkEventTarget.All, nameof(ClearPlayerManagerIfUnoccupied));
         playerCount = playerCountTemp;
         RequestSerialization();
         DealWithDeserialization();
-    }
-
-    public void ClearPlayerManagerIfUnoccupied()
-    {
-        foreach (var p in playerManagers)
-        {
-            p.ClearTextAndVotes();
-        }
     }
 
     private void OnSeedChanged()

@@ -42,6 +42,7 @@ public class PlayerManager : UdonSharpBehaviour
     private void Start()
     {
         ResetVotes();
+        playerUI.SetPromptsVisible(true);
     }
 
     private void SetIsPlaying(bool b)
@@ -209,21 +210,16 @@ public class PlayerManager : UdonSharpBehaviour
         if (ownerPlayerId < 0)
         {
             isPlaying = false;
+            playerUI.SetPromptsVisible(false);
             return;
         }
-
+        
+        playerUI.SetPromptsVisible(true);
         isPlaying = true;
         
         ResetVotes();
         correctIndex = GetCorrectIndex(seed, round);
         if (LocalIsOwner()) playerUI.SetPromptCorrect(correctIndex);
-    }
-
-    public void ClearTextAndVotes()
-    {
-        if (ownerPlayerId >= 0) return;
-        playerUI.ClearText();
-        playerUI.HideVoteResults();
     }
     
     private void AskOwnerClearLines()

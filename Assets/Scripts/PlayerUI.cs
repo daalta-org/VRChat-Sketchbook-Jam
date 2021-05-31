@@ -173,4 +173,12 @@ public class PlayerUI : UdonSharpBehaviour
     {
         textScore.text = score.ToString();
     }
+
+    public void SetPromptsVisible(bool p0)
+    {
+        foreach (var buttonManager in buttonManagers)
+        {
+            buttonManager.SetPromptsVisible(p0);
+        }
+    }
 }

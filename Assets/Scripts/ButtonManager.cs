@@ -19,6 +19,8 @@ public class ButtonManager : UdonSharpBehaviour
     private int playerIndex = -1;
     private int buttonIndex = -1;
 
+    private bool arePromptsVisible = true;
+
     public void SetText(string s)
     {
         Debug.Log("Setting text " + s);
@@ -39,18 +41,18 @@ public class ButtonManager : UdonSharpBehaviour
 
     public void UpdateAfterNeutral()
     {
-        texts[1].text = newText;
-        texts[2].text = newText;
+        texts[1].text = arePromptsVisible ? newText : "";
+        texts[2].text = arePromptsVisible ? newText : "";
     }
     public void UpdateAfterWrong()
     {
-        texts[0].text = newText;
-        texts[2].text = newText;
+        texts[0].text = arePromptsVisible ? newText : "";
+        texts[2].text = arePromptsVisible ? newText : "";
     }
     public void UpdateAfterCorrect()
     {
-        texts[0].text = newText;
-        texts[1].text = newText;
+        texts[0].text = arePromptsVisible ? newText : "";
+        texts[1].text = arePromptsVisible ? newText : "";
     }
 
     public void OnButtonPressed()
@@ -68,5 +70,10 @@ public class ButtonManager : UdonSharpBehaviour
     {
         Networking.LocalPlayer.PlayHapticEventInHand(VRC_Pickup.PickupHand.Right, .1f, .3f, 1f);
         Networking.LocalPlayer.PlayHapticEventInHand(VRC_Pickup.PickupHand.Left, .1f, .3f, 1f);
+    }
+
+    public void SetPromptsVisible(bool p0)
+    {
+        arePromptsVisible = p0;
     }
 }
