@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,8 +21,12 @@ public class ButtonManager : UdonSharpBehaviour
     
     public void SetText(string s)
     {
+        Debug.Log("Setting text " + s);
         newText = s;
         SpinOnce();
+        texts[0].text = s; // TODO remove, this is here for debugging
+        texts[1].text = s;
+        texts[2].text = s;
     }
 
     public void SetAnimatorState(int state)

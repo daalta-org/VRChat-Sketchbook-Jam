@@ -208,6 +208,7 @@ public class PlayerManager : UdonSharpBehaviour
         if (ownerPlayerId < 0)
         {
             playerUI.ClearText();
+            playerUI.HideVoteResults();
             isPlaying = false;
             return;
         }

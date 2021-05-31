@@ -29,7 +29,6 @@ public class GameManager : UdonSharpBehaviour
     {
         Debug.Log("Executing start event on game manager");
         SetPlayerColors();
-        SendCustomEventDelayedSeconds(nameof(SetPromptsForPlayersThisRound), 2f); // TODO Put this here for late joiners, but might break stuff
 
         for (var index = 0; index < playerManagers.Length; index++)
         {
