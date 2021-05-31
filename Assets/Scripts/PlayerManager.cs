@@ -1,10 +1,6 @@
-﻿using System;
-using System.Linq;
-using UdonSharp;
-using Unity.Collections.LowLevel.Unsafe;
+﻿using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
-using VRC.Udon;
 using VRC.Udon.Common.Interfaces;
 
 public class PlayerManager : UdonSharpBehaviour
@@ -142,7 +138,7 @@ public class PlayerManager : UdonSharpBehaviour
             var local = Networking.LocalPlayer;
             if (local == null) return;
             var localId = Networking.LocalPlayer.playerId;
-            if (localId < 0 || localId == ownerPlayerId) stylus.SetColliderEnabled(true);
+            if (ownerPlayerId < 0 || localId == ownerPlayerId) stylus.SetColliderEnabled(true);
             else stylus.SetColliderEnabled(false);
  
         }

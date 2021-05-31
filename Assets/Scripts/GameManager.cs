@@ -1,5 +1,4 @@
-﻿using System;
-using UdonSharp;
+﻿using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon.Common.Interfaces;
@@ -298,12 +297,24 @@ public class GameManager : UdonSharpBehaviour
                 bonusPointPlacement[i] = playerIndex;
                 Debug.Log($"Player {playerIndex} will get bonus points for finishing!");
 
-                isRoundOver = i + 1 >= CountPlayers() - 1; // 2 players (1 + 1) >= 2 players (3 - 1)
+                UpdateIsRoundOver(); //isRoundOver = i + 1 >= CountPlayers() - 1; // 2 players (1 + 1) >= 2 players (3 - 1)
                 
                 RequestSerialization();
                 OnDeserialization();
                 return;
             }
+        }
+        
+        Debug.LogWarning("Ran out of space for bonus point placement!");
+    }
+
+    private void UpdateIsRoundOver()
+    {
+        isRoundOver = GetNumPlacements() + 1 >= playerCount - 1;// 2 players (1 + 1) >= 2 players (3 - 1)
+        if (isRoundOver && isRoundOver != isRoundOverOld)
+        {
+            RequestSerialization();
+            OnDeserialization();
         }
     }
 
@@ -422,4 +433,10 @@ public class GameManager : UdonSharpBehaviour
         RequestSerialization();
         OnDeserialization();
     }*/
+
+    public override void OnPlayerLeft(VRCPlayerApi player)
+    {
+        if (!Networking.LocalPlayer.isMaster) return;
+        UpdateIsRoundOver();
+    }
 }
