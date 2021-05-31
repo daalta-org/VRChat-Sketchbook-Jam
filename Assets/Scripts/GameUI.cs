@@ -67,6 +67,8 @@ public class GameUI : UdonSharpBehaviour
         textRound.text = round >= 0 && round < 4 ? "Round " + (round+1) : "New Game";
         if (round >= 0 && round < 5)
         {
+            animatorMusic.SetBool("GoToThree", false);
+            animatorMusic.SetBool("GoToTwo", false);
             animatorMusic.SetBool(IsMusicRunning, true);
             skyTimer = 0;
             isSkyAnimating = true;
@@ -107,6 +109,8 @@ public class GameUI : UdonSharpBehaviour
     public void OnRoundOver()
     {
         animatorMusic.SetBool(IsMusicRunning, false);
+        animatorMusic.SetBool("GoToThree", false);
+        animatorMusic.SetBool("GoToTwo", false);
         ResetSkyColor();
         skyTimer = 0;
         isSkyAnimating = false;
@@ -114,12 +118,12 @@ public class GameUI : UdonSharpBehaviour
 
     public void MusicDoStageTwo()
     {
-        animatorMusic.SetTrigger("GoToTwo");
+        animatorMusic.SetBool("GoToTwo", true);
     }
     
     public void MusicDoStageThree()
     {
-        animatorMusic.SetTrigger("GoToThree");
+        animatorMusic.SetBool("GoToThree", true);
     }
 
     private void ResetSkyColor()

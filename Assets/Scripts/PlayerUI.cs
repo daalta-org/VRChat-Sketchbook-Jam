@@ -126,9 +126,10 @@ public class PlayerUI : UdonSharpBehaviour
 
     public void ClearText()
     {
+        Debug.Log("Clearing player UI text");
         for (var i = 0; i < 6; i++)
         {
-            buttonManagers[i].SetText("");
+            buttonManagers[i].SetText("-");
         }
     }
 

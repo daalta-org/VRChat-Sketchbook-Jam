@@ -18,15 +18,12 @@ public class ButtonManager : UdonSharpBehaviour
     private PlayerManager playerManager = null;
     private int playerIndex = -1;
     private int buttonIndex = -1;
-    
+
     public void SetText(string s)
     {
         Debug.Log("Setting text " + s);
         newText = s;
         SpinOnce();
-        texts[0].text = s; // TODO remove, this is here for debugging
-        texts[1].text = s;
-        texts[2].text = s;
     }
 
     public void SetAnimatorState(int state)

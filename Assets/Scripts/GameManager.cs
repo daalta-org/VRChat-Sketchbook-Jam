@@ -1,4 +1,5 @@
-﻿using UdonSharp;
+﻿using System;
+using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon.Common.Interfaces;
@@ -24,7 +25,7 @@ public class GameManager : UdonSharpBehaviour
 
     [UdonSynced] private bool isRoundOver = false;
     private bool isRoundOverOld = false;
-
+    
     private void Start()
     {
         Debug.Log("Executing start event on game manager");
@@ -54,6 +55,11 @@ public class GameManager : UdonSharpBehaviour
         SendCustomNetworkEvent(NetworkEventTarget.Owner, nameof(StartGame));
     }
 
+    public override void OnDeserialization()
+    {
+        DealWithDeserialization();
+    }
+
     public void StartGame()
     {
         if (!Networking.LocalPlayer.isMaster)
@@ -79,7 +85,7 @@ public class GameManager : UdonSharpBehaviour
         }
         Debug.Log("Requesting Deserialization...");
         RequestSerialization();
-        OnDeserialization();
+        DealWithDeserialization();
     }
 
     public int GetPlayerCount()
@@ -87,7 +93,7 @@ public class GameManager : UdonSharpBehaviour
         return playerCount;
     }
 
-    public override void OnDeserialization()
+    public void DealWithDeserialization()
     {
         Debug.Log("OnDeserialization has been called");
 
@@ -136,7 +142,7 @@ public class GameManager : UdonSharpBehaviour
         ApplyBonusPoints();
         RequestPlayerManagerSerialization();
         RequestSerialization();
-        OnDeserialization();
+        DealWithDeserialization();
     }
 
     public void RequestNextRound()
@@ -152,9 +158,19 @@ public class GameManager : UdonSharpBehaviour
         if (!isRoundOver || round >= 4 || playerCountTemp < 3) return;
         Debug.Log("Master: Increasing round counter and sending it to clients.");
         round++;
+        isRoundOver = false;
+        SendCustomNetworkEvent(NetworkEventTarget.All, nameof(ClearPlayerManagerIfUnoccupied));
         playerCount = playerCountTemp;
         RequestSerialization();
-        OnDeserialization();
+        DealWithDeserialization();
+    }
+
+    public void ClearPlayerManagerIfUnoccupied()
+    {
+        foreach (var p in playerManagers)
+        {
+            p.ClearTextAndVotes();
+        }
     }
 
     private void OnSeedChanged()
@@ -170,7 +186,6 @@ public class GameManager : UdonSharpBehaviour
     {
         SetPromptsForPlayersThisRound();
         ResetBonusPointPlacement();
-        isRoundOver = false;
         foreach (var playerManager in playerManagers)
         {
             playerManager.OnRoundChanged(seed, round);
@@ -275,8 +290,6 @@ public class GameManager : UdonSharpBehaviour
     /// <param name="playerIndex">Index of the player top attempt the bonus point placement for.</param>
     public void TryBonusPointPlacement(int playerIndex)
     {
-        gameUI.SendCustomNetworkEvent(NetworkEventTarget.All, nameof(gameUI.MusicDoStageTwo));
-        
         if (HasPlacement(playerIndex))
         {
             Debug.LogWarning("Player already has a placement! This function should not have been called.");
@@ -288,6 +301,8 @@ public class GameManager : UdonSharpBehaviour
             Debug.Log("Player has not yet voted for everyone, so they can't get bonus points yet.");
             return;
         }
+
+        gameUI.SendCustomNetworkEvent(NetworkEventTarget.All, nameof(gameUI.MusicDoStageTwo));
 
         for (var i = 0; i < bonusPointPlacement.Length; i++)
         {
@@ -301,7 +316,7 @@ public class GameManager : UdonSharpBehaviour
                 gameUI.SendCustomNetworkEvent(NetworkEventTarget.All, nameof(gameUI.MusicDoStageThree));
                 
                 RequestSerialization();
-                OnDeserialization();
+                DealWithDeserialization();
                 return;
             }
         }
@@ -315,7 +330,7 @@ public class GameManager : UdonSharpBehaviour
         if (isRoundOver && isRoundOver != isRoundOverOld)
         {
             RequestSerialization();
-            OnDeserialization();
+            DealWithDeserialization();
         }
     }
 

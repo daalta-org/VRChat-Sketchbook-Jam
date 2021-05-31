@@ -1,4 +1,5 @@
-﻿using UdonSharp;
+﻿using System;
+using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon.Common.Interfaces;
@@ -37,7 +38,7 @@ public class PlayerManager : UdonSharpBehaviour
 
     private bool localHasVoted = false;
     [SerializeField] private Material[] materialsColor = null;
-
+    
     private void Start()
     {
         ResetVotes();
@@ -202,13 +203,11 @@ public class PlayerManager : UdonSharpBehaviour
         UpdateInstructions();
         
         if (round < 0) return;
-        if (Networking.IsMaster) ClearLines();
+        if (Networking.IsMaster) AskOwnerClearLines();
 
         if (!Utilities.IsValid(VRCPlayerApi.GetPlayerById(ownerPlayerId))) ownerPlayerId = -1;
         if (ownerPlayerId < 0)
         {
-            playerUI.ClearText();
-            playerUI.HideVoteResults();
             isPlaying = false;
             return;
         }
@@ -220,7 +219,14 @@ public class PlayerManager : UdonSharpBehaviour
         if (LocalIsOwner()) playerUI.SetPromptCorrect(correctIndex);
     }
 
-    private void ClearLines()
+    public void ClearTextAndVotes()
+    {
+        if (ownerPlayerId >= 0) return;
+        playerUI.ClearText();
+        playerUI.HideVoteResults();
+    }
+    
+    private void AskOwnerClearLines()
     {
         stylus.SendCustomNetworkEvent(NetworkEventTarget.Owner, nameof(StylusSharp.Erase));
     }
