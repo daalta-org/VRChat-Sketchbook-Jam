@@ -202,7 +202,7 @@ public class PlayerManager : UdonSharpBehaviour
         UpdateInstructions();
         
         if (round < 0) return;
-        ClearLines();
+        if (Networking.IsMaster) ClearLines();
 
         if (!Utilities.IsValid(VRCPlayerApi.GetPlayerById(ownerPlayerId))) ownerPlayerId = -1;
         if (ownerPlayerId < 0)
