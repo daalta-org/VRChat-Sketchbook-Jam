@@ -112,6 +112,16 @@ public class GameUI : UdonSharpBehaviour
         isSkyAnimating = false;
     }
 
+    public void MusicDoStageTwo()
+    {
+        animatorMusic.SetTrigger("GoToTwo");
+    }
+    
+    public void MusicDoStageThree()
+    {
+        animatorMusic.SetTrigger("GoToThree");
+    }
+
     private void ResetSkyColor()
     {
         RenderSettings.skybox.SetColor(HorizonColor, Color.HSVToRGB(.538f, 1, 1, false));

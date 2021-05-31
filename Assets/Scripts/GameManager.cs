@@ -275,6 +275,8 @@ public class GameManager : UdonSharpBehaviour
     /// <param name="playerIndex">Index of the player top attempt the bonus point placement for.</param>
     public void TryBonusPointPlacement(int playerIndex)
     {
+        gameUI.SendCustomNetworkEvent(NetworkEventTarget.All, nameof(gameUI.MusicDoStageTwo));
+        
         if (HasPlacement(playerIndex))
         {
             Debug.LogWarning("Player already has a placement! This function should not have been called.");
@@ -295,6 +297,8 @@ public class GameManager : UdonSharpBehaviour
                 Debug.Log($"Player {playerIndex} will get bonus points for finishing!");
 
                 UpdateIsRoundOver(); //isRoundOver = i + 1 >= CountPlayers() - 1; // 2 players (1 + 1) >= 2 players (3 - 1)
+                
+                gameUI.SendCustomNetworkEvent(NetworkEventTarget.All, nameof(gameUI.MusicDoStageThree));
                 
                 RequestSerialization();
                 OnDeserialization();
