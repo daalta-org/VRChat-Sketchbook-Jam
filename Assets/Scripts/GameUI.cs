@@ -43,7 +43,7 @@ public class GameUI : UdonSharpBehaviour
 
         var modifiedTimer = skyTimer * 2.75f;
 
-        var skySat = 0;//curveSkySaturation.Evaluate(modifiedTimer);
+        var skySat = curveSkySaturation.Evaluate(modifiedTimer);
         if (isSkyAnimating)
         {
             var value = curveValue.Evaluate(modifiedTimer);
