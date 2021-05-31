@@ -18,7 +18,7 @@ public class PlayerUI : UdonSharpBehaviour
     [SerializeField] private string stringJoin = "<b>Join!</b>\n<size=60%>Pick up a pen to play</size>";
     [SerializeField] private string stringOccupied = "<b>{0}</b>\n<size=60%>Is ready to play!</size>";
     [SerializeField] private string stringEmptyGameRunning = " \n<size=60%>Empty, please join the next game!</size>";
-    [SerializeField] private string stringVoteSubmitted= "<b>Voted!</b>\n<size=60%>Keep guessing other drawings!\nGet points for guessing fast!</size>";
+    [SerializeField] private string stringVoteSubmitted= "<b>Voted!</b>\n<size=60%>You guessed for {0}.\nNow guess for others, quickly!</size>";
     [SerializeField] private string stringVoteGuess= "<b>Guess!</b>\n<size=60%>Click to guess what {0} is drawing!\nYou only get 1 vote!</size>";
     [SerializeField] private string stringDraw = "<b>Draw!</b>\n<size=60%>Draw the green prompt!\nGet points when players guess it!</size>";
     [SerializeField] private string stringRoundOver = "<b>Round Over</b>\n<size=60%>Press \"Next Round\" to continue, {0}!";
@@ -118,7 +118,7 @@ public class PlayerUI : UdonSharpBehaviour
         }
         else
         {
-            s = !hasVoted ? string.Format(stringVoteGuess, ownerName) : stringVoteSubmitted;
+            s = !hasVoted ? string.Format(stringVoteGuess, ownerName) : string.Format(stringVoteSubmitted, ownerName);
         }
 
         textInstruction.text = s;

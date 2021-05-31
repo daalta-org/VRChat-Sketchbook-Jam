@@ -52,7 +52,11 @@ public class GameUI : UdonSharpBehaviour
         }
         else
         {
-            if (skyTimer > 5f) skyTimer = -1;
+            if (skyTimer > 5f)
+            {
+                skyTimer = -1;
+                ResetSkyColor();
+            }
         }
 
         RenderSettings.skybox.SetColor(SkyColor, Color.HSVToRGB(0, 0, skySat, false));

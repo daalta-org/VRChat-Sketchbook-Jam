@@ -65,7 +65,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: '<b>Guess!</b>
 
-    <size=60%>What''s Faxmachine drawing?</size>'
+    <size=60%>What''s Faxmachine drawing?
+
+    This is just filler text!</size>'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -447,7 +449,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5246846211135191040}
   m_LocalRotation: {x: -0.21376358, y: 0, z: 0, w: 0.97688544}
-  m_LocalPosition: {x: 0, y: 0, z: -66.6}
+  m_LocalPosition: {x: 0, y: 0, z: -77}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1544176769724469959}
@@ -455,7 +457,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: -24.686, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 532}
+  m_AnchoredPosition: {x: 0, y: 549.3}
   m_SizeDelta: {x: 543.94, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5665939787929114331
