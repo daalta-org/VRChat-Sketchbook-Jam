@@ -63,12 +63,7 @@ public class GameManager : UdonSharpBehaviour
 
         seed = Time.frameCount;
 
-        var numOfPlayers = 0; // This is calculated separately without using isPlaying - but it doesn't have to be. TBD.
-        foreach (var p in playerManagers)
-        {
-            if (p.GetOwnerPlayerId() < 0) continue;
-            numOfPlayers++;
-        }
+        var numOfPlayers = CountPlayers(false);
 
         if (numOfPlayers < 3)
         {
@@ -152,7 +147,7 @@ public class GameManager : UdonSharpBehaviour
     
     public void NextRound()
     {
-        if (!isRoundOver || round >= 4) return;
+        if (!isRoundOver || round >= 4 || CountPlayers(false) < 3) return;
         Debug.Log("Master: Increasing round counter and sending it to clients.");
         round++;
         RequestSerialization();
@@ -170,8 +165,6 @@ public class GameManager : UdonSharpBehaviour
 
     private void OnRoundChanged()
     {
-        Networking.LocalPlayer.PlayHapticEventInHand(VRC_Pickup.PickupHand.Right, .1f, .3f, 1f);
-        Networking.LocalPlayer.PlayHapticEventInHand(VRC_Pickup.PickupHand.Left, .1f, .3f, 1f);
         SetPromptsForPlayersThisRound();
         ResetBonusPointPlacement();
         isRoundOver = false;
@@ -180,17 +173,17 @@ public class GameManager : UdonSharpBehaviour
             playerManager.OnRoundChanged(seed, round);
         }
 
-        playerCount = CountPlayers();
+        playerCount = CountPlayers(true);
 
         gameUI.OnRoundChanged(round);
     }
 
-    private int CountPlayers()
+    private int CountPlayers(bool checkIsPlaying)
     {
         var count = 0;
         foreach (var p in playerManagers)
         {
-            if (p.GetIsPlaying() && Utilities.IsValid(VRCPlayerApi.GetPlayerById(p.GetOwnerPlayerId()))) count++;
+            if ((!checkIsPlaying || p.GetIsPlaying()) && Utilities.IsValid(VRCPlayerApi.GetPlayerById(p.GetOwnerPlayerId()))) count++;
         }
 
         return count;
@@ -310,7 +303,7 @@ public class GameManager : UdonSharpBehaviour
 
     private void UpdateIsRoundOver()
     {
-        isRoundOver = GetNumPlacements() >= CountPlayers() - 1;// 2 players (1 + 1) >= 2 players (3 - 1)
+        isRoundOver = GetNumPlacements() >= CountPlayers(true) - 1;// 2 players (1 + 1) >= 2 players (3 - 1)
         if (isRoundOver && isRoundOver != isRoundOverOld)
         {
             RequestSerialization();
