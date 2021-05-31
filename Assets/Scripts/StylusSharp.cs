@@ -1,5 +1,6 @@
 ﻿
 using System;
+using TMPro;
 using UdonSharp;
 using UnityEngine;
 using VRC.SDK3.Components;
@@ -29,6 +30,9 @@ public class StylusSharp : UdonSharpBehaviour
     [SerializeField] private VRCObjectSync vrcObjectSync = null;
     [SerializeField] private float[] colors = null;
     [SerializeField] private Collider collider = null;
+    [SerializeField] private TextMeshProUGUI inkText = null;
+
+    private int linesDrawn = 0;
     public override bool OnOwnershipRequest(VRCPlayerApi requestingPlayer, VRCPlayerApi requestedOwner)
     {
         return true;
@@ -46,6 +50,8 @@ public class StylusSharp : UdonSharpBehaviour
         lineRenderer.gameObject.SetActive(true);
 
         nextLineIndex = (nextLineIndex + 1) % linePool.Length;
+        linesDrawn = Mathf.Min(15, linesDrawn + 1);
+        inkText.text = $"{linesDrawn}/15\nLines";
         
         line.RequestSerialization();
 
@@ -101,6 +107,8 @@ public class StylusSharp : UdonSharpBehaviour
         {
             p.Erase();
         }
+
+        inkText.text = "";
     }
 
     public void SetColor(int colorIndex)
