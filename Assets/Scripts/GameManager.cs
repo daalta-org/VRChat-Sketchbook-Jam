@@ -147,9 +147,11 @@ public class GameManager : UdonSharpBehaviour
     
     public void NextRound()
     {
-        if (!isRoundOver || round >= 4 || CountPlayers(false) < 3) return;
+        var playerCountTemp = CountPlayers(false);
+        if (!isRoundOver || round >= 4 || playerCountTemp < 3) return;
         Debug.Log("Master: Increasing round counter and sending it to clients.");
         round++;
+        playerCount = playerCountTemp;
         RequestSerialization();
         OnDeserialization();
     }
