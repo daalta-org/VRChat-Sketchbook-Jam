@@ -293,8 +293,6 @@ public class GameManager : UdonSharpBehaviour
             return;
         }
 
-        gameUI.SendCustomNetworkEvent(NetworkEventTarget.All, nameof(gameUI.MusicDoStageTwo));
-
         for (var i = 0; i < bonusPointPlacement.Length; i++)
         {
             if (bonusPointPlacement[i] < 0)
@@ -304,7 +302,8 @@ public class GameManager : UdonSharpBehaviour
 
                 UpdateIsRoundOver(); //isRoundOver = i + 1 >= CountPlayers() - 1; // 2 players (1 + 1) >= 2 players (3 - 1)
                 
-                gameUI.SendCustomNetworkEvent(NetworkEventTarget.All, nameof(gameUI.MusicDoStageThree));
+                if (i > 0) gameUI.SendCustomNetworkEvent(NetworkEventTarget.All, nameof(gameUI.MusicDoStageThree));
+                else gameUI.SendCustomNetworkEvent(NetworkEventTarget.All, nameof(gameUI.MusicDoStageTwo));
                 
                 RequestSerialization();
                 DealWithDeserialization();
