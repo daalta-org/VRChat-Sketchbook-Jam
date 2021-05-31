@@ -296,28 +296,13 @@ public class GameManager : UdonSharpBehaviour
                 bonusPointPlacement[i] = playerIndex;
                 Debug.Log($"Player {playerIndex} will get bonus points for finishing!");
 
-                isRoundOver = i + 1 >= GetPlayerCount() - 1; // 2 players (1 + 1) >= 2 players (3 - 1)
+                isRoundOver = i + 1 >= CountPlayers() - 1; // 2 players (1 + 1) >= 2 players (3 - 1)
                 
                 RequestSerialization();
                 OnDeserialization();
                 return;
             }
         }
-    }
-
-    private bool AreThereEnoughVotesToEndTheRound()
-    {
-        for (var i = 0; i < bonusPointPlacement.Length; i++)
-        {
-            if (bonusPointPlacement[i] < 0)
-            {
-                return i + 1 >= GetPlayerCount() - 1; // 2 players (1 + 1) >= 2 players (3 - 1)
-            }
-        }
-
-        Debug.LogWarning("Placement array was full, wtf?");
-        
-        return false;
     }
 
     private void UpdateBonusPointUI()

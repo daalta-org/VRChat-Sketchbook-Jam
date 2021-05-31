@@ -139,6 +139,12 @@ public class PlayerManager : UdonSharpBehaviour
             Debug.Log($"Owner player ID of pen {playerIndex} changed from {ownerPlayerIdOld} to {ownerPlayerId}");
             ownerPlayerIdOld = ownerPlayerId;
             UpdateInstructions();
+            var local = Networking.LocalPlayer;
+            if (local == null) return;
+            var localId = Networking.LocalPlayer.playerId;
+            if (localId < 0 || localId == ownerPlayerId) stylus.SetColliderEnabled(true);
+            else stylus.SetColliderEnabled(false);
+ 
         }
 
         if (score != scoreOld)
@@ -183,7 +189,10 @@ public class PlayerManager : UdonSharpBehaviour
 
     public override void OnPlayerLeft(VRCPlayerApi player)
     {
-        if (ownerPlayerId == player.playerId) ownerPlayerId = -1;
+        if (ownerPlayerId != player.playerId) return;
+
+        isPlaying = false;
+        ownerPlayerId = -1;
         
         //gameManager.CheckEndRoundPlayerLeft(); TODO
     }

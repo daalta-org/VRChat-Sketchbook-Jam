@@ -28,6 +28,7 @@ public class StylusSharp : UdonSharpBehaviour
     [SerializeField] private PenLineColorSharp[] penLineColorSharp = null;
     [SerializeField] private VRCObjectSync vrcObjectSync = null;
     [SerializeField] private float[] colors = null;
+    [SerializeField] private Collider collider = null;
     public override bool OnOwnershipRequest(VRCPlayerApi requestingPlayer, VRCPlayerApi requestedOwner)
     {
         return true;
@@ -109,5 +110,10 @@ public class StylusSharp : UdonSharpBehaviour
         {
             l.SetColor(color);
         }
+    }
+
+    public void SetColliderEnabled(bool b)
+    {
+        collider.enabled = b;
     }
 }
