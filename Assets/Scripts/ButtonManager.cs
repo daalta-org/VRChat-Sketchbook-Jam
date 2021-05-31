@@ -20,6 +20,7 @@ public class ButtonManager : UdonSharpBehaviour
     private int buttonIndex = -1;
 
     private bool arePromptsVisible = true;
+    private bool arePromptsVisibleOld = false;
 
     public void SetText(string s)
     {
@@ -75,5 +76,10 @@ public class ButtonManager : UdonSharpBehaviour
     public void SetPromptsVisible(bool p0)
     {
         arePromptsVisible = p0;
+        if (arePromptsVisible != arePromptsVisibleOld)
+        {
+            arePromptsVisibleOld = arePromptsVisible;
+            SpinOnce();
+        }
     }
 }

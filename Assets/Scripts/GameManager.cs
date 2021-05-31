@@ -23,8 +23,8 @@ public class GameManager : UdonSharpBehaviour
 
     [UdonSynced] private int[] bonusPointPlacement;
 
-    [UdonSynced] private bool isRoundOver = false;
-    private bool isRoundOverOld = false;
+    [UdonSynced] private bool isRoundOver = true;
+    private bool isRoundOverOld = true;
     
     private void Start()
     {
@@ -62,14 +62,13 @@ public class GameManager : UdonSharpBehaviour
 
     public void StartGame()
     {
+        if (round >= 0 && round < 4) return;
+        if (!isRoundOver) return;
         if (!Networking.LocalPlayer.isMaster)
         {
             Debug.Log("Non-Master tried to call start game event. That's kinda sus");
             return;
         }
-
-        seed = Time.frameCount;
-
         var numOfPlayers = CountPlayers(false);
 
         if (numOfPlayers < 3)
@@ -77,7 +76,10 @@ public class GameManager : UdonSharpBehaviour
             Debug.Log("Player count is below 3.");
             return;
         }
-        seed = UnityEngine.Random.Range(-int.MaxValue, int.MaxValue);
+        
+        
+        isRoundOver = false;
+        seed = Time.frameCount;
         round = 0;
         foreach (var p in playerManagers)
         {

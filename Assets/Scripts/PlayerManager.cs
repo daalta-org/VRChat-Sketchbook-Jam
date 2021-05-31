@@ -45,7 +45,7 @@ public class PlayerManager : UdonSharpBehaviour
         playerUI.SetPromptsVisible(true);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         // TODO Does this fix the late joiner sync?
         playerUI.SetPromptsVisible(ownerPlayerId > -1);
