@@ -60,7 +60,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _Exponent1: 53.8
+    - _Exponent1: 29.7
     - _Exponent2: 326.2
     - _GlossMapScale: 1
     - _Glossiness: 0.5
@@ -78,6 +78,6 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Color1: {r: 0, g: 0, b: 0, a: 1}
-    - _Color2: {r: 0, g: 0, b: 0, a: 1}
+    - _Color2: {r: 1, g: 1, b: 1, a: 1}
     - _Color3: {r: 0.05, g: 0.05, b: 0.05, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

@@ -20,8 +20,8 @@ public class GameUI : UdonSharpBehaviour
     private readonly int Score = Animator.StringToHash("Score");
     private readonly int IsVoteRevealed = Animator.StringToHash("IsVoteRevealed");
     private readonly int IsVoteSubmitted = Animator.StringToHash("IsVoteSubmitted");
-    private readonly int HorizonColor = Shader.PropertyToID("_Color2");
-    private readonly int SkyColor = Shader.PropertyToID("_Color1");
+    private readonly string HorizonColor = "_Color2";
+    private readonly string SkyColor = "_Color1";
 
     private float skyTimer = -1;
     private bool isSkyAnimating = false;
@@ -54,9 +54,8 @@ public class GameUI : UdonSharpBehaviour
         var skySat = 0;//curveSkySaturation.Evaluate(modifiedTimer);
         if (isSkyAnimating)
         {
-            Debug.Log("isSkyAnimating");
-            var value = 1;//curveValue.Evaluate(modifiedTimer);
-            var hue = modifiedTimer % 1;//curveHue.Evaluate(modifiedTimer);
+            var value = curveValue.Evaluate(modifiedTimer);
+            var hue = curveHue.Evaluate(modifiedTimer);
             RenderSettings.skybox.SetColor(HorizonColor, Color.HSVToRGB(hue, 1, value - skySat * 4, false));
         }
         else
