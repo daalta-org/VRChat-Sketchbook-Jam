@@ -27,7 +27,9 @@ public class GameManager : UdonSharpBehaviour
 
     private void Start()
     {
+        Debug.Log("Executing start event on game manager");
         SetPlayerColors();
+        SendCustomEventDelayedSeconds(nameof(SetPromptsForPlayersThisRound), 2f); // TODO Put this here for late joiners, but might break stuff
 
         for (var index = 0; index < playerManagers.Length; index++)
         {
@@ -193,6 +195,7 @@ public class GameManager : UdonSharpBehaviour
     
     private void SetPromptsForPlayersThisRound()
     {
+        Debug.Log("Settings prompts for players for round " + round);
         UnityEngine.Random.InitState(seed);
         var promptsThisRound = prompts.GetPromptSequenceForRound(promptSequence, round);
         for (var i = 0; i < playerManagers.Length; i++)
