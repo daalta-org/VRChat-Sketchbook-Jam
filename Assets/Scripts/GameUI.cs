@@ -29,8 +29,6 @@ public class GameUI : UdonSharpBehaviour
     private void Start()
     {
         ResetSkyColor();
-        skyTimer = 0;
-        isSkyAnimating = true;
     }
 
     private void Update()
@@ -42,12 +40,6 @@ public class GameUI : UdonSharpBehaviour
         
         if (skyTimer < 0) return;
         skyTimer += Time.deltaTime;
-        /*
-        var modifiedTimer = (skyTimer * 2.75);
-        var value = (float) (1 - (((modifiedTimer) / 2) % 1));
-        var hue = ((float) modifiedTimer / 16) % 1f;
-        Debug.Log(hue);
-        */
 
         var modifiedTimer = skyTimer * 2.75f;
 
@@ -68,7 +60,7 @@ public class GameUI : UdonSharpBehaviour
 
     public void OnRoundChanged(int round)
     {
-        textRound.text = "Round " + (round+1);
+        textRound.text = round >= 0 && round < 4 ? "Round " + (round+1) : "New Game";
         if (round >= 0 && round < 5)
         {
             animatorMusic.SetBool(IsMusicRunning, true);
