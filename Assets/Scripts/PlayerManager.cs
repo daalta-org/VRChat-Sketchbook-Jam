@@ -183,17 +183,6 @@ public class PlayerManager : UdonSharpBehaviour
         return ownerPlayerId;
     }
 
-    public override void OnPlayerLeft(VRCPlayerApi player)
-    {
-        if (ownerPlayerId != player.playerId) return;
-
-        isPlaying = false;
-        ownerPlayerId = -1;
-        Reset();
-        
-        //gameManager.CheckEndRoundPlayerLeft(); TODO
-    }
-
     public bool ResetManagedPlayedId(int playerId)
     {
         if (ownerPlayerId == playerId)
@@ -214,6 +203,8 @@ public class PlayerManager : UdonSharpBehaviour
         
         if (round < 0) return;
         ClearLines();
+
+        if (!Utilities.IsValid(VRCPlayerApi.GetPlayerById(ownerPlayerId))) ownerPlayerId = -1;
         if (ownerPlayerId < 0)
         {
             playerUI.ClearText();
@@ -544,6 +535,8 @@ public class PlayerManager : UdonSharpBehaviour
     public void Reset()
     {
         ResetVotes();
+        playerUI.MakeAllPromptsNeutral();
+        playerUI.ResetAnimatorState();
         score = 0;
         RequestSerialization();
         OnDeserialization();

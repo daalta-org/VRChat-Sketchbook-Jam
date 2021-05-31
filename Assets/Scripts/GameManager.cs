@@ -190,7 +190,7 @@ public class GameManager : UdonSharpBehaviour
         var count = 0;
         foreach (var p in playerManagers)
         {
-            if (p.GetIsPlaying()) count++;
+            if (p.GetIsPlaying() && Utilities.IsValid(VRCPlayerApi.GetPlayerById(p.GetOwnerPlayerId()))) count++;
         }
 
         return count;
@@ -310,7 +310,7 @@ public class GameManager : UdonSharpBehaviour
 
     private void UpdateIsRoundOver()
     {
-        isRoundOver = GetNumPlacements() >= playerCount - 1;// 2 players (1 + 1) >= 2 players (3 - 1)
+        isRoundOver = GetNumPlacements() >= CountPlayers() - 1;// 2 players (1 + 1) >= 2 players (3 - 1)
         if (isRoundOver && isRoundOver != isRoundOverOld)
         {
             RequestSerialization();
