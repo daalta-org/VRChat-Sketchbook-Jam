@@ -7594,7 +7594,7 @@ MonoBehaviour:
   - {fileID: 557442859}
   - {fileID: 289794598}
   - {fileID: 594902157}
-  spawnOrder: 2
+  spawnOrder: 1
   spawnOrientation: 0
   ReferenceCamera: {fileID: 1900734473}
   RespawnHeightY: -100

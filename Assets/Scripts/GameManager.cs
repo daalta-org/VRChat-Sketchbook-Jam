@@ -310,7 +310,7 @@ public class GameManager : UdonSharpBehaviour
 
     private void UpdateIsRoundOver()
     {
-        isRoundOver = GetNumPlacements() + 1 >= playerCount - 1;// 2 players (1 + 1) >= 2 players (3 - 1)
+        isRoundOver = GetNumPlacements() >= playerCount - 1;// 2 players (1 + 1) >= 2 players (3 - 1)
         if (isRoundOver && isRoundOver != isRoundOverOld)
         {
             RequestSerialization();
