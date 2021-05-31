@@ -193,6 +193,7 @@ public class PlayerManager : UdonSharpBehaviour
 
         isPlaying = false;
         ownerPlayerId = -1;
+        Reset();
         
         //gameManager.CheckEndRoundPlayerLeft(); TODO
     }

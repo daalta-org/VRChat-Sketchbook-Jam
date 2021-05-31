@@ -62,6 +62,8 @@ public class GameManager : UdonSharpBehaviour
             return;
         }
 
+        seed = Time.frameCount;
+
         var numOfPlayers = 0; // This is calculated separately without using isPlaying - but it doesn't have to be. TBD.
         foreach (var p in playerManagers)
         {
