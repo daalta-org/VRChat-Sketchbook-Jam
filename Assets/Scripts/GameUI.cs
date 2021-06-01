@@ -119,7 +119,6 @@ public class GameUI : UdonSharpBehaviour
     public void MusicDoStageTwo()
     {
         animatorMusic.SetBool("GoToTwo", true);
-        animatorMusic.SetBool("GoToThree", false);
     }
     
     public void MusicDoStageThree()

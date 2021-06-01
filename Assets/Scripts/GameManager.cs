@@ -303,10 +303,7 @@ public class GameManager : UdonSharpBehaviour
                 Debug.Log($"Player {playerIndex} will get bonus points for finishing!");
 
                 UpdateIsRoundOver(); //isRoundOver = i + 1 >= CountPlayers() - 1; // 2 players (1 + 1) >= 2 players (3 - 1)
-                
-                if (i > 0) gameUI.SendCustomNetworkEvent(NetworkEventTarget.All, nameof(gameUI.MusicDoStageThree));
-                else gameUI.SendCustomNetworkEvent(NetworkEventTarget.All, nameof(gameUI.MusicDoStageTwo));
-                
+
                 RequestSerialization();
                 DealWithDeserialization();
                 return;
@@ -336,6 +333,9 @@ public class GameManager : UdonSharpBehaviour
         {
             points[i] = scoreScript.GetBonusPoints(GetPlayerCount(), i);
             names[i] = playerManagers[bonusPointPlacement[i]].GetOwnerName();
+            
+            gameUI.MusicDoStageTwo();
+            if (i >= GetPlayerCount() - 2) gameUI.MusicDoStageThree();
         }
         gameUI.SetBonusPoints(points, names);
     }
