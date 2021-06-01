@@ -339,9 +339,10 @@ public class GameManager : UdonSharpBehaviour
         {
             points[i] = scoreScript.GetBonusPoints(GetPlayerCount(), i);
             names[i] = playerManagers[bonusPointPlacement[i]].GetOwnerName();
-            
+
             gameUI.MusicDoStageTwo();
-            if (i >= GetPlayerCount() - 3) gameUI.MusicDoStageThree();
+            var count = GetPlayerCount();
+            if ((count > 3 && i >= count - 3) || i >= count - 2) gameUI.MusicDoStageThree();
         }
         gameUI.SetBonusPoints(points, names);
     }
