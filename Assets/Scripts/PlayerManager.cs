@@ -68,12 +68,19 @@ public class PlayerManager : UdonSharpBehaviour
         {
             var playerCount = gameManager.GetPlayerCount();
             var pointsArray = scoreScript.GetGuessPointsArray(playerCount);
+            if (pointsArray == null)
+            {
+                Debug.LogError("PointsArray was null! Aborting votes update");
+                return;
+            }
+            
             var networkIds = gameManager.GetPlayerNetworkIds(votes);
             
             playerUI.SetVoteResults(votes, true, pointsArray, networkIds); // TODO isRevealed is always true
         }
         else
         {
+            Debug.LogWarning("PlayerManager was null when updating votes!!");
             playerUI.HideVoteResults();
         }
         

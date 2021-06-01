@@ -62,6 +62,7 @@ public class GameManager : UdonSharpBehaviour
 
     public void StartGame()
     {
+        Debug.Log("Game start requested");
         if (round >= 0 && round < 4) return;
         if (!isRoundOver) return;
         if (!Networking.LocalPlayer.isMaster)
@@ -77,7 +78,8 @@ public class GameManager : UdonSharpBehaviour
             return;
         }
         
-        
+        Debug.Log("Game start OK");
+
         isRoundOver = false;
         seed = Time.frameCount;
         round = 0;
@@ -85,7 +87,7 @@ public class GameManager : UdonSharpBehaviour
         {
             p.Reset();
         }
-        Debug.Log("Requesting Deserialization...");
+        Debug.Log("Requesting Deserialization after game start");
         RequestSerialization();
         DealWithDeserialization();
     }
@@ -104,6 +106,10 @@ public class GameManager : UdonSharpBehaviour
             Debug.Log("Seed has changed: " + seed);
             seedOld = seed;
             OnSeedChanged();
+        }
+        else
+        {
+            Debug.Log("Seed has not changed and is " + seed);
         }
 
         if (round != roundOld)

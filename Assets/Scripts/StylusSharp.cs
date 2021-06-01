@@ -108,6 +108,7 @@ public class StylusSharp : UdonSharpBehaviour
             p.Erase();
         }
 
+        linesDrawn = 0;
         inkText.text = "";
     }
 
