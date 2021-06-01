@@ -341,7 +341,7 @@ public class GameManager : UdonSharpBehaviour
             names[i] = playerManagers[bonusPointPlacement[i]].GetOwnerName();
             
             gameUI.MusicDoStageTwo();
-            if (i >= GetPlayerCount() - 2) gameUI.MusicDoStageThree();
+            if (i >= GetPlayerCount() - 1) gameUI.MusicDoStageThree();
         }
         gameUI.SetBonusPoints(points, names);
     }
