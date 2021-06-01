@@ -48,12 +48,7 @@ public class PlayerManager : UdonSharpBehaviour
     private void FixedUpdate()
     {
         // TODO Does this fix the late joiner sync?
-        playerUI.SetPromptsVisible(ownerPlayerId > -1);
-    }
-
-    private void SetIsPlaying(bool b)
-    {
-        isPlaying = b;
+        playerUI.SetPromptsVisible(ownerPlayerId > -1 && isPlaying);
     }
 
     public bool GetIsPlaying()
@@ -95,7 +90,6 @@ public class PlayerManager : UdonSharpBehaviour
     {
         playerIndex = pi;
         playerUI.SetButtonInfo(this);
-        UpdateInstructions();
     }
     
     public void SetPrompt(int index)
@@ -138,6 +132,7 @@ public class PlayerManager : UdonSharpBehaviour
 
     public override void OnDeserialization()
     {
+        Debug.Log("OnDeserialization for " + playerIndex);
         if (ownerPlayerId != ownerPlayerIdOld)
         {
             Debug.Log($"Owner player ID of pen {playerIndex} changed from {ownerPlayerIdOld} to {ownerPlayerId}");
@@ -153,16 +148,28 @@ public class PlayerManager : UdonSharpBehaviour
 
         if (score != scoreOld)
         {
+            Debug.Log("Score has changed: Player" + playerIndex);
             scoreOld = score;
             playerUI.SetScore(score);
         }
 
         UpdateVotesLocal(); // TODO Remove this. Probably not needed due to the networked event which calls this
+        Debug.Log("OnDeserialization complete");
     }
 
     private void UpdateInstructions()
     {
-        playerUI.UpdateInstructions(gameManager.GetRound(), GetOwnerName(), LocalIsOwner(), LocalHasVotedForThis(), gameManager.IsRoundOver());
+        Debug.Log($"Updating player {playerIndex} instructions");
+        if (gameManager == null)
+        {
+            Debug.LogWarning("gameManager was used before it was properly set!");
+            return;
+        }
+
+        var round = gameManager.GetRound();
+        var roundOver = gameManager.IsRoundOver();
+        playerUI.UpdateInstructions(round, GetOwnerName(), LocalIsOwner(), LocalHasVotedForThis(), roundOver);
+        Debug.Log("Instruction update complete");
     }
 
     public override bool OnOwnershipRequest(VRCPlayerApi requestingPlayer, VRCPlayerApi requestedOwner)

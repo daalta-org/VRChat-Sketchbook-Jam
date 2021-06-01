@@ -34,8 +34,8 @@ public class GameManager : UdonSharpBehaviour
         for (var index = 0; index < playerManagers.Length; index++)
         {
             var p = playerManagers[index];
-            p.SetPromptsAndGameManager(prompts, this, scoreScript);
             p.SetButtonInfo(index);
+            p.SetPromptsAndGameManager(prompts, this, scoreScript);
         }
 
         if (!Networking.IsMaster) return;
