@@ -51,7 +51,7 @@ public class GameManager : UdonSharpBehaviour
         offsetTimer += Time.fixedDeltaTime;
         if (oldTimer % 4 > offsetTimer % 4)
         {
-            SetPromptsForPlayersThisRound((int) offsetTimer / 4, false);
+            SetPromptsForPlayersThisRound((int) offsetTimer / 4, true);
         }
     }
 
@@ -150,6 +150,7 @@ public class GameManager : UdonSharpBehaviour
         {
             Debug.Log("OnRoundOver for player " + index);
 
+            SetPromptsForPlayersThisRound(0, false);
             playerManagers[index].OnRoundOver(); // reveals which prompts were correct
             if (!Networking.IsMaster) continue;
             var pointsToAdd = 0;
@@ -196,7 +197,7 @@ public class GameManager : UdonSharpBehaviour
 
     private void OnRoundChanged()
     {
-        SetPromptsForPlayersThisRound(0, true);
+        SetPromptsForPlayersThisRound(0, false);
         ResetBonusPointPlacement();
         foreach (var playerManager in playerManagers)
         {
@@ -219,7 +220,7 @@ public class GameManager : UdonSharpBehaviour
         return count;
     }
     
-    private void SetPromptsForPlayersThisRound(int offset, bool isRoundStart)
+    private void SetPromptsForPlayersThisRound(int offset, bool preventSelfUpdate)
     {
         Debug.Log("Settings prompts for players for round " + round);
         UnityEngine.Random.InitState(seed);
@@ -227,7 +228,7 @@ public class GameManager : UdonSharpBehaviour
         for (var i = 0; i < playerManagers.Length; i++)
         {
             var isMine = playerManagers[i].LocalIsOwner();
-            if (isRoundStart && isMine) continue;
+            if (preventSelfUpdate && isMine) continue;
             var promptIndex = isMine ? i : (i + offset) % 8;
             playerManagers[i].SetPrompt(promptsThisRound[promptIndex]);
         }

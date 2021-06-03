@@ -9,7 +9,6 @@ public class ButtonManager : UdonSharpBehaviour
 {
     [SerializeField] private TextMeshProUGUI[] texts = null;
     [SerializeField] private Animator animator = null;
-    [SerializeField] private Button neutralButton = null;
     private readonly int animatorState = Animator.StringToHash("State");
     private readonly int animatorSpinOnce = Animator.StringToHash("SpinOnce");
 
