@@ -25,6 +25,8 @@ public class GameManager : UdonSharpBehaviour
 
     [UdonSynced] private bool isRoundOver = true;
     private bool isRoundOverOld = true;
+
+    private float offsetTimer = 0;
     
     private void Start()
     {
@@ -40,6 +42,17 @@ public class GameManager : UdonSharpBehaviour
 
         if (!Networking.IsMaster) return;
         ResetBonusPointPlacement();
+    }
+
+    private void FixedUpdate()
+    {
+        if (isRoundOver || round < 0) return;
+        var oldTimer = offsetTimer;
+        offsetTimer += Time.fixedDeltaTime;
+        if (oldTimer % 4 > offsetTimer % 4)
+        {
+            SetPromptsForPlayersThisRound((int) offsetTimer / 4, false);
+        }
     }
 
     private void SetPlayerColors()
@@ -183,7 +196,7 @@ public class GameManager : UdonSharpBehaviour
 
     private void OnRoundChanged()
     {
-        SetPromptsForPlayersThisRound();
+        SetPromptsForPlayersThisRound(0, true);
         ResetBonusPointPlacement();
         foreach (var playerManager in playerManagers)
         {
@@ -206,14 +219,17 @@ public class GameManager : UdonSharpBehaviour
         return count;
     }
     
-    private void SetPromptsForPlayersThisRound()
+    private void SetPromptsForPlayersThisRound(int offset, bool isRoundStart)
     {
         Debug.Log("Settings prompts for players for round " + round);
         UnityEngine.Random.InitState(seed);
         var promptsThisRound = prompts.GetPromptSequenceForRound(promptSequence, round);
         for (var i = 0; i < playerManagers.Length; i++)
         {
-            playerManagers[i].SetPrompt(promptsThisRound[i]);
+            var isMine = playerManagers[i].LocalIsOwner();
+            if (isRoundStart && isMine) continue;
+            var promptIndex = isMine ? i : (i + offset) % 8;
+            playerManagers[i].SetPrompt(promptsThisRound[promptIndex]);
         }
     }
 

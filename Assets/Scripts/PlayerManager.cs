@@ -115,7 +115,7 @@ public class PlayerManager : UdonSharpBehaviour
         }
     }
     
-    private bool LocalIsOwner()
+    public bool LocalIsOwner()
     {
         if (ownerPlayerId <= 0) return false;
         var managedPlayer = VRCPlayerApi.GetPlayerById(ownerPlayerId);

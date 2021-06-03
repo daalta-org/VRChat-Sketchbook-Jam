@@ -42,18 +42,33 @@ public class ButtonManager : UdonSharpBehaviour
 
     public void UpdateAfterNeutral()
     {
-        texts[1].text = arePromptsVisible ? newText : "";
-        texts[2].text = arePromptsVisible ? newText : "";
+        texts[1].text = GetText();
+        texts[2].text = GetText();
+        texts[3].text = GetText();
     }
     public void UpdateAfterWrong()
     {
-        texts[0].text = arePromptsVisible ? newText : "";
-        texts[2].text = arePromptsVisible ? newText : "";
+        texts[0].text = GetText();
+        texts[2].text = GetText();
+        texts[3].text = GetText();
     }
     public void UpdateAfterCorrect()
     {
-        texts[0].text = arePromptsVisible ? newText : "";
-        texts[1].text = arePromptsVisible ? newText : "";
+        texts[0].text = GetText();
+        texts[1].text = GetText();
+        texts[3].text = GetText();
+    }
+
+    private string GetText()
+    {
+        return arePromptsVisible ? newText : "";
+    }
+
+    public void UpdateAfterDummy()
+    {
+        texts[0].text = GetText();
+        texts[1].text = GetText();
+        texts[2].text = GetText();
     }
 
     public void OnButtonPressed()

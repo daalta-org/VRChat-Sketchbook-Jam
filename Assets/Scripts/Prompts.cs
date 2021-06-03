@@ -39,10 +39,10 @@ public class Prompts : UdonSharpBehaviour
     }
 
     /// <summary>
-    /// Returns seven prompts for a given index
+    /// Returns six prompts for a given index
     /// </summary>
     /// <param name="index">Index of the prompt group</param>
-    /// <returns>Seven similar prompts</returns>
+    /// <returns>Six similar prompts</returns>
     public string[] GetPrompt(int index)
     {
         var result = new string[6];
