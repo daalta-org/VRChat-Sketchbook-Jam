@@ -150,7 +150,7 @@ public class GameManager : UdonSharpBehaviour
             gameUI.SetIsJumbled(isJumbled);
             if (!IsRoundOver() && !isJumbled && offsetTimer >= 0)
             {
-                SetPromptsForPlayersThisRound(0, true);
+                SetPromptsForPlayersThisRound(0, false);
                 offsetTimer = -1;
             }
         }
@@ -230,10 +230,11 @@ public class GameManager : UdonSharpBehaviour
     {
         if (isJumbled)
         {
+            UnityEngine.Random.InitState(seed + round);
             offsetTimer = 0 + UnityEngine.Random.Range(0, 7*jumbleInterval);
         }
         
-        SetPromptsForPlayersThisRound(0, false);
+        SetPromptsForPlayersThisRound((int) (offsetTimer % jumbleInterval), false);
         ResetBonusPointPlacement();
         foreach (var playerManager in playerManagers)
         {
@@ -261,12 +262,22 @@ public class GameManager : UdonSharpBehaviour
         Debug.Log("Settings prompts for players for round " + round);
         UnityEngine.Random.InitState(seed);
         var promptsThisRound = prompts.GetPromptSequenceForRound(promptSequence, round);
+        var foundMine = false;
         for (var i = 0; i < playerManagers.Length; i++)
         {
-            var isMine = playerManagers[i].LocalIsOwner();
-            if (preventSelfUpdate && isMine) continue;
-            var promptIndex = isMine ? i : offset % 8;
-            playerManagers[i].SetPrompt(promptsThisRound[promptIndex], offsetTimer > 1);
+            var isMine = false;
+            if (!foundMine)
+            {
+                isMine = playerManagers[i].LocalIsOwner();
+                if (preventSelfUpdate && isMine)
+                {
+                    foundMine = true;
+                    continue;
+                }
+            }
+            
+            var promptIndex = isMine || !isJumbled ? i : (i + offset) % 8;
+            playerManagers[i].SetPrompt(promptsThisRound[promptIndex], offsetTimer >= 0);
         }
     }
 

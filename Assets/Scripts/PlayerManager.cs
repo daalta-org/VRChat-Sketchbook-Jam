@@ -119,22 +119,19 @@ public class PlayerManager : UdonSharpBehaviour
     {
         if (ownerPlayerId <= 0) return false;
         var managedPlayer = VRCPlayerApi.GetPlayerById(ownerPlayerId);
-        if (managedPlayer == null)
+        if (Utilities.IsValid(managedPlayer)) return managedPlayer.isLocal;
+        
+        Debug.LogWarning("Managed player was not cleared before LocalIsOwner was called. Odd!");
+        if (ownerPlayerId == 123456)
         {
-            Debug.LogWarning("Managed player was not cleared before LocalIsOwner was called. Odd!");
-            if (ownerPlayerId == 123456)
-            {
-                Debug.Log("Oh, it's a dummy player! False alarm, carry on.");
-            }
-            else
-            {
-                ownerPlayerId = -1;
-            }
-
-            return false;
-
+            Debug.Log("Oh, it's a dummy player! False alarm, carry on.");
         }
-        return managedPlayer.isLocal;
+        else
+        {
+            ownerPlayerId = -1;
+        }
+
+        return false;
     }
 
     public override void OnDeserialization()
@@ -322,7 +319,7 @@ public class PlayerManager : UdonSharpBehaviour
     {
         if (ownerPlayerId < 0) return null;
         var player = VRCPlayerApi.GetPlayerById(ownerPlayerId);
-        return player != null ? player.displayName : "!ERROR, TELL FAX!";
+        return Utilities.IsValid(player) ? player.displayName : "!ERROR, TELL FAX!";
     }
 
     private void OnVoteSubmittedCorrect(int id, int index)
