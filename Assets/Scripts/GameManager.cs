@@ -219,7 +219,7 @@ public class GameManager : UdonSharpBehaviour
 
     private void OnSeedChanged()
     {
-        promptSequence = prompts.GetPrompts(seed, 4 * numRounds);
+        promptSequence = prompts.GetPrompts(seed, 3 * numRounds);
         if (promptSequence.Length != numRounds * 4)
         {
             Debug.LogWarning("prompt sequence has unexpected length: " + promptSequence.Length);
@@ -231,7 +231,7 @@ public class GameManager : UdonSharpBehaviour
         if (isJumbled)
         {
             UnityEngine.Random.InitState(seed + round);
-            offsetTimer = 0 + UnityEngine.Random.Range(0, 7*jumbleInterval);
+            offsetTimer = 0 + UnityEngine.Random.Range(0, 2*jumbleInterval);
         }
         
         SetPromptsForPlayersThisRound((int) (offsetTimer % jumbleInterval), false);
@@ -276,7 +276,7 @@ public class GameManager : UdonSharpBehaviour
                 }
             }
             
-            var promptIndex = isMine || !isJumbled ? i : (i + offset) % 8;
+            var promptIndex = isMine || !isJumbled ? i : (i + offset) % 3;
             playerManagers[i].SetPrompt(promptsThisRound[promptIndex], offsetTimer >= 0);
         }
     }

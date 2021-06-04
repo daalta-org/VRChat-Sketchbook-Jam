@@ -95,6 +95,8 @@ public class Prompts : UdonSharpBehaviour
             result[p * numPlayersPerPrompt + 1] = result[p * numPlayersPerPrompt];
             numPromptsTotal--;
             if (numPromptsTotal == 0) continue;
+            result[p * numPlayersPerPrompt + 2] = result[p * numPlayersPerPrompt];
+
         }
 
         return ShuffleIndices(result);
