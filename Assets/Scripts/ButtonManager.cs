@@ -23,7 +23,7 @@ public class ButtonManager : UdonSharpBehaviour
 
     public void SetText(string s)
     {
-        Debug.Log("Setting text " + s);
+        //Debug.Log("Setting text " + s);
         newText = s;
         SpinOnce();
     }

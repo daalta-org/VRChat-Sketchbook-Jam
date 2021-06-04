@@ -11,6 +11,7 @@ public class GameManager : UdonSharpBehaviour
     [SerializeField] private Prompts prompts = null;
     [SerializeField] private int numRounds = 5;
     [SerializeField] private ScoreScript scoreScript;
+    [SerializeField] private float jumbleInterval = 2.25f;
 
     [UdonSynced] private int seed = -1;
     private int seedOld = -1;
@@ -49,9 +50,9 @@ public class GameManager : UdonSharpBehaviour
         if (isRoundOver || round < 0) return;
         var oldTimer = offsetTimer;
         offsetTimer += Time.fixedDeltaTime;
-        if (oldTimer % 4 > offsetTimer % 4)
+        if (oldTimer % jumbleInterval > offsetTimer % jumbleInterval)
         {
-            SetPromptsForPlayersThisRound((int) offsetTimer / 4, true);
+            SetPromptsForPlayersThisRound((int) (offsetTimer / jumbleInterval), true);
         }
     }
 
