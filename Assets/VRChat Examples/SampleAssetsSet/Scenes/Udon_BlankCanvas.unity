@@ -1306,6 +1306,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1926834759}
     m_Modifications:
+    - target: {fileID: 197773936558643192, guid: d0a301f5c5988b24f8930a76f438ba3e,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 197773936558643192, guid: d0a301f5c5988b24f8930a76f438ba3e,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 197773936558643192, guid: d0a301f5c5988b24f8930a76f438ba3e,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 197773936558643192, guid: d0a301f5c5988b24f8930a76f438ba3e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -17.32051
+      objectReference: {fileID: 0}
     - target: {fileID: 204639208763199762, guid: d0a301f5c5988b24f8930a76f438ba3e,
         type: 3}
       propertyPath: m_AnchorMin.y
