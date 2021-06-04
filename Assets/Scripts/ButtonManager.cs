@@ -21,11 +21,12 @@ public class ButtonManager : UdonSharpBehaviour
     private bool arePromptsVisible = true;
     private bool arePromptsVisibleOld = false;
 
-    public void SetText(string s)
+    public void SetText(string s, bool quickSpin)
     {
         //Debug.Log("Setting text " + s);
         newText = s;
-        SpinOnce();
+        if (quickSpin) SpinOnce();
+        else SpinFull();
     }
 
     public void SetAnimatorState(int state)
@@ -37,6 +38,11 @@ public class ButtonManager : UdonSharpBehaviour
     private void SpinOnce()
     {
         animator.SetTrigger(animatorSpinOnce);
+    }
+    
+    private void SpinFull()
+    {
+        animator.SetTrigger("SpinFull");
     }
 
     public void UpdateAfterNeutral()
@@ -93,7 +99,7 @@ public class ButtonManager : UdonSharpBehaviour
         if (arePromptsVisible != arePromptsVisibleOld)
         {
             arePromptsVisibleOld = arePromptsVisible;
-            SpinOnce();
+            SpinFull();
         }
     }
 }

@@ -99,9 +99,9 @@ public class PlayerManager : UdonSharpBehaviour
         playerUI.SetButtonInfo(this);
     }
     
-    public void SetPrompt(int index)
+    public void SetPrompt(int index, bool quickSpin)
     {
-        playerUI.SetPrompt(index, prompts);
+        playerUI.SetPrompt(index, prompts, quickSpin);
     }
 
     public void SetColor(int colorIndex)

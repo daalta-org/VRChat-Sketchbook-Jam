@@ -266,7 +266,7 @@ public class GameManager : UdonSharpBehaviour
             var isMine = playerManagers[i].LocalIsOwner();
             if (preventSelfUpdate && isMine) continue;
             var promptIndex = isMine ? i : (i + offset) % 8;
-            playerManagers[i].SetPrompt(promptsThisRound[promptIndex]);
+            playerManagers[i].SetPrompt(promptsThisRound[promptIndex], offsetTimer > 1);
         }
     }
 
@@ -471,8 +471,9 @@ public class GameManager : UdonSharpBehaviour
 
     private void ResetBonusPointPlacement()
     {
+        Debug.Log("Resetting bonus point placement");
         bonusPointPlacement = new int[7];
-        for (int i = 0; i < bonusPointPlacement.Length; i++)
+        for (var i = 0; i < bonusPointPlacement.Length; i++)
         {
             bonusPointPlacement[i] = -1;
         }
