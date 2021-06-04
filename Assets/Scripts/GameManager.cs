@@ -25,6 +25,10 @@ public class GameManager : UdonSharpBehaviour
     [UdonSynced] private int[] bonusPointPlacement;
 
     [UdonSynced] private bool isRoundOver = true;
+
+    [UdonSynced] private bool isJumbled = false;
+    private bool isJumbledOld = false;
+    
     private bool isRoundOverOld = true;
 
     private float offsetTimer = 0;
@@ -47,6 +51,7 @@ public class GameManager : UdonSharpBehaviour
 
     private void FixedUpdate()
     {
+        if (!isJumbled) return;
         if (isRoundOver || round < 0) return;
         var oldTimer = offsetTimer;
         offsetTimer += Time.fixedDeltaTime;
@@ -138,6 +143,17 @@ public class GameManager : UdonSharpBehaviour
             isRoundOverOld = isRoundOver;
             if (isRoundOver && round >= 0) OnRoundOver();
         }
+
+        if (isJumbled != isJumbledOld)
+        {
+            isJumbledOld = isJumbled;
+            gameUI.SetIsJumbled(isJumbled);
+            if (!IsRoundOver() && !isJumbled && offsetTimer >= 0)
+            {
+                SetPromptsForPlayersThisRound(0, true);
+                offsetTimer = -1;
+            }
+        }
         
         UpdateBonusPointUI(); // TODO probably happens too often
     }
@@ -146,6 +162,7 @@ public class GameManager : UdonSharpBehaviour
     {
         Debug.Log("Round is over!!");
         gameUI.OnRoundOver();
+        offsetTimer = -1;
         
         for (var index = 0; index < playerManagers.Length; index++)
         {
@@ -164,6 +181,19 @@ public class GameManager : UdonSharpBehaviour
 
         ApplyBonusPoints();
         RequestPlayerManagerSerialization();
+        RequestSerialization();
+        DealWithDeserialization();
+    }
+
+    public void RequestToggleIsJumbled()
+    {
+        // TODO Non-players should not be able to toggle this
+        if (round < 0 || isRoundOver) SendCustomNetworkEvent(NetworkEventTarget.Owner, nameof(ToggleIsJumbled));
+    }
+    
+    public void ToggleIsJumbled()
+    {
+        isJumbled = !isJumbled;
         RequestSerialization();
         DealWithDeserialization();
     }
@@ -198,6 +228,11 @@ public class GameManager : UdonSharpBehaviour
 
     private void OnRoundChanged()
     {
+        if (isJumbled)
+        {
+            offsetTimer = 0 + UnityEngine.Random.Range(0, 7*jumbleInterval);
+        }
+        
         SetPromptsForPlayersThisRound(0, false);
         ResetBonusPointPlacement();
         foreach (var playerManager in playerManagers)

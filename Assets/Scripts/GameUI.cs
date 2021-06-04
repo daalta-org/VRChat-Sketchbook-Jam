@@ -2,6 +2,7 @@
 using TMPro;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.UI;
 using VRC.SDKBase;
 
 public class GameUI : UdonSharpBehaviour
@@ -15,6 +16,8 @@ public class GameUI : UdonSharpBehaviour
     [SerializeField] private AnimationCurve curveValue = null;
     [SerializeField] private AnimationCurve curveHue = null;
     [SerializeField] private AnimationCurve curveSkySaturation = null;
+    [SerializeField] private Image jumbleButton = null;
+    [SerializeField] private TextMeshProUGUI jumbleText = null;
     
     private readonly int IsMusicRunning = Animator.StringToHash("IsMusicRunning");
     private readonly int Score = Animator.StringToHash("Score");
@@ -131,5 +134,13 @@ public class GameUI : UdonSharpBehaviour
     {
         RenderSettings.skybox.SetColor(HorizonColor, Color.HSVToRGB(.538f, 1, 1, false));
         RenderSettings.skybox.SetColor(SkyColor, Color.HSVToRGB(0, 1, .05f, false));
+    }
+
+    public void SetIsJumbled(bool b)
+    {
+        jumbleButton.color = b ? Color.green : Color.red;
+        jumbleText.text = "Jumble\n" +
+                          "Mode\n<size=200%>" +
+                          (b ? "ON" : "OFF");
     }
 }
