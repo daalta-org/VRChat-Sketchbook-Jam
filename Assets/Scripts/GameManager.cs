@@ -265,7 +265,7 @@ public class GameManager : UdonSharpBehaviour
         {
             var isMine = playerManagers[i].LocalIsOwner();
             if (preventSelfUpdate && isMine) continue;
-            var promptIndex = isMine ? i : (i + offset) % 8;
+            var promptIndex = isMine ? i : offset % 8;
             playerManagers[i].SetPrompt(promptsThisRound[promptIndex], offsetTimer > 1);
         }
     }

@@ -138,7 +138,7 @@ public class GameUI : UdonSharpBehaviour
 
     public void SetIsJumbled(bool b)
     {
-        jumbleButton.color = b ? Color.green : Color.red;
+        jumbleButton.color = b ? Color.blue : Color.gray;
         jumbleText.text = "Jumble\n" +
                           "Mode\n<size=200%>" +
                           (b ? "ON" : "OFF");

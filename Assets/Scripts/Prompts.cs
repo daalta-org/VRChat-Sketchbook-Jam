@@ -83,8 +83,9 @@ public class Prompts : UdonSharpBehaviour
     {
         Debug.Log("Prompt sequence length: " + promptSequence.Length);
         
-        var numPromptsPerRound = 4;
-        var numPlayersPerPrompt = 2;
+        var numPromptsPerRound = 3;
+        var numPlayersPerPrompt = 3;
+        var numPromptsTotal = 8;
         var numTotalPerRound = numPromptsPerRound * numPlayersPerPrompt;
 
         var result = new int[numTotalPerRound];
@@ -92,6 +93,8 @@ public class Prompts : UdonSharpBehaviour
         {
             result[p * numPlayersPerPrompt] = promptSequence[p + round * numPromptsPerRound]; // ERROR index outside array
             result[p * numPlayersPerPrompt + 1] = result[p * numPlayersPerPrompt];
+            numPromptsTotal--;
+            if (numPromptsTotal == 0) continue;
         }
 
         return ShuffleIndices(result);
