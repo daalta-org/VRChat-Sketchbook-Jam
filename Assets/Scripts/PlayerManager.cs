@@ -217,7 +217,7 @@ public class PlayerManager : UdonSharpBehaviour
     public void OnRoundChanged(int seed, int round)
     {
         playerUI.MakeAllPromptsNeutral();
-        localHasVoted = false;
+        localHasVoted = gameManager.GetMyPlayerManagerId() < 0 ? true : false; // players who don't have an id should not vote
 
         if (round < 0)
         {
@@ -566,5 +566,18 @@ public class PlayerManager : UdonSharpBehaviour
         score = 0;
         RequestSerialization();
         OnDeserialization();
+    }
+
+    /// <summary>
+    /// Not OnPlayerLeft because it's called by the game manager
+    /// </summary>
+    /// <param name="player">Player who left</param>
+    public void PlayerHasLeft(VRCPlayerApi player)
+    {
+        if (!Networking.IsMaster) return;
+        if (player.playerId != ownerPlayerId) return;
+
+        isPlaying = false;
+        ownerPlayerId = -1; // TODO Does more need to be reset?
     }
 }

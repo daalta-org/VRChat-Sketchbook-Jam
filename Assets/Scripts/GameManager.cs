@@ -517,6 +517,10 @@ public class GameManager : UdonSharpBehaviour
     public override void OnPlayerLeft(VRCPlayerApi player)
     {
         if (!Networking.LocalPlayer.isMaster) return;
+        foreach (var p in playerManagers)
+        {
+            p.PlayerHasLeft(player);
+        }
         UpdateIsRoundOver();
     }
 }
