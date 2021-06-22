@@ -172,7 +172,7 @@ public class PlayerManager : UdonSharpBehaviour
 
         var round = gameManager.GetRound();
         var roundOver = gameManager.IsRoundOver();
-        playerUI.UpdateInstructions(round, GetOwnerName(), LocalIsOwner(), LocalHasVotedForThis(), roundOver);
+        playerUI.UpdateInstructions(round, GetOwnerName(), LocalIsOwner(), LocalHasVotedForThis(), roundOver, isPlaying);
         Debug.Log("Instruction update complete");
     }
 
