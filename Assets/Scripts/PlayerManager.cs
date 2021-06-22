@@ -579,5 +579,7 @@ public class PlayerManager : UdonSharpBehaviour
 
         isPlaying = false;
         ownerPlayerId = -1; // TODO Does more need to be reset?
+        RequestSerialization();
+        OnDeserialization();
     }
 }
