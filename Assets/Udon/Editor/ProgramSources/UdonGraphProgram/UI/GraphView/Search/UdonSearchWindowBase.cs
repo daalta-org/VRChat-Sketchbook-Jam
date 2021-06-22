@@ -23,6 +23,7 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
         internal UdonGraph _graphView;
         private List<SearchTreeEntry> _exampleLookup;
         internal UdonGraphWindow _editorWindow;
+        protected bool skipCache = false;
 
         public virtual void Initialize(UdonGraphWindow editorWindow, UdonGraph graphView)
         {
@@ -34,7 +35,7 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
 
         public virtual List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
         {
-            if (_exampleLookup != null && _exampleLookup.Count > 0) return _exampleLookup;
+            if (!skipCache && ( _exampleLookup != null && _exampleLookup.Count > 0)) return _exampleLookup;
 
             _exampleLookup = new List<SearchTreeEntry>();
 
@@ -72,7 +73,6 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
             Texture2D iconOther = new Texture2D(1, 1);
             iconOther.SetPixel(0,0, new Color(0,0,0,0));
             iconOther.Apply();
-            
             Dictionary<string, UdonNodeDefinition> baseNodeDefinition = new Dictionary<string, UdonNodeDefinition>();
 
             foreach (UdonNodeDefinition nodeDefinition in definitions.OrderBy(

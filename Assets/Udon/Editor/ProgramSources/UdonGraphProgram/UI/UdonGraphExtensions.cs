@@ -328,6 +328,7 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI
             typeString = typeString.Replace("TMPro", "");
             typeString = typeString.Replace("VideoVideo", "Video");
             typeString = typeString.Replace("VRCUdonCommon", "");
+            typeString = typeString.Replace("Shuffle[]", "ShuffleArray");
             // ReSharper disable once StringLiteralTypo
             if (typeString.Replace("ector", "").Contains("ctor")) //Handle "Vector/vector"
             {

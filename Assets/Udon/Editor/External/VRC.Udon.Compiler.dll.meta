@@ -9,7 +9,7 @@ PluginImporter:
   isPreloaded: 0
   isOverridable: 0
   isExplicitlyReferenced: 0
-  validateReferences: 0
+  validateReferences: 1
   platformData:
   - first:
       '': Any
@@ -22,7 +22,6 @@ PluginImporter:
         Exclude Linux64: 1
         Exclude LinuxUniversal: 1
         Exclude OSXUniversal: 1
-        Exclude WebGL: 1
         Exclude Win: 1
         Exclude Win64: 1
   - first:

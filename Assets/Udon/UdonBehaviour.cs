@@ -75,6 +75,9 @@ namespace VRC.Udon
         public static System.Action<UdonBehaviour, NetworkEventTarget, string> SendCustomNetworkEventHook { get; set; } = null;
 
         [PublicAPI]
+        public override bool DisableInteractive { get; set; }
+        
+        [PublicAPI]
         [ExcludeFromUdonWrapper]
         public override bool IsNetworkingSupported
         {
@@ -91,7 +94,7 @@ namespace VRC.Udon
             }
         }
 
-        public override bool IsInteractive => _hasInteractiveEvents;
+        public override bool IsInteractive => _hasInteractiveEvents && !DisableInteractive;
 
         public const string ReturnVariableName = "__returnValue";
 
