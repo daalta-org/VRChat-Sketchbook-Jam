@@ -218,9 +218,12 @@ public class PlayerManager : UdonSharpBehaviour
     {
         playerUI.MakeAllPromptsNeutral();
         localHasVoted = false;
-        UpdateInstructions();
-        
-        if (round < 0) return;
+
+        if (round < 0)
+        {
+            UpdateInstructions();
+            return;
+        }
         if (Networking.IsMaster) AskOwnerClearLines();
 
         if (!Utilities.IsValid(VRCPlayerApi.GetPlayerById(ownerPlayerId))) ownerPlayerId = -1;
@@ -228,6 +231,7 @@ public class PlayerManager : UdonSharpBehaviour
         {
             isPlaying = false;
             playerUI.SetPromptsVisible(false);
+            UpdateInstructions();
             return;
         }
         
@@ -237,6 +241,8 @@ public class PlayerManager : UdonSharpBehaviour
         ResetVotes();
         correctIndex = GetCorrectIndex(seed, round);
         if (LocalIsOwner()) playerUI.SetPromptCorrect(correctIndex);
+        
+        UpdateInstructions();
     }
     
     private void AskOwnerClearLines()
