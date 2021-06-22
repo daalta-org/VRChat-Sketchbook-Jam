@@ -574,12 +574,10 @@ public class PlayerManager : UdonSharpBehaviour
     /// <param name="player">Player who left</param>
     public void PlayerHasLeft(VRCPlayerApi player)
     {
-        if (!Networking.IsMaster) return;
-        if (player.playerId != ownerPlayerId) return;
-
-        isPlaying = false;
-        ownerPlayerId = -1; // TODO Does more need to be reset?
-        RequestSerialization();
-        OnDeserialization();
+        if (player.playerId == ownerPlayerId)
+        {
+                    isPlaying = false;
+                    ownerPlayerId = -1; // TODO Does more need to be reset?
+        }
     }
 }

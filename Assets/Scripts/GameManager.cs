@@ -466,7 +466,7 @@ public class GameManager : UdonSharpBehaviour
         return total;
     }
 
-    private bool HasVotedForEveryone(int playerIndex)
+    public bool HasVotedForEveryone(int playerIndex)
     {
         var numVotes = 0;
         foreach (var p in playerManagers)
@@ -521,6 +521,15 @@ public class GameManager : UdonSharpBehaviour
         {
             p.PlayerHasLeft(player);
         }
+
+        for (var index = 0; index < playerManagers.Length; index++)
+        {
+            var p = playerManagers[index];
+            TryBonusPointPlacement(index); // Later joiners could change the situation...
+            p.RequestSerialization();
+            p.OnDeserialization();
+        }
+
         UpdateIsRoundOver();
     }
 }
