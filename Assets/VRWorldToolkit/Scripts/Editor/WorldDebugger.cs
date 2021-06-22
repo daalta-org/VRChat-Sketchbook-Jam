@@ -606,16 +606,19 @@ namespace VRWorldToolkit
                             }
                         }
 
-                        using (new EditorGUI.DisabledScope(!autoFixSet))
+                        if (!(infoLinkSet && (assetPathSet || hasGameObjects)))
                         {
-                            if (GUILayout.Button("Auto Fix", GUILayout.Width(ButtonWidth), GUILayout.Height(ButtonHeight)))
+                            using (new EditorGUI.DisabledScope(!autoFixSet))
                             {
-                                autoFix?.Invoke();
+                                if (GUILayout.Button("Auto Fix", GUILayout.Width(ButtonWidth), GUILayout.Height(ButtonHeight)))
+                                {
+                                    autoFix?.Invoke();
 
-                                EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+                                    EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
 
-                                autoRecheck = true;
-                                recheck = true;
+                                    autoRecheck = true;
+                                    recheck = true;
+                                }
                             }
                         }
                     }
@@ -1054,6 +1057,17 @@ namespace VRWorldToolkit
             };
         }
 
+        public static Action SetBuildTarget(BuildTargetGroup group, BuildTarget target)
+        {
+            return () =>
+            {
+                EditorUserBuildSettings.selectedBuildTargetGroup = group;
+                EditorUserBuildSettings.selectedStandaloneTarget = target;
+                EditorUserBuildSettings.SwitchActiveBuildTargetAsync(group, target);
+                EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+            };
+        }
+
         public static Action FixVRCProjectSettings(VRCProjectSettings settings)
         {
             return () =>
@@ -1210,7 +1224,9 @@ namespace VRWorldToolkit
 
         private const string WorldDescriptorFar = "Scene Descriptor is {0} units far from the zero point in Unity. Having your world center out this far will cause some noticeable jittering on models. You should move your world closer to the zero point of your scene.";
 
-        private const string WorldDescriptorOff = "Scene Descriptor is {0} units far from the zero point in Unity. It is usually good practice to keep it as close as possible to the absolute zero point to avoid floating-point errors.";
+        private const string WorldDescriptorOff = "Scene Descriptor is {0} units far from the zero point in Unity. It is usually good practice if possible to keep it as close as possible to the absolute zero point to avoid floating-point errors.";
+
+        private const string WronglySetBuildSettings = "Wrongly set build settings detected for current editor runtime. This can cause builds to not go through properly.";
 
         private const string ImproperlySetupVRCProjectSettings = "Improperly setup VRCProjectSettings detected. This will cause the Control Panel Builder tab to appear empty.";
 
@@ -1229,6 +1245,8 @@ namespace VRWorldToolkit
         private const string ReferenceCameraNearClipPlaneOver = "The current reference camera's near clip value is {0}. This value gets clamped to be between 0.01 and 0.05.";
 
         private const string NoReferenceCameraSetGeneral = "No reference camera set in the Scene Descriptor. Using a reference camera allows the world's rendering distance to be changed by changing the camera's near and far clipping planes.";
+
+        private const string ReferenceCameraHasNoCameraComponent = "The GameObject \"{0}\" currently set in the Scene Descriptor as a reference camera does not have a camera component. This can cause various problems in-game.";
 
         private const string ColliderUnderSpawnIsTrigger = "The collider \"{0}\" under your spawn point {1} has been set as Is Trigger.";
         private const string ColliderUnderSpawnIsTriggerCombined = "Found \"{0}\" spawn points which have a collider set as Is Trigger underneath.";
@@ -1303,7 +1321,7 @@ namespace VRWorldToolkit
 
         private const string LightsNotBaked = "The current scene is using realtime lighting. Consider baked lighting for improved performance.";
 
-        private const string ConsiderLargerLightmaps = "Consider increasing Lightmap Size from {0} to 2048 or 4096. This allows for more stuff to fit on a single lightmap, leaving fewer textures that need to be sampled.";
+        private const string ConsiderLargerLightmaps = "Possibly unoptimized lighting setup detected with a high amount of separate lightmaps compared to the currently set Lightmap Size.\nConsider increasing Lightmap Size from {0} to 2048 or larger and adjusting the individual Scale In Lightmap value on mesh renderers to fit things on a smaller amount of lightmaps.";
 
         private const string ConsiderSmallerLightmaps = "Baking lightmaps at 4096 with Progressive GPU will silently fall back to CPU Progressive. More than 12GB GPU Memory is needed to bake 4k lightmaps with GPU Progressive.";
 
@@ -1357,7 +1375,7 @@ namespace VRWorldToolkit
 
         private const string NoMatchingLayersFound = "No enabled Post Processing Volumes found with matching layers to the main Post Processing Layer. Layers currently set to: {0}";
 
-        private const string DontUseNoneForTonemapping = "Use either Neutral or ACES for Color Grading Tonemapping. Selecting None for Tonemapping is essentially the same as leaving Tonemapping unchecked.";
+        private const string TonemapperMissing = "No global Tonemapper found. When there is no Tonemapper set, the colors in the scene will be distorted. Ideally, use Neutral or ACES.";
 
         private const string TooHighBloomIntensity = "Do not raise the Bloom intensity too high! It is best to use a low Bloom intensity, between 0.01 to 0.3.";
 
@@ -1489,48 +1507,67 @@ namespace VRWorldToolkit
 
             try
             {
-                // General Checks
+                // Cache repeatedly used values
+                var androidBuildPlatform = Helper.BuildPlatform() == RuntimePlatform.Android;
 
                 // Get Descriptors
                 var descriptors = FindObjectsOfType(typeof(VRC_SceneDescriptor)) as VRC_SceneDescriptor[];
-                long descriptorCount = descriptors.Length;
-                VRC_SceneDescriptor sceneDescriptor;
                 var pipelines = FindObjectsOfType(typeof(PipelineManager)) as PipelineManager[];
 
                 // Check if a descriptor exists
-                if (descriptorCount == 0)
+                if (descriptors.Length == 0)
                 {
                     general.AddMessageGroup(new MessageGroup(NoSceneDescriptor, MessageType.Error));
                     return;
                 }
-                else
+
+                var sceneDescriptor = descriptors[0];
+
+                // General Checks
+
+                // Make sure only one descriptor exists
+                if (descriptors.Length > 1)
                 {
-                    sceneDescriptor = descriptors[0];
+                    general.AddMessageGroup(new MessageGroup(TooManySceneDescriptors, MessageType.Info).AddSingleMessage(new SingleMessage(Array.ConvertAll(descriptors, s => s.gameObject))));
+                    return;
+                }
 
-                    // Make sure only one descriptor exists
-                    if (descriptorCount > 1)
-                    {
-                        general.AddMessageGroup(new MessageGroup(TooManySceneDescriptors, MessageType.Info).AddSingleMessage(new SingleMessage(Array.ConvertAll(descriptors, s => s.gameObject))));
-                        return;
-                    }
+                // Check for multiple pipeline managers
+                if (pipelines.Length > 1)
+                {
+                    general.AddMessageGroup(new MessageGroup(TooManyPipelineManagers, MessageType.Error).AddSingleMessage(new SingleMessage(Array.ConvertAll(pipelines, s => s.gameObject)).SetAutoFix(RemoveBadPipelineManagers(pipelines))));
+                }
 
-                    // Check for multiple pipeline managers
-                    if (pipelines.Length > 1)
-                    {
-                        general.AddMessageGroup(new MessageGroup(TooManyPipelineManagers, MessageType.Error).AddSingleMessage(new SingleMessage(Array.ConvertAll(pipelines, s => s.gameObject)).SetAutoFix(RemoveBadPipelineManagers(pipelines))));
-                    }
+                // Check how far the descriptor is from zero point for floating point errors
+                var descriptorRemoteness = (int) Vector3.Distance(sceneDescriptor.transform.position, new Vector3(0.0f, 0.0f, 0.0f));
 
-                    // Check how far the descriptor is from zero point for floating point errors
-                    var descriptorRemoteness = (int) Vector3.Distance(sceneDescriptor.transform.position, new Vector3(0.0f, 0.0f, 0.0f));
+                if (descriptorRemoteness > 1500)
+                {
+                    general.AddMessageGroup(new MessageGroup(WorldDescriptorFar, MessageType.Error).AddSingleMessage(new SingleMessage(descriptorRemoteness.ToString()).SetSelectObject(Array.ConvertAll(descriptors, s => s.gameObject))));
+                }
+                else if (descriptorRemoteness > 500)
+                {
+                    general.AddMessageGroup(new MessageGroup(WorldDescriptorOff, MessageType.Tips).AddSingleMessage(new SingleMessage(descriptorRemoteness.ToString()).SetSelectObject(Array.ConvertAll(descriptors, s => s.gameObject))));
+                }
 
-                    if (descriptorRemoteness > 1000)
-                    {
-                        general.AddMessageGroup(new MessageGroup(WorldDescriptorFar, MessageType.Error).AddSingleMessage(new SingleMessage(descriptorRemoteness.ToString()).SetSelectObject(Array.ConvertAll(descriptors, s => s.gameObject))));
-                    }
-                    else if (descriptorRemoteness > 250)
-                    {
-                        general.AddMessageGroup(new MessageGroup(WorldDescriptorOff, MessageType.Error).AddSingleMessage(new SingleMessage(descriptorRemoteness.ToString()).SetSelectObject(Array.ConvertAll(descriptors, s => s.gameObject))));
-                    }
+                switch (Helper.BuildPlatform())
+                {
+                    case RuntimePlatform.WindowsPlayer:
+                        if (EditorUserBuildSettings.selectedBuildTargetGroup != BuildTargetGroup.Standalone ||
+                            EditorUserBuildSettings.selectedStandaloneTarget != BuildTarget.StandaloneWindows64)
+                        {
+                            general.AddMessageGroup(new MessageGroup(WronglySetBuildSettings, MessageType.Error)).SetGroupAutoFix(SetBuildTarget(BuildTargetGroup.Standalone, BuildTarget.StandaloneWindows64));
+                        }
+
+                        break;
+                    case RuntimePlatform.Android:
+                        if (EditorUserBuildSettings.selectedBuildTargetGroup != BuildTargetGroup.Android ||
+                            EditorUserBuildSettings.selectedStandaloneTarget != BuildTarget.Android)
+                        {
+                            general.AddMessageGroup(new MessageGroup(WronglySetBuildSettings, MessageType.Error)).SetGroupAutoFix(SetBuildTarget(BuildTargetGroup.Android, BuildTarget.Android));
+                        }
+
+                        break;
                 }
 
                 var vrcProjectSettings = Resources.Load<VRCProjectSettings>("VRCProjectSettings");
@@ -1581,24 +1618,34 @@ namespace VRWorldToolkit
                 }
 
                 // Check reference camera for possible problems
-                if (sceneDescriptor.ReferenceCamera && sceneDescriptor.ReferenceCamera.GetComponent<Camera>())
+                if (sceneDescriptor.ReferenceCamera != null)
                 {
                     var camera = sceneDescriptor.ReferenceCamera.GetComponent<Camera>();
-
-                    if (camera.clearFlags != CameraClearFlags.Skybox)
+                    if (camera != null)
                     {
-                        general.AddMessageGroup(new MessageGroup(ReferenceCameraClearFlagsNotSkybox, MessageType.Warning).AddSingleMessage(new SingleMessage(sceneDescriptor.ReferenceCamera)));
+                        if (camera.clearFlags != CameraClearFlags.Skybox)
+                        {
+                            general.AddMessageGroup(new MessageGroup(ReferenceCameraClearFlagsNotSkybox, MessageType.Warning).AddSingleMessage(new SingleMessage(sceneDescriptor.ReferenceCamera)));
+                        }
+
+                        // TODO: Investigate better sanity value
+                        if (camera.farClipPlane / camera.nearClipPlane > 200000f)
+                        {
+                            general.AddMessageGroup(new MessageGroup(ReferenceCameraClippingPlaneRatio, MessageType.Warning).AddSingleMessage(new SingleMessage(camera.nearClipPlane.ToString(CultureInfo.InvariantCulture), camera.farClipPlane.ToString(CultureInfo.InvariantCulture)).SetSelectObject(camera.gameObject)));
+                        }
+
+                        if (camera.nearClipPlane > 0.05f)
+                        {
+                            general.AddMessageGroup(new MessageGroup(ReferenceCameraNearClipPlaneOver, MessageType.Tips).AddSingleMessage(new SingleMessage(camera.nearClipPlane.ToString(CultureInfo.InvariantCulture)).SetSelectObject(camera.gameObject)));
+                        }
                     }
-
-                    // TODO: Investigate better sanity value
-                    if (camera.farClipPlane / camera.nearClipPlane > 200000f)
+                    else
                     {
-                        general.AddMessageGroup(new MessageGroup(ReferenceCameraClippingPlaneRatio, MessageType.Warning).AddSingleMessage(new SingleMessage(camera.nearClipPlane.ToString(CultureInfo.InvariantCulture), camera.farClipPlane.ToString(CultureInfo.InvariantCulture)).SetSelectObject(camera.gameObject)));
-                    }
-
-                    if (camera.nearClipPlane > 0.05f)
-                    {
-                        general.AddMessageGroup(new MessageGroup(ReferenceCameraNearClipPlaneOver, MessageType.Tips).AddSingleMessage(new SingleMessage(camera.nearClipPlane.ToString(CultureInfo.InvariantCulture)).SetSelectObject(camera.gameObject)));
+                        general.AddMessageGroup(new MessageGroup(ReferenceCameraHasNoCameraComponent, MessageType.Error)).AddSingleMessage(new SingleMessage(sceneDescriptor.ReferenceCamera.name).SetSelectObject(sceneDescriptor.ReferenceCamera).SetAutoFix(() =>
+                        {
+                            sceneDescriptor.ReferenceCamera = null;
+                            PrefabUtility.RecordPrefabInstancePropertyModifications(sceneDescriptor.gameObject);
+                        }));
                     }
                 }
                 else
@@ -1952,7 +1999,7 @@ namespace VRWorldToolkit
                 {
                     bakedLighting = true;
 
-                    if (Helper.BuildPlatform() == RuntimePlatform.Android && EditorUserBuildSettings.androidBuildSubtarget == MobileTextureSubtarget.Generic)
+                    if (androidBuildPlatform && EditorUserBuildSettings.androidBuildSubtarget == MobileTextureSubtarget.Generic)
                     {
                         var lightmaps = LightmapSettings.lightmaps;
 
@@ -1981,7 +2028,7 @@ namespace VRWorldToolkit
                 {
                     // Count lightmaps and suggest to use bigger lightmaps if needed
                     var lightMapSize = LightmapEditorSettings.maxAtlasSize;
-                    if (lightMapSize != 4096 && LightmapSettings.lightmaps.Length > 1 && !LightmapEditorSettings.lightmapper.Equals(LightmapEditorSettings.Lightmapper.ProgressiveGPU))
+                    if (lightMapSize < 2048 && LightmapSettings.lightmaps.Length >= 4)
                     {
                         if (LightmapSettings.lightmaps[0] != null)
                         {
@@ -1989,7 +2036,7 @@ namespace VRWorldToolkit
 
                             if (lightmap.lightmapColor != null && lightmap.lightmapColor.height != 4096)
                             {
-                                lighting.AddMessageGroup(new MessageGroup(ConsiderLargerLightmaps, MessageType.Tips).AddSingleMessage(new SingleMessage(lightMapSize.ToString()).SetAutoFix(SetLightmapSize(4096))));
+                                lighting.AddMessageGroup(new MessageGroup(ConsiderLargerLightmaps, MessageType.Tips).AddSingleMessage(new SingleMessage(lightMapSize.ToString())));
                             }
                         }
                     }
@@ -2073,11 +2120,8 @@ namespace VRWorldToolkit
                 }
                 else
                 {
-#if UNITY_ANDROID
-                    lighting.AddMessageGroup(new MessageGroup(QuestBakedLightingWarning, MessageType.BadFPS).SetDocumentation("https://docs.unity3d.com/2018.4/Documentation/Manual/Lightmapping.html"));
-#else
-                    lighting.AddMessageGroup(new MessageGroup(LightsNotBaked, MessageType.Tips).SetDocumentation("https://docs.unity3d.com/2018.4/Documentation/Manual/Lightmapping.html"));
-#endif
+                    lighting.AddMessageGroup(new MessageGroup(androidBuildPlatform ? QuestBakedLightingWarning : LightsNotBaked, androidBuildPlatform ? MessageType.Warning : MessageType.Tips)
+                        .SetDocumentation("https://docs.unity3d.com/2018.4/Documentation/Manual/Lightmapping.html"));
                 }
 
                 // ReflectionProbes
@@ -2239,6 +2283,8 @@ namespace VRWorldToolkit
                                     postProcessing.AddMessageGroup(new MessageGroup(NoMatchingLayersFound, MessageType.Warning).AddSingleMessage(new SingleMessage(Helper.GetAllLayersFromMask(postprocessLayer.volumeLayer)).SetSelectObject(postprocessLayer.gameObject)));
                                 }
 
+                                var noTonemapper = true;
+
                                 // Go trough the profile settings and see if any bad one's are used
                                 foreach (var postProcessVolume in matchingVolumes)
                                 {
@@ -2264,17 +2310,17 @@ namespace VRWorldToolkit
                                         postProcessing.AddMessageGroup(new MessageGroup(VignetteWarning, MessageType.Warning).AddSingleMessage(new SingleMessage(postProcessVolume.gameObject)));
                                     }
 
-                                    var colorGrading = postProcessProfile.GetSetting<ColorGrading>();
-                                    if (colorGrading && colorGrading.enabled && colorGrading.active)
-                                    {
-                                        if (colorGrading.tonemapper.value == Tonemapper.None && colorGrading.gradingMode == GradingMode.HighDefinitionRange)
-                                        {
-                                            postProcessing.AddMessageGroup(new MessageGroup(DontUseNoneForTonemapping, MessageType.Error).AddSingleMessage(new SingleMessage(postProcessVolume.gameObject)));
-                                        }
-                                    }
-
                                     if (postProcessVolume.isGlobal)
                                     {
+                                        var colorGrading = postProcessProfile.GetSetting<ColorGrading>();
+                                        if (colorGrading && colorGrading.enabled && colorGrading.active)
+                                        {
+                                            if (colorGrading.tonemapper.overrideState && colorGrading.tonemapper.value != Tonemapper.None)
+                                            {
+                                                noTonemapper = false;
+                                            }
+                                        }
+
                                         var bloom = postProcessProfile.GetSetting<Bloom>();
                                         if (bloom && bloom.enabled && bloom.active)
                                         {
@@ -2300,6 +2346,11 @@ namespace VRWorldToolkit
                                             postProcessing.AddMessageGroup(new MessageGroup(DepthOfFieldWarning, MessageType.Warning).AddSingleMessage(new SingleMessage(postProcessVolume.gameObject)));
                                         }
                                     }
+                                }
+
+                                if (noTonemapper)
+                                {
+                                    postProcessing.AddMessageGroup(new MessageGroup(TonemapperMissing, MessageType.Tips).SetDocumentation("https://gitlab.com/s-ilent/SCSS/-/wikis/Other/Post-Processing#colour-grading"));
                                 }
                             }
                         }
@@ -2331,7 +2382,7 @@ namespace VRWorldToolkit
 
                 var mirrorsDefaultLayers = optimization.AddMessageGroup(new MessageGroup(MirrorWithDefaultLayers, MirrorWithDefaultLayersCombined, MirrorWithDefaultLayersInfo, MessageType.Tips));
                 var legacyBlendShapeIssues = general.AddMessageGroup(new MessageGroup(LegacyBlendShapeIssues, LegacyBlendShapeIssuesCombined, LegacyBlendShapeIssuesInfo, MessageType.Warning));
-                var grabPassShaders = general.AddMessageGroup(new MessageGroup(MaterialWithGrabPassShader, MaterialWithGrabPassShaderCombined, Helper.BuildPlatform() == RuntimePlatform.WindowsPlayer ? MaterialWithGrabPassShaderInfoPC : MaterialWithGrabPassShaderInfoQuest, Helper.BuildPlatform() == RuntimePlatform.Android ? MessageType.Error : MessageType.Info));
+                var grabPassShaders = general.AddMessageGroup(new MessageGroup(MaterialWithGrabPassShader, MaterialWithGrabPassShaderCombined, androidBuildPlatform ? MaterialWithGrabPassShaderInfoPC : MaterialWithGrabPassShaderInfoQuest, androidBuildPlatform ? MessageType.Error : MessageType.Info));
                 var disabledPortals = general.AddMessageGroup(new MessageGroup(DisabledPortalsWarning, DisabledPortalsWarningCombined, DisabledPortalsWarningInfo, MessageType.Warning));
                 var materialWithNonWhitelistedShader = general.AddMessageGroup(new MessageGroup(MaterialWithNonWhitelistedShader, MaterialWithNonWhitelistedShaderCombined, MaterialWithNonWhitelistedShaderInfo, MessageType.Warning).SetDocumentation("https://docs.vrchat.com/docs/quest-content-limitations#shaders"));
                 var uiElementNavigation = general.AddMessageGroup(new MessageGroup(UIElementWithNavigationNotNone, UIElementWithNavigationNotNoneCombined, UIElementWithNavigationNotNoneInfo, MessageType.Tips));
@@ -2416,7 +2467,7 @@ namespace VRWorldToolkit
 
                             var shader = material.shader;
 
-                            if (Helper.BuildPlatform() == RuntimePlatform.Android && !Validation.WorldShaderWhiteList.Contains(shader.name))
+                            if (androidBuildPlatform && !Validation.WorldShaderWhiteList.Contains(shader.name))
                             {
                                 var singleMessage = new SingleMessage(material.name, shader.name);
 
@@ -2707,6 +2758,7 @@ namespace VRWorldToolkit
                 AssetDatabase.ImportAsset(LastBuildReportPath);
             }
 
+            var newBuildSet = false;
             if (File.Exists(LastBuildReportPath))
             {
                 switch (AssetDatabase.LoadAssetAtPath<BuildReport>(LastBuildReportPath).summary.platform)
@@ -2717,6 +2769,7 @@ namespace VRWorldToolkit
                         {
                             AssetDatabase.CopyAsset(LastBuildReportPath, WindowsBuildReportPath);
                             buildReportWindows = (BuildReport) AssetDatabase.LoadAssetAtPath(WindowsBuildReportPath, typeof(BuildReport));
+                            newBuildSet = true;
                         }
 
                         break;
@@ -2725,6 +2778,7 @@ namespace VRWorldToolkit
                         {
                             AssetDatabase.CopyAsset(LastBuildReportPath, QuestBuildReportPath);
                             buildReportQuest = (BuildReport) AssetDatabase.LoadAssetAtPath(QuestBuildReportPath, typeof(BuildReport));
+                            newBuildSet = true;
                         }
 
                         break;
@@ -2741,17 +2795,40 @@ namespace VRWorldToolkit
                 buildReportQuest = (BuildReport) AssetDatabase.LoadAssetAtPath(QuestBuildReportPath, typeof(BuildReport));
             }
 
-            if (buildReportTreeView != null && !buildReportTreeView.HasReport())
+            if (buildReportInitDone)
             {
-                if (buildReportWindows != null)
+                BuildReport report = null;
+
+                if (newBuildSet)
                 {
-                    buildReportTreeView.SetReport(buildReportWindows);
+                    switch (Helper.BuildPlatform())
+                    {
+                        case RuntimePlatform.WindowsPlayer:
+                            report = buildReportWindows;
+                            selectedBuildReport = 0;
+                            break;
+                        case RuntimePlatform.Android:
+                            report = buildReportQuest;
+                            selectedBuildReport = 1;
+                            break;
+                    }
                 }
-                else if (buildReportQuest != null)
+                else
                 {
-                    buildReportTreeView.SetReport(buildReportWindows);
+                    if (selectedBuildReport == 1 && buildReportQuest != null)
+                    {
+                        report = buildReportQuest;
+                    }
+                    else
+                    {
+                        selectedBuildReport = 0;
+                        report = buildReportWindows;
+                    }
                 }
+
+                buildReportTreeView.SetReport(report);
             }
+
 #if VRWT_BENCHMARK
             CheckTime.Stop();
             Debug.Log($"Refreshed build reports in: {CheckTime.ElapsedMilliseconds} ms.");
@@ -2837,7 +2914,16 @@ namespace VRWorldToolkit
                     treeViewState = new TreeViewState();
                 }
 
-                var report = buildReportWindows != null ? buildReportWindows : buildReportQuest;
+                BuildReport report;
+                if (selectedBuildReport == 1 && buildReportQuest != null)
+                {
+                    report = buildReportQuest;
+                }
+                else
+                {
+                    selectedBuildReport = 0;
+                    report = buildReportWindows;
+                }
 
                 buildReportTreeView = new BuildReportTreeView(treeViewState, multiColumnHeader, report);
                 searchField = new SearchField();
@@ -3096,7 +3182,7 @@ namespace VRWorldToolkit
                 {
                     RefreshBuild();
 
-                    if (buildReportTreeView.HasReport())
+                    if (buildReportTreeView.BuildSucceeded)
                     {
                         buildReportTreeView.Reload();
                     }
@@ -3134,9 +3220,17 @@ namespace VRWorldToolkit
 
                     var treeViewRect = EditorGUILayout.BeginVertical();
 
-                    if (buildReportTreeView.HasReport())
+                    if (buildReportTreeView.BuildSucceeded)
                     {
                         buildReportTreeView.OnGUI(treeViewRect);
+                    }
+                    else
+                    {
+                        GUILayout.FlexibleSpace();
+
+                        EditorGUILayout.LabelField($"Last {BuildReportToolbar[selectedBuildReport]} Build Failed", Styles.CenteredLabel, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true), GUILayout.Height(40));
+
+                        GUILayout.FlexibleSpace();
                     }
 
                     GUILayout.FlexibleSpace();

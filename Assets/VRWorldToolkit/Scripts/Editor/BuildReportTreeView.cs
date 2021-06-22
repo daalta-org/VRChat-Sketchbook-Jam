@@ -13,6 +13,8 @@ namespace VRWorldToolkit
     public class BuildReportTreeView : TreeView
     {
         private BuildReport report;
+        private bool hasReport;
+        public bool BuildSucceeded { get; private set; }
 
         private enum TreeColumns
         {
@@ -29,20 +31,15 @@ namespace VRWorldToolkit
             showAlternatingRowBackgrounds = true;
             multiColumnHeader.sortingChanged += OnSortingChanged;
 
-            this.report = report;
-
-            if (report != null && report.summary.result == BuildResult.Succeeded)
-            {
-                Reload();
-            }
+            SetReport(report);
         }
 
         private class BuildListAsset
         {
-            public string assetType { get; set; }
-            public string fullPath { get; set; }
-            public int size { get; set; }
-            public double percentage { get; set; }
+            public string AssetType { get; set; }
+            public string FullPath { get; set; }
+            public int Size { get; set; }
+            public double Percentage { get; set; }
 
             public BuildListAsset()
             {
@@ -50,9 +47,9 @@ namespace VRWorldToolkit
 
             public BuildListAsset(string assetType, string fullPath, int size)
             {
-                this.assetType = assetType;
-                this.fullPath = fullPath;
-                this.size = size;
+                AssetType = assetType;
+                FullPath = fullPath;
+                Size = size;
             }
         }
 
@@ -123,61 +120,57 @@ namespace VRWorldToolkit
             }
 
             var results = bl
-                .GroupBy(x => x.fullPath)
+                .GroupBy(x => x.FullPath)
                 .Select(cx => new BuildListAsset()
                 {
-                    assetType = cx.First().assetType,
-                    fullPath = cx.First().fullPath,
-                    size = cx.Sum(x => x.size),
+                    AssetType = cx.First().AssetType,
+                    FullPath = cx.First().FullPath,
+                    Size = cx.Sum(x => x.Size),
                 })
-                .OrderByDescending(x => x.size)
+                .OrderByDescending(x => x.Size)
                 .ToList();
 
-            var totalSize = results.Sum(x => (long) x.size);
+            var totalSize = results.Sum(x => (long) x.Size);
 
             for (var i = 0; i < results.Count; i++)
             {
-                results[i].percentage = (double) results[i].size / totalSize;
+                results[i].Percentage = (double) results[i].Size / totalSize;
             }
 
             for (var i = 0; i < results.Count; i++)
             {
                 var asset = results[i];
 
-                root.AddChild(new BuildReportItem(i, 0, AssetDatabase.GetCachedIcon(asset.fullPath), asset.assetType, asset.fullPath == "" ? "Unknown" : Path.GetFileName(asset.fullPath), asset.fullPath, Path.GetExtension(asset.fullPath), asset.size, asset.percentage));
+                root.AddChild(new BuildReportItem(i,
+                    0,
+                    AssetDatabase.GetCachedIcon(asset.FullPath),
+                    asset.AssetType,
+                    asset.FullPath == "" ? "Unknown" : Path.GetFileName(asset.FullPath),
+                    asset.FullPath,
+                    Path.GetExtension(asset.FullPath),
+                    asset.Size,
+                    asset.Percentage)
+                );
             }
 
             return root;
         }
 
-        /// <summary>
-        /// Set new report for TreeView
-        /// </summary>
-        /// <param name="newReport">New report to set</param>
         public void SetReport(BuildReport newReport)
         {
-            // Set new report
             report = newReport;
+            hasReport = report != null;
+            BuildSucceeded = hasReport && report.summary.result == BuildResult.Succeeded;
 
-            // Reload the TreeView
-            if (HasReport())
+            if (hasReport && BuildSucceeded)
             {
-                base.Reload();
+                Reload();
             }
         }
 
-        /// <summary>
-        /// Check if TreeView has build report and make sure the build wasn't failed
-        /// </summary>
-        /// <returns>If build is set and the build succeeded</returns>
-        public bool HasReport()
+        private bool HasMessages()
         {
-            return report != null && report.summary.result == BuildResult.Succeeded;
-        }
-
-        public bool HasMessages()
-        {
-            return HasReport() && (report.summary.totalErrors > 0 || report.summary.totalWarnings > 0);
+            return report.summary.totalErrors > 0 || report.summary.totalWarnings > 0;
         }
 
         private struct CategoryStats
@@ -191,7 +184,7 @@ namespace VRWorldToolkit
         /// </summary>
         public void DrawOverallStats()
         {
-            if (HasReport())
+            if (BuildSucceeded)
             {
                 var stats = base.GetRows().Cast<BuildReportItem>().ToList();
 
@@ -271,9 +264,9 @@ namespace VRWorldToolkit
                             switch (message.type)
                             {
                                 case LogType.Error:
+                                case LogType.Exception:
                                     messageType = MessageType.Error;
                                     break;
-                                case LogType.Exception:
                                 case LogType.Assert:
                                 case LogType.Warning:
                                     messageType = MessageType.Warning;
@@ -376,10 +369,10 @@ namespace VRWorldToolkit
             {
                 Rect rect;
                 // Get the current cell rect and index
-                if (visibleColumnIndex == 1)
+                if (visibleColumnIndex == 2)
                 {
                     var rectOne = args.GetCellRect(visibleColumnIndex);
-                    var rectTwo = args.GetCellRect(2);
+                    var rectTwo = args.GetCellRect(3);
 
                     rect = new Rect(rectOne.position, new Vector2(rectOne.width + rectTwo.width, rectOne.height));
                 }
