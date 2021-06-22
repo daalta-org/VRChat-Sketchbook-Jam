@@ -22,6 +22,7 @@ public class PlayerUI : UdonSharpBehaviour
     [SerializeField] private string stringVoteGuess= "<b>Guess!</b>\n<size=60%>Click to guess what {0} is drawing!\nYou only get 1 vote!</size>";
     [SerializeField] private string stringDraw = "<b>Draw!</b>\n<size=60%>Draw the green prompt!\nGet points when players guess it!</size>";
     [SerializeField] private string stringRoundOver = "<b>Round Over</b>\n<size=60%>Press \"Next Round\" to continue, {0}!";
+    [SerializeField] private string stringIsOwnedButNotPlaying = "<b>Joining</b>\n<size=60%>{0}, next round you'll join!";
     private readonly int Score = Animator.StringToHash("Score");
     private readonly int IsVoteRevealed = Animator.StringToHash("IsVoteRevealed");
     private readonly int IsVoteSubmitted = Animator.StringToHash("IsVoteSubmitted");
@@ -90,7 +91,7 @@ public class PlayerUI : UdonSharpBehaviour
         HideVoteResults(); // TODO This might not belong here. Probably called too often.
     }
 
-    public void UpdateInstructions(int round, string ownerName, bool isOwner, bool hasVoted, bool roundOver)
+    public void UpdateInstructions(int round, string ownerName, bool isOwner, bool hasVoted, bool roundOver, bool isPlaying)
     {
         string s;
         if (round < 0)
@@ -111,6 +112,10 @@ public class PlayerUI : UdonSharpBehaviour
         else if (roundOver)
         {
             s = stringRoundOver;
+        }
+        else if (!isPlaying)
+        {
+            s = stringIsOwnedButNotPlaying;
         }
         else if (isOwner)
         {
