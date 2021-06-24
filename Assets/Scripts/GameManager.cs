@@ -54,7 +54,7 @@ public class GameManager : UdonSharpBehaviour
 
     private void FixedUpdate()
     {
-        if (Networking.IsMaster && roundTimer > 0)
+        if (Networking.IsMaster && roundTimer >= 0)
         {
             roundTimer += Time.fixedDeltaTime;
             if (roundTimer > maxRoundLength)
