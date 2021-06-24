@@ -12,6 +12,7 @@ public class GameManager : UdonSharpBehaviour
     [SerializeField] private int numRounds = 5;
     [SerializeField] private ScoreScript scoreScript;
     [SerializeField] private float jumbleInterval = 2.25f;
+    [SerializeField] private float maxRoundLength = 180f;
 
     [UdonSynced] private int seed = -1;
     private int seedOld = -1;
@@ -32,6 +33,8 @@ public class GameManager : UdonSharpBehaviour
     private bool isRoundOverOld = true;
 
     private float offsetTimer = 0;
+
+    private float roundTimer = -1;
     
     private void Start()
     {
@@ -51,6 +54,18 @@ public class GameManager : UdonSharpBehaviour
 
     private void FixedUpdate()
     {
+        if (Networking.IsMaster && roundTimer > 0)
+        {
+            roundTimer += Time.fixedDeltaTime;
+            if (roundTimer > maxRoundLength)
+            {
+                roundTimer = -1;
+                isRoundOver = true;
+                RequestSerialization();
+                OnDeserialization();
+            }
+        }
+        
         if (!isJumbled) return;
         if (isRoundOver || round < 0) return;
         var oldTimer = offsetTimer;
@@ -141,6 +156,7 @@ public class GameManager : UdonSharpBehaviour
         if (isRoundOver != isRoundOverOld)
         {
             isRoundOverOld = isRoundOver;
+            if (isRoundOver) roundTimer = -1;
             if (isRoundOver && round >= 0) OnRoundOver();
         }
 
@@ -240,6 +256,8 @@ public class GameManager : UdonSharpBehaviour
         {
             playerManager.OnRoundChanged(seed, round);
         }
+
+        roundTimer = 0;
 
         playerCount = CountPlayers(true);
 
